@@ -1,11 +1,32 @@
 "use client"
+import api from '@/api/axios';
 import Logo from "@/public/icon.svg";
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { useHookFormMask } from 'use-mask-input';
+import { login } from '../actions/login';
+
+interface ILogin {
+  register: string
+  password: string
+}
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const {
+    handleSubmit,
+    formState: {errors},
+    register
+  } = useForm<ILogin>()
+  const registerWithMask = useHookFormMask(register);
+  const router = useRouter()
+
+  async function onSubmit(data: ILogin) {
+    const token = (await api.post("user/auth", data)).data as {token: string}
+    
+    await login(token)
+    router.replace('/dashboard')
+  }
 
   return (
     <div className='sm:flex bg-[#9C7C5A]'>
@@ -17,7 +38,6 @@ export default function Login() {
             <p className='hidden sm:flex font-semibold text-xl md:text-3xl lg:text-4xl xl:text-5xl'>Bem-vindo(a)</p>
             <p className='sm:pt-2 text-sm sm:text-base xl:text-[17px] leading-5'>Faça login para gerenciar suas consultas</p>
           </div>
-
           {/* Info do cliente */}
         <div className='hidden sm:flex flex-col items-center font-semibold'>
           <p className='self-center pb-1'>Rafaella Kalena <br className='md:hidden'/> S. Araújo</p>
@@ -30,28 +50,25 @@ export default function Login() {
         <div className='flex flex-col w-full md:max-w-[500px]'>
           <h1 className='text-[#2D231C] text-3xl text-center font-semibold py-2'>Login</h1>
 
-          <form onSubmit={e => e.preventDefault()}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className='flex flex-col pt-3'>
-              <label className='font-medium text-[#2D231C]'>E-mail</label>
-              <input 
+              <label className='font-medium text-[#2D231C]'>CPF</label>
+              <input
+              required
                 className='border border-[#B7A17D] h-11 px-3' 
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required/>
+                {...registerWithMask('register', ['999.999.999-99'],{required: true, autoUnmask: true, })}/>
             </div>
             <div className='flex flex-col pt-3'>
               <label className='font-medium text-[#2D231C]'>Senha</label>
               <input 
+              required
                 className='border border-[#B7A17D] h-11 px-3' 
                 type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required/>
+                {...register('password', {required: true})}/>
             </div>
             
             <button 
-              className='h-11 w-full mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
+              className='cursor-pointer h-11 w-full mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
               type="submit"
               >Login</button>
           </form>
