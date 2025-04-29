@@ -24,25 +24,29 @@ export default function Dashboard() {
 
   return (
     <div className='relative flex flex-col sm:flex-row sm:h-dvh'>
-      <section className='flex flex-col sm:w-36 px-10 py-5 justify-items-center items-center place-content-between'>
-        <Image src={Logo} alt='Logo do site' className=' sm:flex w-13  sm:mt-3 justify-self-center text-[#6A5242]'/>
-
-        <div className='flex fixed right-0 left-0 bottom-0 py-6 sm:static'>
-          <div className="flex mx-auto sm:flex-col sm:h-[240px] sm:w-[60px] bg-[#F1EDE3] rounded-full items-center sm:justify-between sm:mt-4">
-            {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActive(item.id)}
-              className={`w-14 h-14 flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 text-2xl
-                ${active === item.id ? 'bg-[#6B4A2E] text-white' : 'text-[#2D231C]'}`}
-            >
-              {item.icon}
-            </button>
-            ))}
+      <section className='flex flex-col sm:w-36 px-10 py-5 justify-items-center items-center justify-between'>
+        <div className='flex flex-col items-center'>
+          <Image src={Logo} alt='Logo do site' className=' sm:flex w-13  sm:mt-3 justify-self-center text-[#6A5242]'/>
+          <div className='flex fixed right-0 left-0 bottom-0 py-6 sm:static'>
+            <div className="flex mx-auto sm:flex-col sm:h-[240px] sm:w-[60px] bg-[#F1EDE3] rounded-full items-center sm:justify-between sm:mt-4">
+              {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActive(item.id)}
+                className={`w-14 h-14 flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 text-2xl
+                  ${active === item.id ? 'bg-[#6B4A2E] text-white' : 'text-[#2D231C]'}`}
+              >
+                {item.icon}
+              </button>
+              ))}
+            </div>
           </div>
         </div>
         
-        <div className="hidden sm:flex h-[100px] w-[60px] bg-[#F1EDE3] rounded-4xl flex-col items-center justify-between py-2 my-14">
+
+        
+        
+        <div className="hidden sm:flex h-[100px] w-[60px] bg-[#F1EDE3] rounded-4xl flex-col items-center justify-between py-2 my-9">
           <button
             className='w-14 h-14 flex items-center justify-center rounded-full text-[#2D231C] cursor-pointer transition-all py-2 px-3 duration-300 text-2xl'>
             <LuBell />
