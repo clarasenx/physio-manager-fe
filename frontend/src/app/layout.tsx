@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from 'next/font/google'
 import { Montserrat } from 'next/font/google'
 import "./globals.css";
+import Navbar from './components/Navbar';
 
 export const metadata: Metadata = {
   title: "Physio Manager",
@@ -24,7 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className}`}>
+      <body className={`${poppins.className} relative flex flex-col sm:flex-row sm:h-dvh`}>
+        <Navbar />
         {children}
       </body>
     </html>

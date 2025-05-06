@@ -29,7 +29,7 @@ export default function Login() {
   }
 
   return (
-    <div className='sm:flex bg-[#9C7C5A]'>
+    <div className='sm:flex bg-[#9C7C5A] w-full'>
 
       <section className='flex flex-col sm:w-2/5 py-7 sm:pb-0 px-10 xs:px-16 sm:px-8 lg:px-16 xl:px-20 text-[#F1EDE3] justify-evenly'>    
           <Image src={Logo} alt='Logo do site' className='w-10 sm:w-18 pb-5 self-end sm:self-center'/>
