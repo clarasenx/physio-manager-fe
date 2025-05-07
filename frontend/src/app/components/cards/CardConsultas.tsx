@@ -1,6 +1,11 @@
-import { LuList } from 'react-icons/lu';
+import { LuList, LuX } from 'react-icons/lu';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
 import { FaUser } from 'react-icons/fa';
+import { PiEyeBold } from 'react-icons/pi';
+import { GoPencil } from 'react-icons/go';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+
 
 interface ConsultaData {
   diaSemana: string;
@@ -20,6 +25,28 @@ interface CardConsultaProps {
 }
 
 export default function CardConsulta({ item }: CardConsultaProps) {
+  const [menuAberto, setMenuAberto] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuAberto(false);
+    }
+  };
+
+  if (menuAberto) {
+    document.addEventListener('mousedown', handleClickOutside);
+  } else {
+    document.removeEventListener('mousedown', handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [menuAberto]);
+
   return (
     <section className='bg-[#F1EDE3] justify-between w-full flex rounded-lg p-4 '>
       <div className='flex md:gap-8'>
@@ -42,9 +69,26 @@ export default function CardConsulta({ item }: CardConsultaProps) {
         </div>
       </div>
       </div>
-      <div className='flex flex-col md:justify-center'>         
-        <button className='md:hidden'><HiDotsVertical/></button>
-        <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'>Editar</button>
+
+      <div className='relative flex flex-col md:justify-center'>         
+        <button className='md:hidden' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical/></button>
+        <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button>
+        {menuAberto && (
+          <div ref={menuRef} className='w-[175px] top-1 right-5 md:right-26 md:top-5 bg-[#F1EDE3] flex flex-col absolute shadow-md p-1 rounded-lg '>
+          <div className='flex items-center px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
+            <PiEyeBold />
+            <button className='px-2 p-1 text-[12px] font-medium rounded-lg'>Visualizar consulta</button>
+          </div>
+          <div className='flex items-center px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242] '>
+            <GoPencil />
+            <button className='px-2 p-1 text-[12px] font-medium'>Editar consulta</button>
+          </div>
+          <div className='flex items-center px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
+            <LuX />
+            <button className='px-2 p-1 text-[12px] font-medium rounded-lg'>Cancelar consulta</button>
+          </div>
+        </div>
+        )}
       </div>
     </section>
   )
