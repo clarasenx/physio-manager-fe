@@ -50,7 +50,7 @@ export default function Dashboard() {
         </div>
 
         <div className='bg-white flex flex-col w-full md:h-full p-5 rounded-lg gap-3 text-zinc-950'>
-
+          {/* ### transformar esse card em componente ### */}
           <section className='bg-[#F1EDE3] flex flex-col rounded-lg p-4 md:px-5 w-[260px] md:flex-row md:w-full'>
             <div className='flex justify-between items-center pb-2 md:pb-0 md:h-full md:border-r-2 border-[#6B4A2E] lg:justify-center md:pr-4 md:mr-6 lg:mr-10 md:w-1/7'>
               <p className='font-medium md:text-lg lg:text-xl md:font-semibold md:text-center'>09:30 <br className='hidden md:flex xl:hidden'/> - <br className='hidden md:flex xl:hidden'/>  10:30</p>

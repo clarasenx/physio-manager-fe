@@ -16,10 +16,10 @@ const Navbar = () => {
   
     const [active, setActive] = useState('dashboard');
     const navItems = [
-    { id: 'dashboard', icon: <LuLayoutGrid /> },
-    { id: 'calendar', icon: <LuCalendarDays /> },
-    { id: 'users', icon: <LuUserPen /> },
-    { id: 'menu', icon: <LuList /> },
+    { id: 'dashboard', icon: <LuLayoutGrid />, rota: "/dashboard" },
+    { id: 'calendar', icon: <LuCalendarDays />, rota: "/consultas" },
+    { id: 'users', icon: <LuUserPen />, rota: "/pacientes" },
+    { id: 'menu', icon: <LuList />, rota: "/menu"},
   ];
 
   const pathname = usePathname();
@@ -37,7 +37,11 @@ const Navbar = () => {
               {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActive(item.id)}
+                onClick={() => {
+                  setActive(item.id)
+                  router.push(item.rota)
+                  }
+                }
                 className={`w-14 h-14 flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 text-2xl
                   ${active === item.id ? 'bg-[#6B4A2E] text-white' : 'text-[#2D231C]'}`}
               >
