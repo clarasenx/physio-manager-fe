@@ -14,14 +14,14 @@ export default function Dashboard() {
       status: "Concluída",
     },
     {
-      id: 1,
+      id: 2,
       name: "Raissa Andrade",
       treatment: "Sessão de fisioterapia",
       time: "10:30-11:30",
       status: "Pendente",
     },
     {
-      id: 1,
+      id: 3,
       name: "Ana Frota",
       treatment: "Liberação miofascial",
       time: "13:30-14:30",
