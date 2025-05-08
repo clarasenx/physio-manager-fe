@@ -1,8 +1,33 @@
 'use client'
 import { HiDotsVertical } from 'react-icons/hi';
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
+import CardDashboard from '../components/cards/CardDashboard';
 
 export default function Dashboard() {
+
+  const consultasHoje = [
+    {
+      id: 1,
+      name: "Raissa Andrade",
+      treatment: "Sessão de fisioterapia",
+      time: "09:30-10:30",
+      status: "Concluída",
+    },
+    {
+      id: 1,
+      name: "Raissa Andrade",
+      treatment: "Sessão de fisioterapia",
+      time: "10:30-11:30",
+      status: "Pendente",
+    },
+    {
+      id: 1,
+      name: "Ana Frota",
+      treatment: "Liberação miofascial",
+      time: "13:30-14:30",
+      status: "Cancelada",
+    },
+  ]
 
   return (
     <div className='flex flex-col h-full w-full items-center px-8 sm:py-5'>
@@ -50,51 +75,9 @@ export default function Dashboard() {
         </div>
 
         <div className='bg-white flex flex-col w-full md:h-full p-5 rounded-lg gap-3 text-zinc-950'>
-          {/* ### transformar esse card em componente ### */}
-          <section className='bg-[#F1EDE3] flex flex-col rounded-lg p-4 md:px-5 w-[260px] md:flex-row md:w-full'>
-            <div className='flex justify-between items-center pb-2 md:pb-0 md:h-full md:border-r-2 border-[#6B4A2E] lg:justify-center md:pr-4 md:mr-6 lg:mr-10 md:w-1/7'>
-              <p className='font-medium md:text-lg lg:text-xl md:font-semibold md:text-center'>09:30 <br className='hidden md:flex xl:hidden'/> - <br className='hidden md:flex xl:hidden'/>  10:30</p>
-              <button className='md:hidden'><HiDotsVertical/></button>
-            </div>
-            <div className='py-2 md:p-4 md:w-3/7'>
-              <p className='text-lg leading-4 font-semibold'>Raissa Andrade</p>
-              <p className='md:text-sm'>Sessão de fisioterapia</p>
-            </div>
-            <div className='md:flex md:justify-between md:items-center md:w-3/7'>
-              <p className='px-3 py-1 justify-self-end bg-red-800 max-w-28 rounded-full text-sm text-white font-medium w-[120px] text-center'>Cancelada</p>
-              <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'>Editar</button>
-            </div>
-          </section>
-
-          <section className='bg-[#F1EDE3] flex flex-col rounded-lg p-4 md:px-5 w-[260px] md:flex-row md:w-full'>
-            <div className='flex justify-between items-center pb-2 md:pb-0 md:h-full md:border-r-2 border-[#6B4A2E] lg:justify-center md:pr-4 md:mr-6 lg:mr-10 md:w-1/7'>
-              <p className='font-medium md:text-lg lg:text-xl md:font-semibold md:text-center'>09:30 <br className='hidden md:flex xl:hidden'/> - <br className='hidden md:flex xl:hidden'/>  10:30</p>
-              <button className='md:hidden'><HiDotsVertical/></button>
-            </div>
-            <div className='py-2 md:p-4 md:w-3/7'>
-              <p className='text-lg leading-4 font-semibold'>Raissa Andrade</p>
-              <p className='md:text-sm'>Sessão de fisioterapia</p>
-            </div>
-            <div className='md:flex md:justify-between md:items-center md:w-3/7'>
-              <p className='px-3 py-1 justify-self-end bg-green-900 max-w-28 rounded-full text-sm text-white font-medium w-[120px] text-center'>Concluída</p>
-              <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'>Editar</button>
-            </div>
-          </section>
-
-          <section className='bg-[#F1EDE3] flex flex-col rounded-lg p-4 md:px-5 w-[260px] md:flex-row md:w-full'>
-            <div className='flex justify-between items-center pb-2 md:pb-0 md:h-full md:border-r-2 border-[#6B4A2E] lg:justify-center md:pr-4 md:mr-6 lg:mr-10 md:w-1/7'>
-              <p className='font-medium md:text-lg lg:text-xl md:font-semibold md:text-center'>09:30 <br className='hidden md:flex xl:hidden'/> - <br className='hidden md:flex xl:hidden'/>  10:30</p>
-              <button className='md:hidden'><HiDotsVertical/></button>
-            </div>
-            <div className='py-2 md:p-4 md:w-3/7'>
-              <p className='text-lg leading-4 font-semibold'>Raissa Andrade</p>
-              <p className='md:text-sm'>Sessão de fisioterapia</p>
-            </div>
-            <div className='md:flex md:justify-between md:items-center md:w-3/7'>
-              <p className='px-3 py-1 justify-self-end bg-amber-600 max-w-28 rounded-full text-sm text-white font-medium w-[120px] text-center'>Pendente</p>
-              <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'>Editar</button>
-            </div>
-          </section>
+          {consultasHoje.map((item) => (
+            <CardDashboard key={item.id} item={item} />
+          ))}
         </div>
       </section>
     </div>
