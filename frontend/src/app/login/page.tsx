@@ -1,6 +1,6 @@
 "use client"
 import api from '@/api/axios';
-import Logo from "@/public/icon.svg";
+import Logo from "@/../public/iconDark.svg";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -46,7 +46,7 @@ export default function Login() {
       </section>
 
       {/* Seção de Login */}
-      <section className='flex flex-col sm:justify-center md:items-center h-screen w-full bg-[#F9F7F3] sm:rounded-l-2xl rounded-t-2xl px-10 sm:px-16 pt-12 sm:pt-0'>
+      <section className='flex flex-col sm:justify-center md:items-center h-screen w-full bg-[#F9F7F3] sm:rounded-l-2xl sm:rounded-t-none rounded-t-2xl px-10 sm:px-16 pt-12 sm:pt-0'>
         <div className='flex flex-col w-full md:max-w-[500px]'>
           <h1 className='text-[#2D231C] text-3xl text-center font-semibold py-2'>Login</h1>
 
