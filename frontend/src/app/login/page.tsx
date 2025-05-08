@@ -1,6 +1,6 @@
 "use client"
 import api from '@/api/axios';
-import Logo from "@/public/icon.svg";
+import Logo from "@/../public/icon.svg";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
