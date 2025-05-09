@@ -2,7 +2,7 @@
 
 import { getDaysInMonth } from "@/utils/getDaysInMonth";
 import { useCallback, useState } from "react";
-import { CalendarDay, EventType } from "../calendarDay";
+import { CalendarDay, EventType } from "../scheduleMenu/calendarDay";
 import { isSameDay } from "@/utils/isSameDay";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 

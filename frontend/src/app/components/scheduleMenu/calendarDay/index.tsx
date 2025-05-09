@@ -6,6 +6,7 @@ import { BiPlus } from "react-icons/bi";
 import { BsEye, BsPencil, BsX } from "react-icons/bs";
 import { FiX } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
+import { ScheduleMenu } from "..";
 
 export type EventType = {
   id: string;
@@ -23,16 +24,19 @@ interface ICalendarDay {
 
 const indexOfEndWeek = [0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41]
 
-const EventCard = ({ event }: { event: EventType }) => {
+const EventCard = ({ event, isCurrentMonth }: { event: EventType, isCurrentMonth: boolean }) => {
   const [showActions, setShowActions] = useState(false);
 
-  const toggleActions = () => setShowActions(!showActions)
+  const toggleActions = () => {
+    if(!isCurrentMonth) return
+    setShowActions(!showActions)
+  }
 
   return (
     <div
-      className="relative mt-1 bg-[#9b7b61] text-white rounded text-xs cursor-pointer"
+      className={`relative mt-1 bg-[#9b7b61]  rounded text-xs ${isCurrentMonth ? 'cursor-pointer' : ''}`}
     >
-      <div onClick={() => toggleActions()} className="h-full w-full py-1 px-2">
+      <div onClick={() => toggleActions()} className="h-full w-full py-1 px-2 text-white">
         {event.time} - {event.title}
         <span className="absolute top-1 right-1">
           ⋮
@@ -40,28 +44,13 @@ const EventCard = ({ event }: { event: EventType }) => {
       </div>
 
       {showActions && (
-        <>
 
-          <div
-            className={`inset-0 bg-black/25 z-40 fixed cursor-default`}
-            onClick={() => toggleActions()}
+          <ScheduleMenu
+            menuAberto={showActions}
+            setMenuAberto={setShowActions}
+            className='absolute top-7 right-0 bg-[#F1EDE3] z-50'
           />
-          <div
-            className={`
-              absolute w-full z-50 top-7 cursor-default right-0 bg-[#F1EDE3] text-black text-sm rounded shadow py-2 px-1 bg-[#F1EDE3]
-            `}
-          >
-            <button className="flex cursor-pointer gap-0.5 text-xs items-center w-full rounded-sm text-start text-nowrap truncate font-medium text-[#6A5242] p-0.5 xl:p-1 2xl:p-2 2xl:text-sm 2xl:gap-1 hover:bg-[#6A5242] hover:text-[#F1EDE3]">
-              <BsEye className="hidden xl:block shrink-0" size={20} /> Visualizar
-            </button>
-            <button className="flex cursor-pointer gap-0.5 text-xs items-center w-full rounded-sm text-start text-nowrap truncate font-medium text-[#6A5242] p-0.5 xl:p-1 2xl:p-2 2xl:text-sm 2xl:gap-1 hover:bg-[#6A5242] hover:text-[#F1EDE3]">
-              <BsPencil className="hidden xl:block shrink-0" size={20} /> Editar
-            </button>
-            <button className="flex cursor-pointer gap-0.5 text-xs items-center w-full rounded-sm text-start text-nowrap truncate font-medium text-[#6A5242] p-0.5 xl:p-1 2xl:p-2 2xl:text-sm 2xl:gap-1 hover:bg-[#6A5242] hover:text-[#F1EDE3]">
-              <BsX className="hidden xl:block shrink-0" size={20} /> Cancelar
-            </button>
-          </div>
-        </>
+          
       )}
     </div>
   );
@@ -79,7 +68,7 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
       <div className="text-xxs text-[#2D231C] font-semibold text-right mr-3">{date.getDate()}</div>
       <div>
         {events.map(event => (
-          <EventCard key={event.id} event={event} />
+          <EventCard key={event.id} event={event} isCurrentMonth={isCurrentMonth}/>
         ))}
       </div>
       {
