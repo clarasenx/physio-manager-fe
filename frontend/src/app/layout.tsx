@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} relative flex h-dvh w-dvw bg-[#F1EDE3] mb-16 md:mb-0 md:pr-4`}>
+      <body className={`${poppins.className} relative flex md:h-fit w-content bg-[#F1EDE3] mb-16 md:mb-0`}>
         <Navbar />
         {children}
       </body>

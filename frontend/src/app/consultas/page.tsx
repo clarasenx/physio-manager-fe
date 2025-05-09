@@ -33,7 +33,7 @@ export default function Consultas() {
   return (
     <div className='w-full'>
       {/* toggle Consultas/Calendario */}
-      <section className='flex justify-center px-4 mt-10'>
+      <section className='flex justify-center px-4 mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
           {/* Indicador deslizante */}
           <div
@@ -57,7 +57,7 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-3 px-7 py-4 '>
+      <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
         <p className='text-2xl text-center font-medium'>Consultas</p>
 
         <div className='bg-white w-full rounded-2xl py-4 flex flex-col items-center justify-center'>

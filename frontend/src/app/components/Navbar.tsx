@@ -4,7 +4,6 @@ import Logo from "../../../public/icon.svg";
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '../actions/logout';
 import { LuLayoutGrid, LuCalendarDays, LuUserPen, LuList, LuLogOut, LuBell } from "react-icons/lu";
-import { useState } from 'react';
 import Image from 'next/image';
 
 const Navbar = () => {
@@ -14,7 +13,6 @@ const Navbar = () => {
       router.replace("/login")
     }
   
-    const [active, setActive] = useState('dashboard');
     const navItems = [
     { id: 'dashboard', icon: <LuLayoutGrid />, rota: "/dashboard" },
     { id: 'calendar', icon: <LuCalendarDays />, rota: "/consultas" },
@@ -28,22 +26,21 @@ const Navbar = () => {
   if (hideHeader) return null;
   
   return (
-    <section className='z-100 flex flex-col h-full lg:w-36 lg:px-10 py-5 justify-items-center lg:items-center justify-between'>
-        <div className='flex flex-col lg:items-center'>
-          <Image src={Logo} alt='Logo do site' className='hidden lg:flex w-13 lg:mt-3'/>
+    <section className='flex flex-col h-full md:w-36 md:px-10 py-5 justify-items-center sm:items-center justify-between'>
+        <div className='flex flex-col sm:items-center'>
+          <Image src={Logo} alt='Logo do site' className='hidden md:flex w-13 sm:mt-3'/>
 
-          <div className='flex fixed right-0 left-0 bottom-0 py-6 lg:static'>
-            <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center lg:justify-between lg:mt-4 shadow-md">
+          <div className='flex fixed right-0 left-0 bottom-0 py-6 md:static'>
+            <div className="flex mx-auto md:flex-col md:h-[240px] md:w-[60px] bg-[#ece2c9] rounded-full items-center sm:justify-between sm:mt-4 shadow-md">
               {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
-                  setActive(item.id)
                   router.push(item.rota)
                   }
                 }
                 className={`w-14 h-14 flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 text-2xl
-                  ${active === item.id ? 'bg-[#6B4A2E] text-white' : 'text-[#2D231C]'}`}
+                  ${pathname === item.rota ? 'bg-[#6B4A2E] text-white' : 'text-[#2D231C]'}`}
               >
                 {item.icon}
               </button>
@@ -51,11 +48,8 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        
 
-        
-        
-        <div className="hidden lg:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
+        <div className="hidden md:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
           <button
             className='w-14 h-14 flex items-center justify-center rounded-full text-[#2D231C] cursor-pointer transition-all py-2 px-3 duration-300 text-2xl'>
             <LuBell />
