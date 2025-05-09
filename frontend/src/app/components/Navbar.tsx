@@ -28,12 +28,12 @@ const Navbar = () => {
   if (hideHeader) return null;
   
   return (
-    <section className='flex flex-col h-full sm:w-36 sm:px-10 py-5 justify-items-center sm:items-center justify-between'>
-        <div className='flex flex-col sm:items-center'>
-          <Image src={Logo} alt='Logo do site' className='hidden sm:flex w-13 sm:mt-3'/>
+    <section className='z-100 flex flex-col h-full lg:w-36 lg:px-10 py-5 justify-items-center lg:items-center justify-between'>
+        <div className='flex flex-col lg:items-center'>
+          <Image src={Logo} alt='Logo do site' className='hidden lg:flex w-13 lg:mt-3'/>
 
-          <div className='flex fixed right-0 left-0 bottom-0 py-6 sm:static'>
-            <div className="flex mx-auto sm:flex-col sm:h-[240px] sm:w-[60px] bg-[#ece2c9] rounded-full items-center sm:justify-between sm:mt-4 shadow-md">
+          <div className='flex fixed right-0 left-0 bottom-0 py-6 lg:static'>
+            <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center lg:justify-between lg:mt-4 shadow-md">
               {navItems.map((item) => (
               <button
                 key={item.id}
@@ -55,7 +55,7 @@ const Navbar = () => {
 
         
         
-        <div className="hidden sm:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
+        <div className="hidden lg:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
           <button
             className='w-14 h-14 flex items-center justify-center rounded-full text-[#2D231C] cursor-pointer transition-all py-2 px-3 duration-300 text-2xl'>
             <LuBell />
