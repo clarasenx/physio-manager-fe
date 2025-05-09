@@ -48,10 +48,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        
 
-        
-        
         <div className="hidden md:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
           <button
             className='w-14 h-14 flex items-center justify-center rounded-full text-[#2D231C] cursor-pointer transition-all py-2 px-3 duration-300 text-2xl'>
