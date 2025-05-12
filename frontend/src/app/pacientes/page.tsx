@@ -1,3 +1,4 @@
+import CardPacienteIndiv from '@/components/cards/CardPacienteIndiv';
 import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
 
@@ -72,7 +73,11 @@ export default function Consultas() {
               </tbody>
             </table> 
           </section>
-          
+
+          {/* Cards de paciente individual */}
+          <section className='w-full flex flex-col md:hidden'>
+            <CardPacienteIndiv />
+          </section>
         
 
           {/* Card de informações de um paciente especificio*/}
