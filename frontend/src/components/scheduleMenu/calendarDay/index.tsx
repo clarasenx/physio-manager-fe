@@ -45,7 +45,7 @@ const EventCard = ({ event, isCurrentMonth }: { event: EventType, isCurrentMonth
           <ScheduleMenu
             menuAberto={showActions}
             setMenuAberto={setShowActions}
-            className='absolute top-7 right-0 bg-[#F1EDE3] z-50'
+            className='absolute top-7 right-0 bg-[#F6F5F2] z-50'
           />
           
       )}
@@ -61,7 +61,7 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
   const [isHover, setIsHover] = useState<boolean>(false)
 
   return (
-    <div className={`bg-[${indexOfEndWeek.includes(index) ? '#F1EDE3' : '#F9F7F3'}] ${isCurrentMonth ? '' : 'opacity-70'} p-1 relative min-h-[110px] ${isCurrentDate ? 'border border-[#9b7b61]/50' : ''}`} onPointerEnter={() => setIsHover(true)} onPointerLeave={() => setIsHover(false)}>
+    <div className={`bg-[${indexOfEndWeek.includes(index) ? '#F6F5F2' : '#F9F7F3'}] ${isCurrentMonth ? '' : 'opacity-70'} p-1 relative min-h-[110px] ${isCurrentDate ? 'border border-[#9b7b61]/50' : ''}`} onPointerEnter={() => setIsHover(true)} onPointerLeave={() => setIsHover(false)}>
       <div className="text-xxs text-[#2D231C] font-semibold text-right mr-3">{date.getDate()}</div>
       <div>
         {events.map(event => (
@@ -70,7 +70,7 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
       </div>
       {
         isHover &&
-        <div className="w-6 h-6 flex justify-center items-center rounded-sm bg-[#F1EDE3] absolute top-1 left-1 cursor-pointer">
+        <div className="w-6 h-6 flex justify-center items-center rounded-sm bg-[#F6F5F2] absolute top-1 left-1 cursor-pointer">
           <BiPlus color="#6A5242" size={20} />
         </div>
       }

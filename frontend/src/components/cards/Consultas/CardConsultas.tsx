@@ -26,7 +26,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
-    <section className='bg-[#F1EDE3] justify-between w-full flex rounded-lg p-4 '>
+    <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg p-4 '>
       <div className='flex md:gap-8'>
         <div className='flex flex-col items-center justify-center pr-4 border-r-2 border-[#6B4A2E]/40 sm:pl-3 sm:pr-5 md:pl-8 md:pr-10 lg:justify-center '>
           <p className='font-semibold text-lg text-[#1f1005] md:font-semibold md:text-center'>{item.data.diaSemana}</p>
@@ -55,7 +55,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
           <ScheduleMenu
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
-            className='top-1 right-5 md:right-26 md:top-5 bg-[#F1EDE3]'
+            className='top-1 right-5 md:right-26 md:top-5 bg-[#F6F5F2]'
           />
         )}
       </div>

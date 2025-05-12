@@ -18,7 +18,7 @@ interface DashboardDataProps {
 const CardDashboard = ({item}: DashboardDataProps) => {
   const [menuAberto, setMenuAberto] = useState(false);
   return (
-    <section className='bg-[#F1EDE3] flex flex-col rounded-lg p-4 md:px-5 md:flex-row w-full'>
+    <section className='bg-[#F6F5F2] flex flex-col rounded-lg p-4 md:px-5 md:flex-row w-full'>
       <div className='flex justify-between items-center pb-2 md:pb-0  md:border-r-2 border-[#6B4A2E] lg:justify-center lg:mr-10 md:h-16 md:w-1/5'>
         <p className='text-nowrap font-medium md:text-lg lg:text-xl md:font-semibold md:leading-5'>{item.time}</p>
         <button className='md:hidden cursor-pointer'><HiDotsVertical/></button>
@@ -35,7 +35,7 @@ const CardDashboard = ({item}: DashboardDataProps) => {
           <ScheduleMenu
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
-            className='top-1 right-5 md:right-26 md:top-5 bg-[#F1EDE3]'
+            className='top-1 right-5 md:right-26 md:top-5 bg-[#F6F5F2]'
           />
         )}
       </div>

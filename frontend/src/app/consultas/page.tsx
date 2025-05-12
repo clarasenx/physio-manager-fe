@@ -107,9 +107,9 @@ export default function Consultas() {
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" className='cursor-pointer bg-[#6A5242] text-white hover:bg-[#F7F3EB]'><LuCirclePlus />Novo paciente</Button>
+                      <Button><LuCirclePlus />Novo paciente</Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
                       <DialogHeader>
                         <DialogTitle>Criar consulta</DialogTitle>
                       </DialogHeader>

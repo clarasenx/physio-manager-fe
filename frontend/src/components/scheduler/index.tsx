@@ -61,7 +61,7 @@ export const Scheduler = () => {
       </div>
       <div className="grid grid-cols-7  grid-rows-1 gap-[1px] rounded-t-xl bg-[#D4D0C6] border-b border-[#D4D0C6] overflow-hidden w-full">
         {weekDays.map((day, index) => (
-          <p key={`WeekDay-${index}`} className="text-center font-medium bg-[#F1EDE3] h-full py-2 text-[#6A5242]">{day}</p>
+          <p key={`WeekDay-${index}`} className="text-center font-medium bg-[#F6F5F2] h-full py-2 text-[#6A5242]">{day}</p>
         ))}
       </div>
       <div className="grid grid-cols-7 grid-rows-5 gap-[1px] w-full bg-[#D4D0C6] rounded-b-xl overflow-hidden">

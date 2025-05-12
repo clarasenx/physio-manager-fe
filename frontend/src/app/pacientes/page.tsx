@@ -22,7 +22,7 @@ export default function Consultas() {
 
       <section className='bg-white h-full rounded-lg py-5 px-4 shadow'>
         <div className='w-full flex justify-center gap-2'>
-          <div className='px-2 h-8 w-full flex bg-[#F1EDE3] rounded-lg items-center gap-2 shadow cursor-pointer'>
+          <div className='px-2 h-8 w-full flex bg-[#F6F5F2] rounded-lg items-center gap-2 shadow cursor-pointer'>
             <LuSearch className='text-[#6A5242]'/>
             <input type="text"
             placeholder="Buscar por paciente"
@@ -39,7 +39,7 @@ export default function Consultas() {
           <section className='w-full hidden md:flex'>
             <table className="w-full overflow-hidden rounded-lg border border-gray-200 text-sm">
               <thead>
-                <tr className="bg-[#F1EDE3] text-[#2D231C] text-left text-nowrap">
+                <tr className="bg-[#F6F5F2] text-[#2D231C] text-left text-nowrap">
                   <th className="p-3">Nome</th>
                   <th className="p-3">Data de nascimento</th>
                   <th className="p-3">Telefone</th>
@@ -76,7 +76,7 @@ export default function Consultas() {
         
 
           {/* Card de informações de um paciente especificio*/}
-          <section className='hidden w-64 text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
+          <section className='hidden w-64 text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F6F5F2]'>
             <p className='font-semibold text-lg px-3 pb-2'>{pacientes[0].nome}</p>
 
             <div className='bg-white px-4 py-3 rounded-lg'>
