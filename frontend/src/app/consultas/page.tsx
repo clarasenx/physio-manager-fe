@@ -1,11 +1,8 @@
 'use client'
 import { useState } from 'react';
-import { FaUser } from 'react-icons/fa6';
-import { HiDotsVertical } from 'react-icons/hi';
-import { HiClock } from 'react-icons/hi2';
-import { LuList } from 'react-icons/lu';
-import CardConsulta from './../components/cards/CardConsultas';
+import CardConsulta from '../components/cards/Consultas/CardConsultas';
 import { Scheduler } from '../components/scheduler';
+import { LuCirclePlus } from 'react-icons/lu';
 
 
 export default function Consultas() {
@@ -65,27 +62,34 @@ export default function Consultas() {
           {
             activeToggleInicial === 1 ? (
               <>
-                {/* toggle consultas agendadas/concluidas/canceladas */}
-                <div className="relative inline-flex bg-[#F7F3EB] rounded-full p-1">
-                  {/* Indicador deslizante */}
-                  <div
-                    className="absolute top-1 left-1 h-7 w-24 rounded-full bg-[#6B4A2E] transition-all duration-300"
-                    style={{
-                      transform: `translateX(${(activeToggleConsultas - 1) * 96}px)`
-                    }}
-                  ></div>
+                <div className='sm:w-full items-center gap-3 flex flex-col sm:flex-row sm:px-6 sm:justify-between'>
+                  {/* toggle consultas agendadas/concluidas/canceladas */}
+                  <div className="relative inline-flex bg-[#F7F3EB] rounded-full p-1">
+                    {/* Indicador deslizante */}
+                    <div
+                      className="absolute top-1 left-1 h-7 w-24 rounded-full bg-[#6B4A2E] transition-all duration-300"
+                      style={{
+                        transform: `translateX(${(activeToggleConsultas - 1) * 96}px)`
+                      }}
+                    ></div>
 
-                  {toggleConsultas.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveToggleConsultas(item.id)}
-                      className={`relative z-10 w-24 h-7 text-[12px] flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleConsultas === item.id ? 'text-white' : 'text-[#2D231C]'
-                        }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                    {toggleConsultas.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveToggleConsultas(item.id)}
+                        className={`relative z-10 w-24 h-7 text-[12px] flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleConsultas === item.id ? 'text-white' : 'text-[#2D231C]'
+                          }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className='flex w-fit h-7 sm:h-9 px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
+                    <LuCirclePlus />
+                    <button className='text-sm text-nowrap'>Novo paciente</button>
+                  </div>
                 </div>
+                
 
                 {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
                 {/*Seção das consultas do dia*/}

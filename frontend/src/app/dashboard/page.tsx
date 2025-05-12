@@ -1,5 +1,4 @@
 'use client'
-import { HiDotsVertical } from 'react-icons/hi';
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
 import CardDashboard from '../components/cards/CardDashboard';
 

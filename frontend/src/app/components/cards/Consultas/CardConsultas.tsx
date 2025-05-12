@@ -1,11 +1,8 @@
-import { LuList, LuX } from 'react-icons/lu';
-import { HiClock, HiDotsVertical } from 'react-icons/hi';
+import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
-import { PiEyeBold } from 'react-icons/pi';
-import { GoPencil } from 'react-icons/go';
-import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { ScheduleMenu } from '../scheduleMenu';
+import { HiClock, HiDotsVertical } from 'react-icons/hi';
+import { LuList } from 'react-icons/lu';
+import { ScheduleMenu } from '../../scheduleMenu';
 
 
 interface ConsultaData {
