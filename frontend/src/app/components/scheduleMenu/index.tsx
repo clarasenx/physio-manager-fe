@@ -35,7 +35,7 @@ export const ScheduleMenu = ({
   }, [menuAberto]);
 
   return (
-    <div ref={menuRef} className={'w-[175px] flex flex-col absolute shadow-md p-1 rounded-lg ' + className}>
+    <div ref={menuRef} className={'w-[175px] flex flex-col absolute shadow-lg p-1 rounded-lg ' + className}>
       <div className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
         <PiEyeBold  className="cursor-pointer"/>
         <button className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Visualizar consulta</button>
