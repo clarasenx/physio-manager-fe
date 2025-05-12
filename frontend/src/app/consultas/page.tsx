@@ -3,6 +3,25 @@ import { useState } from 'react';
 import CardConsulta from '../components/cards/Consultas/CardConsultas';
 import { Scheduler } from '../components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
+import { Button } from "@/app/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/app/components/ui/dialog"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/app/components/ui/form"
+;
 
 
 export default function Consultas() {
@@ -27,6 +46,7 @@ export default function Consultas() {
     { id: 4, tratamento: "Liberação miofascial", horário: "11:30 - 12:30", paciente: "Ana Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
     { id: 5, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" }
   ]
+  const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
   return (
     <div className='w-full'>
       {/* toggle Consultas/Calendario */}
@@ -62,7 +82,7 @@ export default function Consultas() {
           {
             activeToggleInicial === 1 ? (
               <>
-                <div className='sm:w-full items-center gap-3 flex flex-col sm:flex-row sm:px-6 sm:justify-between'>
+                <div className='relative sm:w-full items-center gap-3 flex flex-col sm:flex-row sm:px-6 sm:justify-between'>
                   {/* toggle consultas agendadas/concluidas/canceladas */}
                   <div className="relative inline-flex bg-[#F7F3EB] rounded-full p-1">
                     {/* Indicador deslizante */}
@@ -84,10 +104,20 @@ export default function Consultas() {
                       </button>
                     ))}
                   </div>
-                  <div className='flex w-fit h-7 sm:h-9 px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
-                    <LuCirclePlus />
-                    <button className='text-sm text-nowrap'>Novo paciente</button>
-                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className='cursor-pointer bg-[#6A5242] text-white hover:bg-[#F7F3EB]'><LuCirclePlus />Novo paciente</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Criar consulta</DialogTitle>
+                      </DialogHeader>
+                      
+                      <DialogFooter>
+                        <Button type="submit" className='bg-[#6A5242]'>Salvar consulta</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
                 
 
