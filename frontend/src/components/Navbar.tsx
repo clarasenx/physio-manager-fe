@@ -1,10 +1,10 @@
 'use client'
   
-import Logo from "../../../public/icon.svg";
+import Logo from "../../public/icon.svg";
 import { usePathname, useRouter } from 'next/navigation';
-import { logout } from '../actions/logout';
 import { LuLayoutGrid, LuCalendarDays, LuUserPen, LuList, LuLogOut, LuBell } from "react-icons/lu";
 import Image from 'next/image';
+import { logout } from "@/app/actions/logout";
 
 const Navbar = () => {
     const router = useRouter();

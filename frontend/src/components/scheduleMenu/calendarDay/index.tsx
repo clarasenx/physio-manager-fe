@@ -3,9 +3,6 @@
 import { isSameDay } from "@/utils/isSameDay";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
-import { BsEye, BsPencil, BsX } from "react-icons/bs";
-import { FiX } from "react-icons/fi";
-import { MdOutlineEdit } from "react-icons/md";
 import { ScheduleMenu } from "..";
 
 export type EventType = {
