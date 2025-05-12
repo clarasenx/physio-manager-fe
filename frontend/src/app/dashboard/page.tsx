@@ -1,6 +1,6 @@
 'use client'
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
-import CardDashboard from '../components/cards/CardDashboard';
+import CardDashboard from '@/components/cards/CardDashboard';
 
 export default function Dashboard() {
 

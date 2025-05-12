@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react';
-import CardConsulta from '../components/cards/Consultas/CardConsultas';
-import { Scheduler } from '../components/scheduler';
+import CardConsulta from '@/components/cards/Consultas/CardConsultas';
+import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
-import { Button } from "@/app/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog"
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -20,8 +20,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form"
+} from "@/components/ui/form"
 ;
+import { ConsutasCreateForm } from './components/createForm';
 
 
 export default function Consultas() {
@@ -114,7 +115,7 @@ export default function Consultas() {
                       </DialogHeader>
                       
                       <DialogFooter>
-                        <Button type="submit" className='bg-[#6A5242]'>Salvar consulta</Button>
+                        <ConsutasCreateForm />
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
