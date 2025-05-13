@@ -75,13 +75,13 @@ export default function Consultas() {
           </section>
 
           {/* Cards de paciente individual */}
-          <section className='w-full flex flex-col md:hidden'>
+          <section className='w-full flex flex-col md:hidden bg-[#F1EDE3] rounded-md p-4'>
             <CardPacienteIndiv />
           </section>
         
 
           {/* Card de informações de um paciente especificio*/}
-          <section className='hidden w-64 text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
+          <section className=' w-64 text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
             <p className='font-semibold text-lg px-3 pb-2'>{pacientes[0].nome}</p>
 
             <div className='bg-white px-4 py-3 rounded-lg'>
