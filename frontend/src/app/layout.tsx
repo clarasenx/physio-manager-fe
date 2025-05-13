@@ -4,6 +4,7 @@ import { Montserrat } from 'next/font/google'
 import "./globals.css";
 import Navbar from '@/components/Navbar';
 import { UseClientProvider } from '@/hooks/useClientProvider';
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Physio Manager",
@@ -33,6 +34,7 @@ export default function RootLayout({
             {children}
           </div>
         </UseClientProvider>
+        <Toaster />
       </body>
     </html>
   );

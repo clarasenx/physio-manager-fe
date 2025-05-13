@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import CardConsulta from '@/components/cards/Consultas/CardConsultas';
 import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
@@ -12,20 +12,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-;
+
 import { ConsutasCreateForm } from './components/createForm';
+import { useSchedule } from '@/hooks/useSchedule';
+import { ScheduleStatus } from '@/enum/schedule-status.enum';
+import { Skeleton } from '@/components/ui/skeleton';
+import { isSameDay } from 'date-fns';
+import { ScheduleSection } from './components/scheduleSection';
 
 
 export default function Consultas() {
+
 
   const [activeToggleInicial, setActiveToggleInicial] = useState(1);
   const toggleInicial = [
@@ -35,10 +32,14 @@ export default function Consultas() {
 
   const [activeToggleConsultas, setActiveToggleConsultas] = useState(1);
   const toggleConsultas = [
-    { id: 1, label: "Agendadas" },
-    { id: 2, label: "Concluídas" },
-    { id: 3, label: "Canceladas" },
+    { id: 1, label: "Agendadas", status: ScheduleStatus.SCHEDULED },
+    { id: 2, label: "Concluídas", status: ScheduleStatus.COMPLETED },
+    { id: 3, label: "Canceladas", status: ScheduleStatus.CANCELED },
   ]
+
+  const scheduleStatus = toggleConsultas.find(t => t.id === activeToggleConsultas)?.status
+
+  const schedules = useSchedule({ status: scheduleStatus })
 
   const consultas = [
     { id: 1, tratamento: "Liberação miofascials gsg", horário: "09:30 - 10:30", paciente: "Andressa Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
@@ -48,6 +49,31 @@ export default function Consultas() {
     { id: 5, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" }
   ]
   const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
+
+  const getScheduleToday = useCallback(() => schedules.data?.filter(schedule => isSameDay(schedule.date, new Date())), [schedules])
+
+  const getSchedule = useCallback(() => schedules.data?.filter(schedule => !isSameDay(schedule.date, new Date())), [schedules])
+
+  function Loading() {
+    return (
+      <>
+        <Skeleton className="w-[100px] h-[20px] rounded-full" />
+        <Skeleton className="w-[120px] h-[20px] rounded-full" />
+        <Skeleton className="w-[110px] h-[20px] rounded-full" />
+      </>
+    )
+  }
+
+  function Error() {
+    return (
+      <>
+        <h3 className='text-2xl text-center font-medium'>Ocorreu um erro ao carregar consultas</h3>
+        <p>Tente novamente mais tarde!</p>
+        <Button onClick={() => schedules.refetch()}>Recarregar</Button>
+      </>
+    )
+  }
+
   return (
     <div className='w-full'>
       {/* toggle Consultas/Calendario */}
@@ -76,7 +102,7 @@ export default function Consultas() {
 
       {/* Seção consultas */}
       <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
-        <p className='text-2xl text-center font-medium'>Consultas</p>
+        <h2 className='text-2xl text-center font-medium'>Consultas</h2>
 
         <div className='bg-white w-full rounded-2xl py-4 flex flex-col items-center justify-center'>
 
@@ -107,46 +133,37 @@ export default function Consultas() {
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button><LuCirclePlus />Novo paciente</Button>
+                      <Button><LuCirclePlus />Nova Consulta</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
                       <DialogHeader>
                         <DialogTitle>Criar consulta</DialogTitle>
                       </DialogHeader>
-                      
+
                       <DialogFooter>
                         <ConsutasCreateForm />
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
                 </div>
-                
+
 
                 {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
                 {/*Seção das consultas do dia*/}
-                <section className='flex flex-col gap-3 py-4 px-6 w-full'>
-                  <p className='text-lg font-medium'>Para hoje</p>
-                  <div className='flex flex-col gap-4'>
-                    {consultas.map((item) => (
-                      <CardConsulta key={item.id} item={item} />
-                    ))}
-                  </div>
-                </section>
-
-
-                {/*Seção das consultas da semana*/}
-                <section className='flex flex-col gap-3 py-4 px-6 w-full'>
-                  <p className='text-lg font-medium'>Para esta semana</p>
-                  <div className='flex flex-col gap-4'>
-                    {consultas.map((item) => (
-                      <CardConsulta key={item.id} item={item} />
-                    ))}
-                  </div>
-                </section>
+                {
+                  schedules.isPending ? <Loading /> :
+                    schedules.isError ? <Error /> : (
+                      <>
+                        <ScheduleSection title="Para hoje" items={getScheduleToday() || []} />
+                        <ScheduleSection title="Para esta semana" items={getSchedule() || []} />
+                      </>
+                    )
+                }
+                
               </>) : (
-                <div className='px-6 w-full'>
-                  <Scheduler />
-                </div>
+              <div className='px-6 w-full'>
+                <Scheduler />
+              </div>
             )
           }
 

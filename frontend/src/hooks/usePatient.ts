@@ -7,6 +7,6 @@ export const patientKey = 'patient'
 
 export const usePatient = (filter?: UpdatePatientType) => useQuery<PatientType[]>({
   queryKey: [patientKey, filter],
-  queryFn: async ()=> (await api.get('patient')).data,
+  queryFn: async ()=> (await api.get('patient', {params: filter})).data,
   retry: 3
 })

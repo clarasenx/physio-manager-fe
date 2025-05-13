@@ -31,9 +31,16 @@ import { pt } from 'date-fns/locale/pt';
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { zodResolver } from '@hookform/resolvers/zod';
+import api from "@/api/axios"
+import { toast } from "sonner"
+import { QueryClient } from "@tanstack/react-query"
+import { scheduleKey } from "@/hooks/useSchedule"
 
 export const ConsutasCreateForm = () => {
+  const useQuery = new QueryClient()
   const [time, setTime] = useState<string>('00:00')
+
+
   const form = useForm<CreateScheduleType>({
     resolver: zodResolver(CreateScheduleSchema)
   })
@@ -50,10 +57,21 @@ export const ConsutasCreateForm = () => {
     return auxDate;
   }
 
-  function onSubmit(data: CreateScheduleType) {
+  async function onSubmit(data: CreateScheduleType) {
     data.date = setHours(data.date)
     console.log(data);
+    try {
+      await api.post('schedule', data)
 
+      useQuery.invalidateQueries({ queryKey: [scheduleKey] })
+
+      toast("Consulta criada com sucesso.")
+    }
+    catch {
+      toast("Ocorreu uma falha ao salvar a consulta.", {
+        description: "Tente novamente mais tarde"
+      })
+    }
   }
 
   return (
@@ -119,9 +137,11 @@ export const ConsutasCreateForm = () => {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date()
-                        }
+                        disabled={(date) => {
+                          const today = new Date()
+                          today.setHours(0, 0, 0, 0)
+                          return date < today
+                        }}
                         initialFocus
                       />
                     </PopoverContent>
