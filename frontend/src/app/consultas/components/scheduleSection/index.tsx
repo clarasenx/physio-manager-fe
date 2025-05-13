@@ -3,7 +3,7 @@ import { ScheduleType } from "@/dtos/schedule/schedule.schema";
 
 export const ScheduleSection = ({ title, items }: { title: string, items: ScheduleType[] }) => {
   return (
-    <section className='flex flex-col gap-3 py-4 px-6 w-full'>
+    <section className='flex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
       <p className='text-lg font-medium'>{title}</p>
       <div className='flex flex-col gap-4'>
         {

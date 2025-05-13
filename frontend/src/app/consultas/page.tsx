@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,6 +18,8 @@ import { ScheduleStatus } from '@/enum/schedule-status.enum';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isSameDay } from 'date-fns';
 import { ScheduleSection } from './components/scheduleSection';
+import { groupSchedulesByDate } from '@/utils/scheduleUtils';
+import { ErrorMessage } from '@/components/ErrorMessage';
 
 
 export default function Consultas() {
@@ -56,26 +57,21 @@ export default function Consultas() {
 
   function Loading() {
     return (
-      <>
-        <Skeleton className="w-[100px] h-[20px] rounded-full" />
-        <Skeleton className="w-[120px] h-[20px] rounded-full" />
-        <Skeleton className="w-[110px] h-[20px] rounded-full" />
-      </>
+      <div className='lex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+
+      </div>
     )
   }
 
-  function Error() {
-    return (
-      <>
-        <h3 className='text-2xl text-center font-medium'>Ocorreu um erro ao carregar consultas</h3>
-        <p>Tente novamente mais tarde!</p>
-        <Button onClick={() => schedules.refetch()}>Recarregar</Button>
-      </>
-    )
-  }
-
+  
   return (
-    <div className='w-full'>
+    <div className='w-full max-h-dvh'>
       {/* toggle Consultas/Calendario */}
       <section className='flex justify-center px-4 mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
@@ -101,10 +97,10 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
+      <section className='flex flex-col gap-4 px-0 md:pl-4 md:pr-7 py-4 '>
         <h2 className='text-2xl text-center font-medium'>Consultas</h2>
 
-        <div className='bg-white w-full rounded-2xl py-4 flex flex-col items-center justify-center'>
+        <div className='bg-white w-full rounded-2xl py-2 flex flex-col items-center justify-center'>
 
           {
             activeToggleInicial === 1 ? (
@@ -131,7 +127,7 @@ export default function Consultas() {
                       </button>
                     ))}
                   </div>
-                  <Dialog>
+                  <Dialog open={activeCreateConsultaButton} onOpenChange={setActiveCreateConsultaButton}>
                     <DialogTrigger asChild>
                       <Button><LuCirclePlus />Nova Consulta</Button>
                     </DialogTrigger>
@@ -139,10 +135,7 @@ export default function Consultas() {
                       <DialogHeader>
                         <DialogTitle>Criar consulta</DialogTitle>
                       </DialogHeader>
-
-                      <DialogFooter>
-                        <ConsutasCreateForm />
-                      </DialogFooter>
+                      <ConsutasCreateForm closeModal={() => { setActiveCreateConsultaButton(false) }} />
                     </DialogContent>
                   </Dialog>
                 </div>
@@ -152,14 +145,24 @@ export default function Consultas() {
                 {/*Seção das consultas do dia*/}
                 {
                   schedules.isPending ? <Loading /> :
-                    schedules.isError ? <Error /> : (
-                      <>
-                        <ScheduleSection title="Para hoje" items={getScheduleToday() || []} />
-                        <ScheduleSection title="Para esta semana" items={getSchedule() || []} />
-                      </>
-                    )
+                    schedules.isError ? <ErrorMessage refetch={schedules.refetch} /> : (() => {
+                      const grouped = groupSchedulesByDate(schedules.data || [])
+
+                      return (
+                        <>
+                          <ScheduleSection title="Para hoje" items={grouped.today} />
+                          <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
+                          <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
+                          {
+                            Object.entries(grouped.months).map(([month, items]) => (
+                              <ScheduleSection key={month} title={`Para ${month}`} items={items} />
+                            ))
+                          }
+                        </>
+                      )
+                    })()
                 }
-                
+
               </>) : (
               <div className='px-6 w-full'>
                 <Scheduler />

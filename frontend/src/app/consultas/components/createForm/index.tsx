@@ -33,16 +33,25 @@ import { useState } from "react"
 import { zodResolver } from '@hookform/resolvers/zod';
 import api from "@/api/axios"
 import { toast } from "sonner"
-import { QueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { scheduleKey } from "@/hooks/useSchedule"
 
-export const ConsutasCreateForm = () => {
-  const useQuery = new QueryClient()
+export const ConsutasCreateForm = ({
+  closeModal,
+  date
+}: {
+  closeModal: ()=>void,
+  date?: Date
+}) => {
+  const queryClient = useQueryClient()
   const [time, setTime] = useState<string>('00:00')
 
 
   const form = useForm<CreateScheduleType>({
-    resolver: zodResolver(CreateScheduleSchema)
+    resolver: zodResolver(CreateScheduleSchema),
+    defaultValues: {
+      date: date
+    }
   })
   const patients = usePatient()
 
@@ -63,9 +72,10 @@ export const ConsutasCreateForm = () => {
     try {
       await api.post('schedule', data)
 
-      useQuery.invalidateQueries({ queryKey: [scheduleKey] })
+      queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
 
       toast("Consulta criada com sucesso.")
+      closeModal()
     }
     catch {
       toast("Ocorreu uma falha ao salvar a consulta.", {
@@ -160,7 +170,7 @@ export const ConsutasCreateForm = () => {
             </FormItem>
           </div>
           <div className="flex justify-end gap-4 mt-6">
-            <Button variant={'secondary'}>Cancelar</Button>
+            <Button type="button" variant={'secondary'} onClick={()=>closeModal()}>Cancelar</Button>
             <Button type="submit">Criar</Button>
           </div>
         </form>

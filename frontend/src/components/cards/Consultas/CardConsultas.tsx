@@ -65,13 +65,13 @@ export default function CardConsulta({ item }: CardConsultaProps) {
       </div>
 
       <div className='relative flex flex-col md:justify-center'>
-        <button className='md:hidden' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical /></button>
-        <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button>
+        <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28}/></button>
+        {/* <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button> */}
         {menuAberto && (
           <ScheduleMenu
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
-            className='top-1 right-5 md:right-26 md:top-5 bg-[#F6F5F2]'
+            className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
           />
         )}
       </div>

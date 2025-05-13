@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from '@/components/Navbar';
 import { UseClientProvider } from '@/hooks/useClientProvider';
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export const metadata: Metadata = {
   title: "Physio Manager",
@@ -33,6 +34,7 @@ export default function RootLayout({
           <div className="max-h-dvh overflow-auto w-full">
             {children}
           </div>
+           <ReactQueryDevtools initialIsOpen={false} />
         </UseClientProvider>
         <Toaster />
       </body>
