@@ -1,7 +1,8 @@
-'use cliente'
+'use client'
 import { useState } from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
-import { ScheduleMenu } from '../scheduleMenu';
+import { ScheduleMenu } from '../../app/consultas/components/scheduleMenu';
+import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 
 interface DashboardData {
   id: number;
@@ -36,6 +37,7 @@ const CardDashboard = ({item}: DashboardDataProps) => {
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
             className='top-1 right-5 md:right-26 md:top-5 bg-[#F6F5F2]'
+            schedule={{} as ListScheduleType} /* ALTERAR FUTURAMENTE */
           />
         )}
       </div>

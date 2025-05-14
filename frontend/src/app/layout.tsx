@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} relative flex md:h-fit w-content bg-[#F6F5F2] mb-16 md:mb-0`}>
+      <body className={`${poppins.className} relative flex md:h-fit  w-content bg-[#F6F5F2] mb-[73px] md:mb-0`}>
         <Navbar />
         <UseClientProvider>
           <div className="max-h-dvh overflow-auto w-full">
@@ -36,7 +36,7 @@ export default function RootLayout({
           </div>
            <ReactQueryDevtools initialIsOpen={false} />
         </UseClientProvider>
-        <Toaster />
+        <Toaster position="top-right"/>
       </body>
     </html>
   );

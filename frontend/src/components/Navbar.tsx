@@ -26,11 +26,11 @@ const Navbar = () => {
   if (hideHeader) return null;
   
   return (
-    <section className='flex flex-col h-dvh md:w-36 md:px-10 py-5 justify-items-center sm:items-center justify-between'>
+    <section className='flex z-50 flex-col h-dvh md:w-36 md:px-10 py-5 justify-items-center sm:items-center justify-between'>
         <div className='flex flex-col sm:items-center'>
           <Image src={Logo} alt='Logo do site' className='hidden md:flex w-13 sm:mt-3'/>
 
-          <div className='flex fixed right-0 left-0 bottom-0 py-6 md:static'>
+          <div className='flex fixed right-0 left-0 bottom-0 py-2 md:py-6 md:static border-t border-zinc-300 md:border-none bg-[#F1EDE3] md:bg-transparent'>
             <div className="flex mx-auto md:flex-col md:h-[240px] md:w-[60px] bg-[#F1EDE3] rounded-full items-center sm:justify-between sm:mt-4 shadow-md">
               {navItems.map((item) => (
               <button

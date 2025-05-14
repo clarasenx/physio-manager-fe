@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
 import { LuList } from 'react-icons/lu';
-import { ScheduleMenu } from '../../scheduleMenu';
-import { ScheduleType } from '@/dtos/schedule/schedule.schema';
+import { ScheduleMenu } from '../../../app/consultas/components/scheduleMenu';
+import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
+import { ScheduleStatus } from '@/enum/schedule-status.enum';
+import { isScheduleStarted } from '@/utils/isScheduleStarted';
 
 
 interface ConsultaData {
@@ -11,35 +13,29 @@ interface ConsultaData {
   diaMes: string;
 }
 
-interface Consulta {
-  id: number;
-  data: ConsultaData;
-  tratamento: string;
-  horário: string;
-  paciente: string;
-}
-
 interface CardConsultaProps {
-  item: ScheduleType;
+  item: ListScheduleType;
 }
 
 export default function CardConsulta({ item }: CardConsultaProps) {
   const [menuAberto, setMenuAberto] = useState(false);
 
-  const getWeekDay = (date: Date)=> {
+  const getWeekDay = (date: Date) => {
     const aux = new Date(date)
     return aux.toLocaleDateString('pt-BR', { weekday: 'short' })
   }
 
-  const getMonthDay = (date: Date)=> {
+  const getMonthDay = (date: Date) => {
     const aux = new Date(date)
     return aux.getDate()
   }
 
-  const getTime = (date: Date)=> {
+  const getTime = (date: Date) => {
     const aux = new Date(date)
     return aux.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
   }
+
+  const scheduleIsStarted = item.status === ScheduleStatus.SCHEDULED && typeof item.initialDiscomfort === 'number'
 
   return (
     <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg p-4 '>
@@ -64,16 +60,25 @@ export default function CardConsulta({ item }: CardConsultaProps) {
         </div>
       </div>
 
-      <div className='relative flex flex-col md:justify-center'>
-        <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28}/></button>
-        {/* <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button> */}
-        {menuAberto && (
-          <ScheduleMenu
-            menuAberto={menuAberto}
-            setMenuAberto={setMenuAberto}
-            className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
-          />
-        )}
+      <div className='flex items-start gap-6'>
+        {
+          isScheduleStarted(item) ?
+            <p
+              className={`px-3 py-1 justify-self-end rounded-full text-sm text-white text-center bg-green-800`}
+            >Consulta Iniciada</p> : <></>
+        }
+        <div className='relative flex flex-col md:justify-center'>
+          <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28} /></button>
+          {/* <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button> */}
+          {menuAberto && (
+            <ScheduleMenu
+              menuAberto={menuAberto}
+              setMenuAberto={setMenuAberto}
+              className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
+              schedule={item}
+            />
+          )}
+        </div>
       </div>
     </section>
   )

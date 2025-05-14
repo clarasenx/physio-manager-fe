@@ -2,19 +2,12 @@
 
 import { isSameDay } from "@/utils/isSameDay";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { ScheduleMenu } from "..";
+import { ScheduleMenu } from "../../../app/consultas/components/scheduleMenu";
 import { BiPlus } from "react-icons/bi";
-import { ConsutasCreateForm } from "@/app/consultas/components/createForm";
-import { ScheduleType } from "@/dtos/schedule/schedule.schema";
 import { createPortal } from "react-dom";
 import { StatusColor } from "@/constants/StatusColor";
+import { ConsultaCreateDialog } from "@/app/consultas/components/createDialog";
+import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
 
 export type EventType = {
   id: string;
@@ -25,7 +18,7 @@ export type EventType = {
 
 interface ICalendarDay {
   date: Date,
-  events: ScheduleType[]
+  events: ListScheduleType[]
   index: number
   isCurrentMonth: boolean
 }
@@ -51,7 +44,7 @@ export const Portal = ({ children }: PortalProps) => {
 };
 
 
-const EventCard = ({ event, isCurrentMonth }: { event: ScheduleType, isCurrentMonth: boolean }) => {
+const EventCard = ({ event, isCurrentMonth }: { event: ListScheduleType, isCurrentMonth: boolean }) => {
   const [showActions, setShowActions] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -61,7 +54,7 @@ const EventCard = ({ event, isCurrentMonth }: { event: ScheduleType, isCurrentMo
     if (!isCurrentMonth) return;
     const rect = ref.current?.getBoundingClientRect();
     if (rect) {
-      setMenuPosition({ top: rect.top + 3, left: rect.left + (rect.width/2) });
+      setMenuPosition({ top: rect.top + 3, left: rect.left + (rect.width / 2) });
     }
     setShowActions(!showActions);
   };
@@ -79,11 +72,12 @@ const EventCard = ({ event, isCurrentMonth }: { event: ScheduleType, isCurrentMo
 
       {showActions && (
         <Portal>
-          <div style={{ position: 'absolute', top: menuPosition.top, left: menuPosition.left, zIndex: 9999 }}>
+          <div style={{ position: 'absolute', top: menuPosition.top, left: menuPosition.left, zIndex: 10 }} className="hidden lg:block">
             <ScheduleMenu
               menuAberto={showActions}
               setMenuAberto={setShowActions}
               className='absolute top-7 right-0 bg-[#F6F5F2] z-50'
+              schedule={event}
             />
           </div>
         </Portal>
@@ -108,25 +102,14 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
           <EventCard key={event.id} event={event} isCurrentMonth={isCurrentMonth} />
         ))}
       </div>
-      <Dialog open={activeCreateConsultaButton} onOpenChange={(open) => {
-        setActiveCreateConsultaButton(open)
-        setIsHover(false)
-      }}>
-        <DialogTrigger asChild>
-          {
-            isHover &&
-            <div className="w-6 h-6 flex justify-center items-center rounded-sm bg-[#F6F5F2] absolute top-1 left-1 cursor-pointer">
-              <BiPlus color="#6A5242" size={20} />
-            </div>
-          }
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
-          <DialogHeader>
-            <DialogTitle>Criar consulta</DialogTitle>
-          </DialogHeader>
-          <ConsutasCreateForm closeModal={() => { setActiveCreateConsultaButton(false) }} date={date} />
-        </DialogContent>
-      </Dialog>
+      <ConsultaCreateDialog date={date}>
+        {
+          isHover &&
+          <div className="w-6 h-6 flex justify-center items-center rounded-sm bg-[#F6F5F2] absolute top-1 left-1 cursor-pointer">
+            <BiPlus color="#6A5242" size={20} />
+          </div>
+        }
+      </ConsultaCreateDialog>
     </div>
   );
 };

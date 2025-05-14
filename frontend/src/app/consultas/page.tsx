@@ -1,29 +1,19 @@
 'use client'
 import { useCallback, useState } from 'react';
-import CardConsulta from '@/components/cards/Consultas/CardConsultas';
 import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
-import { ConsutasCreateForm } from './components/createForm';
 import { useSchedule } from '@/hooks/useSchedule';
 import { ScheduleStatus } from '@/enum/schedule-status.enum';
 import { Skeleton } from '@/components/ui/skeleton';
-import { isSameDay } from 'date-fns';
 import { ScheduleSection } from './components/scheduleSection';
-import { groupSchedulesByDate } from '@/utils/scheduleUtils';
+import { groupSchedulesByDate, groupSchedulesByMonth } from '@/utils/scheduleUtils';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { ConsultaCreateDialog } from './components/createDialog';
+import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 
 
 export default function Consultas() {
-
 
   const [activeToggleInicial, setActiveToggleInicial] = useState(1);
   const toggleInicial = [
@@ -42,19 +32,6 @@ export default function Consultas() {
 
   const schedules = useSchedule({ status: scheduleStatus })
 
-  const consultas = [
-    { id: 1, tratamento: "Liberação miofascials gsg", horário: "09:30 - 10:30", paciente: "Andressa Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 2, tratamento: "Liberação miofascial", horário: "11:30 - 12:30", paciente: "Ana Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 3, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 4, tratamento: "Liberação miofascial", horário: "11:30 - 12:30", paciente: "Ana Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 5, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" }
-  ]
-  const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
-
-  const getScheduleToday = useCallback(() => schedules.data?.filter(schedule => isSameDay(schedule.date, new Date())), [schedules])
-
-  const getSchedule = useCallback(() => schedules.data?.filter(schedule => !isSameDay(schedule.date, new Date())), [schedules])
-
   function Loading() {
     return (
       <div className='lex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
@@ -69,7 +46,7 @@ export default function Consultas() {
     )
   }
 
-  
+
   return (
     <div className='w-full max-h-dvh'>
       {/* toggle Consultas/Calendario */}
@@ -127,17 +104,9 @@ export default function Consultas() {
                       </button>
                     ))}
                   </div>
-                  <Dialog open={activeCreateConsultaButton} onOpenChange={setActiveCreateConsultaButton}>
-                    <DialogTrigger asChild>
-                      <Button><LuCirclePlus />Nova Consulta</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
-                      <DialogHeader>
-                        <DialogTitle>Criar consulta</DialogTitle>
-                      </DialogHeader>
-                      <ConsutasCreateForm closeModal={() => { setActiveCreateConsultaButton(false) }} />
-                    </DialogContent>
-                  </Dialog>
+                  <ConsultaCreateDialog>
+                    <Button><LuCirclePlus />Nova Consulta</Button>
+                  </ConsultaCreateDialog>
                 </div>
 
 
@@ -145,22 +114,10 @@ export default function Consultas() {
                 {/*Seção das consultas do dia*/}
                 {
                   schedules.isPending ? <Loading /> :
-                    schedules.isError ? <ErrorMessage refetch={schedules.refetch} /> : (() => {
-                      const grouped = groupSchedulesByDate(schedules.data || [])
-
-                      return (
-                        <>
-                          <ScheduleSection title="Para hoje" items={grouped.today} />
-                          <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
-                          <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
-                          {
-                            Object.entries(grouped.months).map(([month, items]) => (
-                              <ScheduleSection key={month} title={`Para ${month}`} items={items} />
-                            ))
-                          }
-                        </>
-                      )
-                    })()
+                    schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
+                      activeToggleConsultas === 1 ?
+                        <ConsultasAgendadas schedules={schedules.data} /> :
+                        <ConsultasConcluidasECanceladas schedules={schedules.data} />
                 }
 
               </>) : (
@@ -173,5 +130,39 @@ export default function Consultas() {
         </div>
       </section>
     </div>
+  )
+}
+
+function ConsultasAgendadas({ schedules }: { schedules?: ListScheduleType[] }) {
+  const grouped = groupSchedulesByDate(schedules || [])
+  return (
+    <>
+      <ScheduleSection title="Para hoje" items={grouped.today} />
+      <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
+      <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
+      {
+        Object.entries(grouped.months).map(([month, items]) => (
+          <ScheduleSection key={month} title={`Para ${month}`} items={items} />
+        ))
+      }
+    </>
+  )
+}
+
+function ConsultasConcluidasECanceladas({ schedules }: { schedules?: ListScheduleType[] }) {
+  const grouped = groupSchedulesByMonth(schedules || [])
+
+  const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
+    const dateA = new Date(a[1][0].date).getTime()
+    const dateB = new Date(b[1][0].date).getTime()
+    return dateB - dateA // Mais recente primeiro
+  })
+
+  return (
+    <>
+      {sortedEntries.map(([month, items]) => (
+        <ScheduleSection key={month} title={`${month}`} items={items} />
+      ))}
+    </>
   )
 }

@@ -21,6 +21,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
 import { usePatient } from "@/hooks/usePatient"
 import { useForm } from "react-hook-form"
@@ -35,17 +43,20 @@ import api from "@/api/axios"
 import { toast } from "sonner"
 import { useQueryClient } from "@tanstack/react-query"
 import { scheduleKey } from "@/hooks/useSchedule"
+import { AxiosError } from "axios"
+import { danger } from "@/constants/ToastStyle"
 
-export const ConsutasCreateForm = ({
+export const ConsultaCreateForm = ({
   closeModal,
   date
 }: {
-  closeModal: ()=>void,
+  closeModal: () => void,
   date?: Date
 }) => {
   const queryClient = useQueryClient()
   const [time, setTime] = useState<string>('00:00')
-
+  const [openDialog, setOpenDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<CreateScheduleType>({
     resolver: zodResolver(CreateScheduleSchema),
@@ -66,29 +77,67 @@ export const ConsutasCreateForm = ({
     return auxDate;
   }
 
-  async function onSubmit(data: CreateScheduleType) {
+  async function onSubmit(data: CreateScheduleType, force?: boolean) {
     data.date = setHours(data.date)
-    console.log(data);
+    const params = force ? { force } : {}
     try {
-      await api.post('schedule', data)
-
+      setIsLoading(true)
+      await api.post('schedule', data, { params })
+      
       queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
-
+      
+      setIsLoading(false)
       toast("Consulta criada com sucesso.")
       closeModal()
     }
-    catch {
-      toast("Ocorreu uma falha ao salvar a consulta.", {
-        description: "Tente novamente mais tarde"
+    catch (err) {
+      setIsLoading(false)
+      if (!(err instanceof AxiosError)) {
+        toast("Ocorreu uma falha ao criar a consulta.", {
+          description: "Tente novamente mais tarde",
+          style: danger
+        })
+        return
+      }
+      
+      if (err.status === 409) {
+        if (err.response?.data.code === 'EXACT_CONFLICT') {
+          toast("Existe uma consulta no horário definido.", {
+            className: 'toast-danger bg-red-500',
+            style: danger
+          })
+          return
+        }
+        setOpenDialog(true)
+      }
+      toast("Ocorreu uma falha ao criar a consulta.", {
+        description: "Tente novamente mais tarde",
+        style: danger
       })
     }
   }
 
   return (
     <div className="w-full">
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
+          <DialogHeader>
+            <DialogTitle>Atenção</DialogTitle>
+          </DialogHeader>
+          Existe uma ou mais consultas cadastradas perto do intervalo de tempo do horario definido, tem certeza que deseja criar a consulta?
+          <DialogFooter>
+            <Button variant={'outline'}>
+              Alterar Horario
+            </Button>
+            <Button variant={'destructive'} onClick={() => onSubmit(form.getValues(), true)}>
+              Criar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit((data) => onSubmit(data, false))}>
           <div className="xl:w-9/12 mb-4">
             <FormField
               control={form.control}
@@ -170,8 +219,8 @@ export const ConsutasCreateForm = ({
             </FormItem>
           </div>
           <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant={'secondary'} onClick={()=>closeModal()}>Cancelar</Button>
-            <Button type="submit">Criar</Button>
+            <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
+            <Button type="submit" isLoading={isLoading}>Criar</Button>
           </div>
         </form>
       </Form>

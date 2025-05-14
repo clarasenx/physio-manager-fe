@@ -2,9 +2,12 @@ import { useState } from "react"
 import { Calendar } from "../ui/calendar"
 import { useSchedule } from "@/hooks/useSchedule"
 import CardConsulta from "../cards/Consultas/CardConsultas"
-import { Skeleton } from "../ui/skeleton"
+
 import { ErrorMessage } from "../ErrorMessage"
 import { CircularProgress } from "@mui/material"
+import { ConsultaCreateDialog } from "@/app/consultas/components/createDialog"
+import { Button } from "../ui/button"
+import { LuCirclePlus } from "react-icons/lu"
 
 export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m: Date) => void }) => {
   const [initialDate, setInitialDate] = useState<Date | undefined>(new Date())
@@ -42,6 +45,10 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
         mode="single"
 
       />
+      <ConsultaCreateDialog date={initialDate}>
+        <Button><LuCirclePlus/>Nova Consulta</Button>
+      </ConsultaCreateDialog>
+
       <div className="w-full bg-[#B7A17D] items-center flex flex-col p-4 gap-2 rounded-lg mt-4">
         {
           schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage refetch={schedule.refetch} /> :

@@ -2,15 +2,13 @@
 
 import { getDaysInMonth } from "@/utils/getDaysInMonth";
 import { useCallback, useState } from "react";
-import { CalendarDay, EventType } from "../scheduleMenu/calendarDay";
+import { CalendarDay, EventType } from "./calendarDay";
 import { isSameDay } from "@/utils/isSameDay";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { ScheduleType } from "@/dtos/schedule/schedule.schema";
 import { useSchedule } from "@/hooks/useSchedule";
 import { StatusView } from "@/constants/StatusView";
 import { StatusColor } from "@/constants/StatusColor";
 import { SchedulerMobile } from "./mobile";
-import { Skeleton } from "../ui/skeleton";
 
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);

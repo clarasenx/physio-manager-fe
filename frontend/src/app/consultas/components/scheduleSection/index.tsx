@@ -1,7 +1,7 @@
 import CardConsulta from "@/components/cards/Consultas/CardConsultas";
-import { ScheduleType } from "@/dtos/schedule/schedule.schema";
+import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
 
-export const ScheduleSection = ({ title, items }: { title: string, items: ScheduleType[] }) => {
+export const ScheduleSection = ({ title, items }: { title: string, items: ListScheduleType[] }) => {
   return (
     <section className='flex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
       <p className='text-lg font-medium'>{title}</p>
