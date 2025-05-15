@@ -109,11 +109,16 @@ export const ConsultaEditForm = ({
       delete payload[key as keyof typeof payload]
     });
 
+    if(schedule.status === ScheduleStatus.SCHEDULED) {
+      delete payload.finalDiscomfort
+      delete payload.initialDiscomfort
+    }
+
     const params = force ? { force } : {}
 
     try {
       setIsLoading(true)
-      await api.patch(`schedule/${schedule.id}`, data, { params })
+      await api.patch(`schedule/${schedule.id}`, payload, { params })
 
       queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
 
