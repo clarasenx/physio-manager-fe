@@ -38,33 +38,34 @@ export default function CardConsulta({ item }: CardConsultaProps) {
   const scheduleIsStarted = item.status === ScheduleStatus.SCHEDULED && typeof item.initialDiscomfort === 'number'
 
   return (
-    <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg p-4 '>
+    <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg py-2 sm:py-3 px-4 '>
       <div className='flex md:gap-8'>
-        <div className='flex flex-col items-center justify-center pr-4 border-r-2 border-[#6B4A2E]/40 sm:pl-3 sm:pr-5 md:pl-8 md:pr-10 lg:justify-center '>
+        <div className='flex flex-col items-center justify-center pr-4 border-r-2 border-[#6B4A2E]/40 sm:pl-3 sm:pr-5 md:pl-8 md:pr-10 lg:justify-center w-20 sm:w-32'>
           <p className='font-semibold text-lg text-[#1f1005] md:font-semibold md:text-center'>{getWeekDay(item.date)}</p>
-          <p className='font-bold text-4xl text-[#6A5242] md:text-center'>{getMonthDay(item.date)}</p>
+          <p className='font-bold text-3xl sm:text-4xl text-[#6A5242] md:text-center'>{getMonthDay(item.date)}</p>
         </div>
-        <div className='flex flex-col px-2'>
-          <div className='flex items-center gap-2'>
-            <LuList className='text-[#6A5242]' />
-            <p className='line-clamp-1'>{item.patient?.name}</p>
+        <div className='grid sm:grid-cols-2'>
+          <div className='flex items-center px-2 sm:col-start-2 row-start-1'>
+            <p className='line-clamp-1 font-medium px-0.5'>{item.patient?.name}</p>
           </div>
-          <div className='flex items-center gap-2'>
-            <HiClock className='text-[#6A5242]' />
-            <p className='line-clamp-1'>{getTime(item.date)}</p>
-          </div>
-          <div className='flex items-center gap-2'>
-            <FaUser className='text-[#6A5242]' />
-            <p className='line-clamp-1'>{item.patient?.name}</p>
+          <div className='flex flex-col justify-between px-2  sm:py-2 sm:w-60 col-start-1 '>
+            <div className='flex items-center gap-2'>
+              <HiClock className='text-[#6A5242]' />
+              <p className='line-clamp-1'>{getTime(item.date)}</p>
+            </div>
+            <div className='flex items-center gap-2'>
+              <FaUser className='text-[#6A5242]' />
+              <p className='line-clamp-1'>{item.patient?.name}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className='flex items-start gap-6'>
+      <div className='flex items-start gap-2 sm:gap-6'>
         {
           isScheduleStarted(item) ?
             <p
-              className={`px-3 py-1 justify-self-end rounded-full text-sm text-white text-center bg-green-800`}
+              className={`px-1 sm:px-3 py-1 sm:py-1 justify-self-end font-medium rounded-full text-xs text-green-800 sm:text-sm sm:text-white text-center sm:bg-green-800`}
             >Consulta Iniciada</p> : <></>
         }
         <div className='relative flex flex-col md:justify-center'>

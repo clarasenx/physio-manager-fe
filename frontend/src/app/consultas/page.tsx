@@ -50,7 +50,7 @@ export default function Consultas() {
   return (
     <div className='w-full max-h-dvh'>
       {/* toggle Consultas/Calendario */}
-      <section className='flex justify-center px-4 mt-6'>
+      <section className='flex justify-center px-4 mt-3 sm:mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
           {/* Indicador deslizante */}
           <div
@@ -74,7 +74,7 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-4 px-0 md:pl-4 md:pr-7 py-4 '>
+      <section className='flex flex-col gap-2 sm:gap-4 px-0 md:pl-4 md:pr-7 py-2 sm:py-4 '>
         <h2 className='text-2xl text-center font-medium'>Consultas</h2>
 
         <div className='bg-white w-full rounded-2xl py-2 flex flex-col items-center justify-center'>
@@ -109,16 +109,18 @@ export default function Consultas() {
                   </ConsultaCreateDialog>
                 </div>
 
+                <div className='w-full max-h-[63dvh] md:max-h-[75dvh] my-2 overflow-auto'>
 
-                {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
-                {/*Seção das consultas do dia*/}
-                {
-                  schedules.isPending ? <Loading /> :
-                    schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
-                      activeToggleConsultas === 1 ?
-                        <ConsultasAgendadas schedules={schedules.data} /> :
-                        <ConsultasConcluidasECanceladas schedules={schedules.data} />
-                }
+                  {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
+                  {/*Seção das consultas do dia*/}
+                  {
+                    schedules.isPending ? <Loading /> :
+                      schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
+                        activeToggleConsultas === 1 ?
+                          <ConsultasAgendadas schedules={schedules.data} /> :
+                          <ConsultasConcluidasECanceladas schedules={schedules.data} />
+                  }
+                </div>
 
               </>) : (
               <div className='px-6 w-full'>

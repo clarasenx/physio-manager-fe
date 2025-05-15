@@ -28,10 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} relative flex md:h-fit  w-content bg-[#F6F5F2] mb-[73px] md:mb-0`}>
+      <body className={`${poppins.className} relative flex md:h-fit  w-content bg-[#F6F5F2]`}>
         <Navbar />
         <UseClientProvider>
-          <div className="max-h-dvh overflow-auto w-full">
+          <div className="max-h-[calc(100dvh-73px)] md:max-h-dvh overflow-auto w-full">
             {children}
           </div>
            <ReactQueryDevtools initialIsOpen={false} />

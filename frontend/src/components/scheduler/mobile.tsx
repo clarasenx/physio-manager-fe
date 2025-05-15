@@ -35,7 +35,7 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
     <div className="w-full flex items-center flex-col">
       <Calendar
         selected={initialDate}
-        className="bg-[#F6F5F2] rounded-lg"
+        className="bg-[#F6F5F2] rounded-lg mb-2"
         month={month}
         onMonthChange={setMonth}
         classNames={{

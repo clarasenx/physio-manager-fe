@@ -11,6 +11,7 @@ import { ConsultaActionDialog } from "../actionDialog";
 import { isScheduleStarted } from "@/utils/isScheduleStarted";
 import { actionTypeView } from "@/constants/actionTypeView";
 import { ConsultaCancelDialog } from "../cancelDialog";
+import { ConsultaEditDialog } from "../editDialog";
 
 interface IScheduleMenu {
   setMenuAberto: (p: boolean) => void
@@ -29,13 +30,13 @@ export const ScheduleMenu = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
+      const target = event.target as Node;      
 
       // Verifica se o clique foi fora do menu
       const clickedOutsideMenu = menuRef.current && !menuRef.current.contains(target);
 
       // Verifica se o clique foi dentro de algum dialog (ajuste o seletor conforme sua estrutura)
-      const isInsideDialog = !!document.querySelector('[role="dialog"]')?.contains(target);
+      const isInsideDialog = !!document.querySelector('[role="dialog"]');      
 
       if (clickedOutsideMenu && !isInsideDialog) {
         setMenuAberto(false);
@@ -71,10 +72,12 @@ export const ScheduleMenu = ({
             </button>
           </ConsultaActionDialog>
       }
-      <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242] '>
-        <GoPencil className="cursor-pointer" />
-        <p className='px-2 p-1 cursor-pointer text-[12px] font-medium'>Editar consulta</p>
-      </button>
+      <ConsultaEditDialog schedule={schedule} closeMenu={() => setMenuAberto(false)}>
+        <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242] '>
+          <GoPencil className="cursor-pointer" />
+          <p className='px-2 p-1 cursor-pointer text-[12px] font-medium'>Editar consulta</p>
+        </button>
+      </ConsultaEditDialog>
       <ConsultaCancelDialog schedule={schedule}>
         <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
           <LuX className="cursor-pointer" />

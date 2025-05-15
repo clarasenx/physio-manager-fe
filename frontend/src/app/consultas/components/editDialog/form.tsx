@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
+import { UpdateScheduleSchema, UpdateScheduleType } from "@/dtos/schedule/update-schedule.dto"
 import { usePatient } from "@/hooks/usePatient"
 import { useForm } from "react-hook-form"
 import { cn } from "@/lib/utils"
@@ -37,7 +37,7 @@ import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { pt } from 'date-fns/locale/pt';
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { zodResolver } from '@hookform/resolvers/zod';
 import api from "@/api/axios"
 import { toast } from "sonner"
@@ -45,23 +45,34 @@ import { useQueryClient } from "@tanstack/react-query"
 import { scheduleKey } from "@/hooks/useSchedule"
 import { AxiosError } from "axios"
 import { danger } from "@/constants/ToastStyle"
+import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
+import { Textarea } from "@/components/ui/textarea"
+import { ScheduleStatus } from "@/enum/schedule-status.enum"
 
-export const ConsultaCreateForm = ({
+export const ConsultaEditForm = ({
   closeModal,
-  date
+  schedule
 }: {
   closeModal: () => void,
-  date?: Date
+  schedule: ListScheduleType
 }) => {
   const queryClient = useQueryClient()
-  const [time, setTime] = useState<string>('00:00')
+  const [time, setTime] = useState<string>(schedule.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))
   const [openDialog, setOpenDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const triggerCalendarRef = useRef<HTMLButtonElement>(null)
 
-  const form = useForm<CreateScheduleType>({
-    resolver: zodResolver(CreateScheduleSchema),
+  console.log(schedule);
+
+
+  const form = useForm<UpdateScheduleType>({
+    resolver: zodResolver(UpdateScheduleSchema),
     defaultValues: {
-      date: date
+      date: schedule.date,
+      patientId: schedule.patientId,
+      notes: schedule.notes || '',
+      initialDiscomfort: schedule.initialDiscomfort || 0,
+      finalDiscomfort: schedule.finalDiscomfort || 0,
     }
   })
   const patients = usePatient()
@@ -77,29 +88,49 @@ export const ConsultaCreateForm = ({
     return auxDate;
   }
 
-  async function onSubmit(data: CreateScheduleType, force?: boolean) {
-    data.date = setHours(data.date)
+  async function onSubmit(data: UpdateScheduleType, force?: boolean) {
+    if (data.date) {
+      data.date = setHours(data.date)
+    }
+
+    const payload: UpdateScheduleType = { ...data }
+
+    Object.entries(data).forEach(([key, value]) => {
+
+      if (
+        schedule[key as keyof typeof schedule] !== value ||
+        (
+          value instanceof Date &&
+          value.getTime() !== new Date(schedule[key as keyof typeof schedule] as Date).getTime()
+        )
+      ) {
+        return;
+      }
+      delete payload[key as keyof typeof payload]
+    });
+
     const params = force ? { force } : {}
+
     try {
       setIsLoading(true)
-      await api.post('schedule', data, { params })
-      
+      await api.patch(`schedule/${schedule.id}`, data, { params })
+
       queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
-      
+
       setIsLoading(false)
-      toast("Consulta criada com sucesso.")
+      toast("Consulta editada com sucesso.")
       closeModal()
     }
     catch (err) {
       setIsLoading(false)
       if (!(err instanceof AxiosError)) {
-        toast("Ocorreu uma falha ao criar a consulta.", {
+        toast("Ocorreu uma falha ao editar a consulta.", {
           description: "Tente novamente mais tarde",
           style: danger
         })
         return
       }
-      
+
       if (err.status === 409) {
         if (err.response?.data.code === 'EXACT_CONFLICT') {
           toast("Existe uma consulta no horário definido.", {
@@ -111,7 +142,7 @@ export const ConsultaCreateForm = ({
         setOpenDialog(true)
         return
       }
-      toast("Ocorreu uma falha ao criar a consulta.", {
+      toast("Ocorreu uma falha ao editar a consulta.", {
         description: "Tente novamente mais tarde",
         style: danger
       })
@@ -125,7 +156,7 @@ export const ConsultaCreateForm = ({
           <DialogHeader>
             <DialogTitle>Atenção</DialogTitle>
           </DialogHeader>
-          Existe uma ou mais consultas cadastradas perto do intervalo de tempo do horario definido, tem certeza que deseja criar a consulta?
+          Existe uma ou mais consultas cadastradas perto do intervalo de tempo do horario definido, tem certeza que deseja salvar esta data?
           <DialogFooter>
             <Button variant={'outline'}>
               Alterar Horario
@@ -146,7 +177,7 @@ export const ConsultaCreateForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Paciente</FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))}>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
                     <FormControl>
                       <SelectTrigger className="w-full bg-white border-black">
                         <SelectValue placeholder="Selecione um paciente" />
@@ -166,20 +197,22 @@ export const ConsultaCreateForm = ({
               )}
             />
           </div>
-          <div className="flex gap-10">
+          {/* <div className="flex gap-10"> */}
+          <div className="grid grid-cols-7 grid-row-2 mb-4 gap-y-4">
             <FormField
               control={form.control}
               name="date"
               render={({ field }) => (
-                <FormItem className="flex flex-col flex-1">
+                <FormItem className="col-span-3">
                   <FormLabel>Data</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
+                          ref={triggerCalendarRef}
                           className={cn(
-                            "pl-3 text-left font-normal border-black",
+                            "pl-3 text-left font-normal border-black mb-2",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -196,11 +229,15 @@ export const ConsultaCreateForm = ({
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                          field.onChange(date)
+                          setTimeout(() => triggerCalendarRef.current?.click(), 0)
+                        }}
                         disabled={(date) => {
+                          if (schedule.status !== ScheduleStatus.SCHEDULED) return false
                           const today = new Date()
                           today.setHours(0, 0, 0, 0)
-                          return date < today
+                          return (date < today)
                         }}
                         initialFocus
                       />
@@ -210,7 +247,7 @@ export const ConsultaCreateForm = ({
                 </FormItem>
               )}
             />
-            <FormItem className="flex-1">
+            <FormItem className="col-span-3 col-start-5">
               <FormLabel>Hora</FormLabel>
               <FormControl>
                 <Input className="border-black bg-white" type="time" placeholder="00:00" value={time} onChange={event => setTime(event.target.value)} />
@@ -218,10 +255,57 @@ export const ConsultaCreateForm = ({
               <FormDescription />
               <FormMessage />
             </FormItem>
+
+            {
+              schedule.status !== ScheduleStatus.SCHEDULED ?
+                <>
+                  <FormField
+                    control={form.control}
+                    name="initialDiscomfort"
+                    render={({ field }) => (
+                      <FormItem className="col-span-3 ">
+                        <FormLabel>Dor Inicial</FormLabel>
+                        <Input
+                          className="bg-white border-black"
+                          type="number"
+                          placeholder="De 1 a 10"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="finalDiscomfort"
+                    render={({ field }) => (
+                      <FormItem className="col-span-3 col-start-5">
+                        <FormLabel>Dor Final</FormLabel>
+                        <Input className="bg-white border-black" type="number" placeholder="De 1 a 10" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </> : <></>
+            }
+
           </div>
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem className="flex flex-col flex-1">
+                <FormLabel>Notas</FormLabel>
+                <Textarea className="bg-white border-black" placeholder="Escreva suas notas aqui" {...field} value={field.value ?? undefined} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex justify-end gap-4 mt-6">
             <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
-            <Button type="submit" isLoading={isLoading}>Criar</Button>
+            <Button type="submit" isLoading={isLoading}>Salvar</Button>
           </div>
         </form>
       </Form>
