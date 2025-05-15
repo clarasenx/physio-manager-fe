@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google'
-import { Montserrat } from 'next/font/google'
 import "./globals.css";
+import Navbar from '@/components/Navbar';
+import { UseClientProvider } from '@/hooks/useClientProvider';
+import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export const metadata: Metadata = {
   title: "Physio Manager",
@@ -9,12 +12,8 @@ export const metadata: Metadata = {
 };
 
 const poppins = Poppins({
-  weight: ['200','400','500','600','700'],
-  subsets: ["latin","latin-ext"]
-})
-const montserrat = Montserrat({
-  weight: "variable",
-  subsets: ["latin","latin-ext"]
+  weight: ['200', '400', '500', '600', '700'],
+  subsets: ["latin", "latin-ext"]
 })
 
 export default function RootLayout({
@@ -24,8 +23,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className}`}>
-        {children}
+      <body className={`${poppins.className} relative flex md:h-fit  w-content bg-[#F6F5F2]`}>
+        <Navbar />
+        <UseClientProvider>
+          <div className="max-h-[calc(100dvh-73px)] md:max-h-dvh overflow-auto w-full">
+            {children}
+          </div>
+           <ReactQueryDevtools initialIsOpen={false} />
+        </UseClientProvider>
+        <Toaster position="top-right"/>
       </body>
     </html>
   );
