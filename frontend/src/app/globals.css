@@ -51,9 +51,9 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #6A5242;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: #E0D9C8;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -87,9 +87,9 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: #6A5242;
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: #E0D9C8;
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
@@ -121,4 +121,30 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Aplica ao container com overflow */
+.seu-container {
+  overflow-y: auto;
+  scrollbar-width: thin;            /* Firefox */
+  scrollbar-color: #888 transparent; /* Firefox */
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) */
+.seu-container::-webkit-scrollbar {
+  width: 1px; /* aqui você ajusta a "finesse" */
+}
+
+.seu-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 2px;
+}
+
+.seu-container::-webkit-scrollbar-track {
+  background: transparent;
 }

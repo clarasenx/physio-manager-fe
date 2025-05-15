@@ -27,6 +27,7 @@ const Navbar = () => {
   
   return (
     <section className='flex flex-col h-full lg:w-36 lg:px-10 py-5 justify-items-center sm:items-center justify-between'>
+
         <div className='flex flex-col sm:items-center'>
           <Image src={Logo} alt='Logo do site' className='hidden lg:flex w-13 sm:mt-3'/>
 

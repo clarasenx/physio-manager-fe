@@ -1,5 +1,5 @@
+import { isValidCPF } from "@/utils/validate-cpf";
 import { z } from "zod";
-import { isValidCPF } from "../../utils/validate-cpf";
 
 export const UserSchema = z.object({
   id: z.number(),
