@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className='sm:flex bg-[#9C7C5A] w-full'>
 
-      <section className='flex flex-col sm:w-2/5 py-7 sm:pb-0 px-10 xs:px-16 sm:px-8 lg:px-16 xl:px-20 text-[#F1EDE3] justify-evenly'>    
+      <section className='flex flex-col sm:w-2/5 py-7 sm:pb-0 px-10 xs:px-16 sm:px-8 lg:px-16 xl:px-20 text-[#F6F5F2] justify-evenly'>    
           <Image src={Logo} alt='Logo do site' className='w-10 sm:w-18 pb-5 self-end sm:self-center'/>
           <div className='flex flex-col 2xl:ml-14 sm:pb-28'>
             <p className='text-xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold md:leading-8 xl:leading-10'>Olá,</p>
@@ -46,7 +46,7 @@ export default function Login() {
       </section>
 
       {/* Seção de Login */}
-      <section className='flex flex-col sm:justify-center md:items-center h-screen w-full bg-[#F9F7F3] sm:rounded-l-2xl sm:rounded-t-none rounded-t-2xl px-10 sm:px-16 pt-12 sm:pt-0'>
+      <section className='flex flex-col sm:justify-center md:items-center sm:h-screen w-full bg-[#F9F7F3] sm:rounded-l-2xl sm:rounded-t-none rounded-t-2xl px-10 sm:px-16 pt-12 sm:pt-0'>
         <div className='flex flex-col w-full md:max-w-[500px]'>
           <h1 className='text-[#2D231C] text-3xl text-center font-semibold py-2'>Login</h1>
 

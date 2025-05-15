@@ -1,28 +1,16 @@
 'use client'
-import { useState } from 'react';
-import CardConsulta from '@/components/cards/Consultas/CardConsultas';
+import { useCallback, useState } from 'react';
 import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-;
-import { ConsutasCreateForm } from './components/createForm';
+import { useSchedule } from '@/hooks/useSchedule';
+import { ScheduleStatus } from '@/enum/schedule-status.enum';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ScheduleSection } from './components/scheduleSection';
+import { groupSchedulesByDate, groupSchedulesByMonth } from '@/utils/scheduleUtils';
+import { ErrorMessage } from '@/components/ErrorMessage';
+import { ConsultaCreateDialog } from './components/createDialog';
+import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 
 
 export default function Consultas() {
@@ -35,23 +23,34 @@ export default function Consultas() {
 
   const [activeToggleConsultas, setActiveToggleConsultas] = useState(1);
   const toggleConsultas = [
-    { id: 1, label: "Agendadas" },
-    { id: 2, label: "Concluídas" },
-    { id: 3, label: "Canceladas" },
+    { id: 1, label: "Agendadas", status: ScheduleStatus.SCHEDULED },
+    { id: 2, label: "Concluídas", status: ScheduleStatus.COMPLETED },
+    { id: 3, label: "Canceladas", status: ScheduleStatus.CANCELED },
   ]
 
-  const consultas = [
-    { id: 1, tratamento: "Liberação miofascials gsg", horário: "09:30 - 10:30", paciente: "Andressa Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 2, tratamento: "Liberação miofascial", horário: "11:30 - 12:30", paciente: "Ana Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 3, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 4, tratamento: "Liberação miofascial", horário: "11:30 - 12:30", paciente: "Ana Andrade", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" },
-    { id: 5, tratamento: "Liberação miofascial", horário: "14:30 - 15:30", paciente: "Ana Frotasgsgsg ggsgsgs", data: { diaMes: "20", diaSemana: "Seg" }, status: "concluida" }
-  ]
-  const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
+  const scheduleStatus = toggleConsultas.find(t => t.id === activeToggleConsultas)?.status
+
+  const schedules = useSchedule({ status: scheduleStatus })
+
+  function Loading() {
+    return (
+      <div className='lex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
+
+      </div>
+    )
+  }
+
+
   return (
-    <div className='w-full'>
+    <div className='w-full max-h-dvh'>
       {/* toggle Consultas/Calendario */}
-      <section className='flex justify-center px-4 mt-6'>
+      <section className='flex justify-center px-4 mt-3 sm:mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
           {/* Indicador deslizante */}
           <div
@@ -75,10 +74,10 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
-        <p className='text-2xl text-center font-medium'>Consultas</p>
+      <section className='flex flex-col gap-2 sm:gap-4 px-0 md:pl-4 md:pr-7 py-2 sm:py-4 '>
+        <h2 className='text-2xl text-center font-medium'>Consultas</h2>
 
-        <div className='bg-white w-full rounded-2xl py-4 flex flex-col items-center justify-center'>
+        <div className='bg-white w-full rounded-2xl py-2 flex flex-col items-center justify-center'>
 
           {
             activeToggleInicial === 1 ? (
@@ -105,53 +104,67 @@ export default function Consultas() {
                       </button>
                     ))}
                   </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" className='cursor-pointer bg-[#6A5242] text-white hover:bg-[#F7F3EB]'><LuCirclePlus />Novo paciente</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Criar consulta</DialogTitle>
-                      </DialogHeader>
-                      
-                      <DialogFooter>
-                        <ConsutasCreateForm />
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                  <ConsultaCreateDialog>
+                    <Button><LuCirclePlus />Nova Consulta</Button>
+                  </ConsultaCreateDialog>
                 </div>
-                
 
-                {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
-                {/*Seção das consultas do dia*/}
-                <section className='flex flex-col gap-3 py-4 px-6 w-full'>
-                  <p className='text-lg font-medium'>Para hoje</p>
-                  <div className='flex flex-col gap-4'>
-                    {consultas.map((item) => (
-                      <CardConsulta key={item.id} item={item} />
-                    ))}
-                  </div>
-                </section>
+                <div className='w-full max-h-[63dvh] md:max-h-[75dvh] my-2 overflow-auto'>
 
+                  {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
+                  {/*Seção das consultas do dia*/}
+                  {
+                    schedules.isPending ? <Loading /> :
+                      schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
+                        activeToggleConsultas === 1 ?
+                          <ConsultasAgendadas schedules={schedules.data} /> :
+                          <ConsultasConcluidasECanceladas schedules={schedules.data} />
+                  }
+                </div>
 
-                {/*Seção das consultas da semana*/}
-                <section className='flex flex-col gap-3 py-4 px-6 w-full'>
-                  <p className='text-lg font-medium'>Para esta semana</p>
-                  <div className='flex flex-col gap-4'>
-                    {consultas.map((item) => (
-                      <CardConsulta key={item.id} item={item} />
-                    ))}
-                  </div>
-                </section>
               </>) : (
-                <div className='px-6 w-full'>
-                  <Scheduler />
-                </div>
+              <div className='px-6 w-full'>
+                <Scheduler />
+              </div>
             )
           }
 
         </div>
       </section>
     </div>
+  )
+}
+
+function ConsultasAgendadas({ schedules }: { schedules?: ListScheduleType[] }) {
+  const grouped = groupSchedulesByDate(schedules || [])
+  return (
+    <>
+      <ScheduleSection title="Para hoje" items={grouped.today} />
+      <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
+      <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
+      {
+        Object.entries(grouped.months).map(([month, items]) => (
+          <ScheduleSection key={month} title={`Para ${month}`} items={items} />
+        ))
+      }
+    </>
+  )
+}
+
+function ConsultasConcluidasECanceladas({ schedules }: { schedules?: ListScheduleType[] }) {
+  const grouped = groupSchedulesByMonth(schedules || [])
+
+  const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
+    const dateA = new Date(a[1][0].date).getTime()
+    const dateB = new Date(b[1][0].date).getTime()
+    return dateB - dateA // Mais recente primeiro
+  })
+
+  return (
+    <>
+      {sortedEntries.map(([month, items]) => (
+        <ScheduleSection key={month} title={`${month}`} items={items} />
+      ))}
+    </>
   )
 }
