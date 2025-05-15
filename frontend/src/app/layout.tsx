@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google'
-import { Montserrat } from 'next/font/google'
 import "./globals.css";
 import Navbar from '@/components/Navbar';
 import { UseClientProvider } from '@/hooks/useClientProvider';
@@ -14,10 +13,6 @@ export const metadata: Metadata = {
 
 const poppins = Poppins({
   weight: ['200', '400', '500', '600', '700'],
-  subsets: ["latin", "latin-ext"]
-})
-const montserrat = Montserrat({
-  weight: "variable",
   subsets: ["latin", "latin-ext"]
 })
 

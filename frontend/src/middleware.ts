@@ -11,9 +11,9 @@ export function middleware(request: NextRequest) {
   const isAuthPage = path === '/login'
 
   // Se o usuário NÃO está autenticado e tenta acessar página protegida → redireciona pro login
-  /* if (!token && !isPublic) {
+  if (!token && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
-  } */
+  }
 
   // Se o usuário ESTÁ autenticado e tenta acessar /login → redireciona para /dashboard
   console.log(path);

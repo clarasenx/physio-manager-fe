@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
-import { LuList } from 'react-icons/lu';
 import { ScheduleMenu } from '../../../app/consultas/components/scheduleMenu';
 import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
-import { ScheduleStatus } from '@/enum/schedule-status.enum';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
 
-
-interface ConsultaData {
-  diaSemana: string;
-  diaMes: string;
-}
 
 interface CardConsultaProps {
   item: ListScheduleType;
@@ -34,8 +27,6 @@ export default function CardConsulta({ item }: CardConsultaProps) {
     const aux = new Date(date)
     return aux.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
   }
-
-  const scheduleIsStarted = item.status === ScheduleStatus.SCHEDULED && typeof item.initialDiscomfort === 'number'
 
   return (
     <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg py-2 sm:py-3 px-4 '>

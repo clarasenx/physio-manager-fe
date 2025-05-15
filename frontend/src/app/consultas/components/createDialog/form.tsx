@@ -27,7 +27,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
 import { usePatient } from "@/hooks/usePatient"

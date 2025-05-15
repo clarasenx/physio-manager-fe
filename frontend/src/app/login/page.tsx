@@ -15,7 +15,6 @@ interface ILogin {
 export default function Login() {
   const {
     handleSubmit,
-    formState: {errors},
     register
   } = useForm<ILogin>()
   const registerWithMask = useHookFormMask(register);

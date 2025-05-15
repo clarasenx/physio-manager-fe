@@ -2,7 +2,7 @@
 
 import { getDaysInMonth } from "@/utils/getDaysInMonth";
 import { useCallback, useState } from "react";
-import { CalendarDay, EventType } from "./calendarDay";
+import { CalendarDay } from "./calendarDay";
 import { isSameDay } from "@/utils/isSameDay";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useSchedule } from "@/hooks/useSchedule";
@@ -29,14 +29,6 @@ export const Scheduler = () => {
 
   const schedule = useSchedule()
 
-  const [events, setEvents] = useState<EventType[]>([
-    {
-      date: new Date(),
-      id: '1',
-      time: '23 h',
-      title: 'teste'
-    }
-  ]);
 
   const mounth = useCallback(() => currentMonth.toLocaleDateString('pt-BR', {
     month: 'long',

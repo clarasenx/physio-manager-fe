@@ -91,7 +91,6 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
   const currentDate = new Date()
   const isCurrentDate = isSameDay(currentDate, date)
 
-  const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
   const [isHover, setIsHover] = useState<boolean>(false)
 
   return (

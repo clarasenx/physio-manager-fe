@@ -50,7 +50,7 @@ export const ScheduleMenu = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [menuAberto]);
+  }, [menuAberto, setMenuAberto]);
 
   const actionType: 'START' | 'CONCLUDE' = isScheduleStarted(schedule) ?
     'CONCLUDE' : 'START'

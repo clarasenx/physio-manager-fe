@@ -40,7 +40,7 @@ export const ConsultaCancelDialog = ({
       setIsLoading(false)
       setOpenDialog(false)
     }
-    catch (err) {
+    catch {
       setIsLoading(false)
       toast("Ocorreu uma falha ao cancelar a consulta.", {
         description: "Tente novamente mais tarde",

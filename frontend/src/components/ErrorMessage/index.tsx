@@ -1,5 +1,4 @@
 import { CircularProgress } from "@mui/material";
-import { Button } from "../ui/button";
 
 export function ErrorMessage({ refetch, isLoading, className }: { refetch: () => void, isLoading?: boolean, className?: string }) {
   return (

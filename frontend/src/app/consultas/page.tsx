@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
 import { Button } from "@/components/ui/button"

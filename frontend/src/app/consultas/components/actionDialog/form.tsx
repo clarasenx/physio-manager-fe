@@ -14,14 +14,14 @@ import { toast } from "sonner"
 import { useQueryClient } from "@tanstack/react-query"
 import { scheduleKey } from "@/hooks/useSchedule"
 import { danger } from "@/constants/ToastStyle"
-import { StartScheduleSchema, StartScheduleType } from "@/dtos/schedule/start-schedule.dto"
+import { StartScheduleSchema } from "@/dtos/schedule/start-schedule.dto"
 import { Textarea } from "@/components/ui/textarea"
 import { actionTypeView } from "@/constants/actionTypeView";
-import { ConcludeScheduleSchema, ConcludeScheduleType } from "@/dtos/schedule/conclude-schedule.dto";
+import { ConcludeScheduleSchema } from "@/dtos/schedule/conclude-schedule.dto";
 import { z } from "zod";
 import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
 import { isScheduleStarted } from "@/utils/isScheduleStarted";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GoPencil } from "react-icons/go";
 
 export const ConsultaActionForm = ({
@@ -64,10 +64,10 @@ export const ConsultaActionForm = ({
       const message = actionType === 'CONCLUDE' ? "Consulta finalizada com sucesso." : "Consulta iniciada com sucesso."
       
       setIsLoading(false)
-      toast("Consulta iniciada com sucesso.")
+      toast(message)
       closeModal()
     }
-    catch (err) {
+    catch {
       setIsLoading(false)
       toast("Ocorreu uma falha ao salvar a consulta.", {
         description: "Tente novamente mais tarde",
