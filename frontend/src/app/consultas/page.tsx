@@ -74,8 +74,9 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-2 sm:gap-4 px-0 md:pl-4 md:pr-7 py-2 sm:py-4 '>
-        <h2 className='text-2xl text-center font-medium'>Consultas</h2>
+      <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
+        <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
+
 
         <div className='bg-white w-full rounded-2xl py-2 flex flex-col items-center justify-center'>
 
