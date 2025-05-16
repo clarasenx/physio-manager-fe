@@ -53,7 +53,7 @@ export const Scheduler = () => {
       <div className="flex justify-between my-2">
         <div className="flex jusitfy-between items-center gap-2">
           <IoIosArrowBack size={18} className="cursor-pointer" onClick={previousMonth} />
-          <h2 className="font-bold text-xl">{capitalize(mounth())}</h2>
+          <h2 className="font-bold text-xl text-center w-28">{capitalize(mounth())}</h2>
           <IoIosArrowForward size={18} className="cursor-pointer" onClick={nextMonth} />
         </div>
         <span className="flex items-center mr-2 font-medium">{currentMonth.toLocaleDateString('pt-br', { year: 'numeric' })}</span>

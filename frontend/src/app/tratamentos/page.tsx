@@ -20,7 +20,7 @@ export default function Tratamentos() {
             </div>
           </section>
 
-          <div className='w-full flex flex-col flex-wrap gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='w-full flex flex-col flex-wrap gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh]'>
           <CardTratamentos />
           <CardTratamentos />
           <CardTratamentos />

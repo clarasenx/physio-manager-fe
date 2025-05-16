@@ -11,7 +11,7 @@ export default function Consultas() {
   });
 
   return (
-    <div className='w-full h-full px-8 sm:px-4 mt-10'>
+    <div className='w-fit sm:w-2xl lg:w-full h-100dvh px-8 sm:px-4 mx-auto mt-10'>
       <div className='flex justify-between items-center'>
         <p className='text-2xl text-center font-medium pb-3'>Pacientes</p>
         <div className='sm:hidden flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
@@ -71,8 +71,12 @@ export default function Consultas() {
             </table> 
           </section>
 
-          {/* Cards de paciente individual */}
-          <section className='w-full grid grid-cols-1 sm:grid-cols-2 lg:hidden bg-[#F1EDE3] rounded-md p-4'>
+          {/* Cards de paciente individual mobile/telas menores*/}
+          <section className='w-full overflow-auto sm:max-h-[60dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md p-4'>
+            <CardPacienteIndiv />
+            <CardPacienteIndiv />
+            <CardPacienteIndiv />
+            <CardPacienteIndiv />
             <CardPacienteIndiv />
           </section>
         
