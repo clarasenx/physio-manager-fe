@@ -11,10 +11,8 @@ import { TratamentoCreateForm } from "./form"
 
 
 export const TratamentoCreateDialog = ({
-  date,
   children
 }: {
-  date?: Date,
   children: ReactNode
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
