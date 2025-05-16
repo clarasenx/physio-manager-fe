@@ -15,9 +15,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Se o usuário ESTÁ autenticado e tenta acessar /login → redireciona para /dashboard
-  console.log(path);
-  
+  // Se o usuário ESTÁ autenticado e tenta acessar /login → redireciona para /dashboard  
   if (token && (isAuthPage || path === "/")) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }

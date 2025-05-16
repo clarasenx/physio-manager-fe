@@ -1,5 +1,8 @@
+'use client'
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
 import CardTratamentos from './../../components/cards/CardTratamentos';
+import { TratamentoCreateDialog } from './components/createDialog';
+import { Button } from '@/components/ui/button';
 
 export default function Tratamentos() {
   return (
@@ -14,10 +17,9 @@ export default function Tratamentos() {
               placeholder="Buscar por tratamento"
               className='text-sm min-w-[145px] w-full'/>
             </div>
-            <div className='hidden sm:flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
-              <LuCirclePlus />
-              <button className='h-8 text-sm text-nowrap'>Novo tratamento</button>
-            </div>
+            <TratamentoCreateDialog>
+              <Button><LuCirclePlus />Novo tratamento</Button>
+            </TratamentoCreateDialog>
           </section>
 
           <div className='w-full flex flex-col flex-wrap gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh]'>

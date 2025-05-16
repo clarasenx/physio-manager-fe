@@ -40,7 +40,7 @@ export const ConsultaActiveDialog = ({
       setIsLoading(false)
       setOpenDialog(false)
     }
-    catch (err) {
+    catch {
       setIsLoading(false)
       toast("Ocorreu uma falha ao ativar a consulta.", {
         description: "Tente novamente mais tarde",
