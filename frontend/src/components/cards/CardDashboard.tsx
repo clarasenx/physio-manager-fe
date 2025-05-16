@@ -2,9 +2,7 @@
 import { useState } from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
 import { ScheduleMenu } from '../../app/consultas/components/scheduleMenu';
-import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 import { ScheduleType } from '@/dtos/schedule/schedule.schema';
-import { StatusColor } from '@/constants/StatusColor';
 import { StatusView } from '@/constants/StatusView';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
 import { ScheduleStatus } from '@/enum/schedule-status.enum';

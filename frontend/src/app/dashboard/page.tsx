@@ -1,33 +1,8 @@
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
-import CardDashboard from '@/components/cards/CardDashboard';
 import { DashboardResult } from './components/result';
 import { TodaySchedules } from './components/todaySchedules';
 
 export default function Dashboard() {
-
-  const consultasHoje = [
-    {
-      id: 1,
-      name: "Raissa Andrade",
-      treatment: "Sessão de fisioterapia",
-      time: "09:30-10:30",
-      status: "Concluída",
-    },
-    {
-      id: 2,
-      name: "Raissa Andrade",
-      treatment: "Sessão de fisioterapia",
-      time: "10:30-11:30",
-      status: "Pendente",
-    },
-    {
-      id: 3,
-      name: "Ana Frota",
-      treatment: "Liberação miofascial",
-      time: "13:30-14:30",
-      status: "Cancelada",
-    },
-  ]
 
   return (
     <div className='flex flex-col h-full w-full items-center px-2 sm:px-8 sm:py-5'>

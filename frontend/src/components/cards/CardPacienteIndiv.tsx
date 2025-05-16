@@ -11,7 +11,7 @@ const CardPacienteIndiv = () => {
   ]
 
   return (
-    <div className='h-fit flex flex-col px-4 py-2 border rounded-xl shadow-md bg-white'>
+    <div className='h-fit flex flex-col px-2 sm:px-4 py-2 border rounded-xl shadow-md bg-white'>
       <section className='flex flex-col py-3'>
         <div className='flex items-center gap-2'>
           <p className='text-[#82654C] font-semibold '>Nome:</p>
@@ -26,7 +26,7 @@ const CardPacienteIndiv = () => {
           <p>999999-9999</p>
         </div>
         <div className='flex items-center gap-2'>
-          <p className='text-[#82654C] font-semibold'>Última consulta:</p>
+          <p className='text-[#82654C] w-fit font-semibold'>Última consulta:</p>
           <p>23/05/25</p>
         </div>
       </section>

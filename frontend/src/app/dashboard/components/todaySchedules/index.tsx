@@ -4,7 +4,6 @@ import CardDashboard from "@/components/cards/CardDashboard"
 import { ErrorMessage } from "@/components/ErrorMessage"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useDashboard } from "@/hooks/useDashboard"
-import { IDashboard } from "@/interfaces/IDashboard"
 
 export const TodaySchedules = () => {
   const {

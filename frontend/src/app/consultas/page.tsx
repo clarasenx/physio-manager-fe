@@ -114,7 +114,7 @@ export default function Consultas() {
                   {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
                   {/*Seção das consultas do dia*/}
                   {
-                    schedules.isPending ? <Loading /> :
+                    schedules.isLoading ? <Loading /> :
                       schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
                         activeToggleConsultas === 1 ?
                           <ConsultasAgendadas schedules={schedules.data} /> :
