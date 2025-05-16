@@ -73,7 +73,7 @@ export default function Dashboard() {
           <p className='text-xl text-center font-medium py-2'>Compromissos para hoje</p>
         </div>
 
-        <div className='bg-white flex flex-col w-full md:h-full p-5 rounded-lg gap-3 text-zinc-950'>
+        <div className='bg-white flex flex-col w-full md:h-full p-5 rounded-lg gap-3 text-zinc-950 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh]'>
           {consultasHoje.map((item) => (
             <CardDashboard key={item.id} item={item} />
           ))}
