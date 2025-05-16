@@ -1,6 +1,7 @@
-'use client'
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
 import CardDashboard from '@/components/cards/CardDashboard';
+import { DashboardResult } from './components/result';
+import { TodaySchedules } from './components/todaySchedules';
 
 export default function Dashboard() {
 
@@ -29,7 +30,7 @@ export default function Dashboard() {
   ]
 
   return (
-    <div className='flex flex-col h-full w-full items-center px-8 sm:py-5'>
+    <div className='flex flex-col h-full w-full items-center px-2 sm:px-8 sm:py-5'>
       {/* Primeira seção, de boas vindas */}
       <section className='flex flex-col w-full items-center md:items-start  text-[#2D231C] pb-5'>
         <p className='text-3xl py-2'>
@@ -41,25 +42,26 @@ export default function Dashboard() {
       {/* Segunda seção, de cards */}
       <section className='flex flex-col md:flex-row w-full items-center md:justify-between gap-3 lg:gap-12'>
         <div className='bg-white flex px-6 py-4 gap-2 rounded-lg w-full md:w-full md:h-[108px]lg:h-full'>
-          <LuCalendarDays className='size-12 sm:size-14 text-[#6B4A2E] self-center'/>
+          <LuCalendarDays className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
-            <p className='text-3xl leading-9 sm:text-4xl pt-2 font-semibold'>10</p>
+
+            <DashboardResult dataKey='todaySchedules' />
             <p className='text-sm leading-4 sm:text-base'>Consultas para hoje</p>
           </div>
-        </div>      
+        </div>
 
         <div className='bg-white flex px-6 py-4 gap-2 rounded-lg w-full md:w-full md:h-[108px] lg:h-full'>
-          <LuSquareCheck className='size-12 sm:size-14 text-[#6B4A2E] self-center'/>
+          <LuSquareCheck className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
-            <p className='text-3xl leading-9 sm:text-4xl pt-2 font-semibold'>10</p>
+            <DashboardResult dataKey='totalSchedulesCompleted' />
             <p className='text-sm leading-4 sm:text-base'>Consultas concluídas</p>
           </div>
         </div>
-        
+
         <div className='bg-white flex px-6 py-4 gap-2 rounded-lg w-full md:w-full md:h-[108px] lg:h-full'>
-          <LuUser className='size-12 sm:size-14 text-[#6B4A2E] self-center'/>
+          <LuUser className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
-            <p className='text-3xl leading-9 sm:text-4xl pt-2 font-semibold'>108</p>
+            <DashboardResult dataKey='totalPatients' />
             <p className='text-sm leading-4 sm:text-base'>Pacientes cadastrados</p>
           </div>
         </div>
@@ -69,15 +71,11 @@ export default function Dashboard() {
       <section className='flex flex-col w-full md:h-full gap-2 py-8 items-center md:items-start'>
         <p className='text-xl text-center font-medium py-2 md:hidden'>Para Hoje</p>
         <div className='hidden md:flex items-center w-full gap-2'>
-          <LuPin  className='size-6'/> 
+          <LuPin className='size-6' />
           <p className='text-xl text-center font-medium py-2'>Compromissos para hoje</p>
         </div>
 
-        <div className='bg-white flex flex-col w-full md:h-full p-5 rounded-lg gap-3 text-zinc-950 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh]'>
-          {consultasHoje.map((item) => (
-            <CardDashboard key={item.id} item={item} />
-          ))}
-        </div>
+        <TodaySchedules />
       </section>
     </div>
   )
