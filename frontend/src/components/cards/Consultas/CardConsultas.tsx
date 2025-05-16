@@ -57,7 +57,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
           isScheduleStarted(item) ?
             <p
               className={`px-1 sm:px-3 py-1 sm:py-1 justify-self-end font-medium rounded-full text-xs text-green-800 sm:text-sm sm:text-white text-center sm:bg-green-800`}
-            >Consulta Iniciada</p> : <></>
+            >Em Andamento</p> : <></>
         }
         <div className='relative flex flex-col md:justify-center'>
           <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28} /></button>
