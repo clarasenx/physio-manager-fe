@@ -23,7 +23,6 @@ export const TodaySchedules = () => {
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
-        <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
       </div>
     )
   }

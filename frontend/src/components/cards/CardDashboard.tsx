@@ -7,6 +7,7 @@ import { ScheduleType } from '@/dtos/schedule/schedule.schema';
 import { StatusColor } from '@/constants/StatusColor';
 import { StatusView } from '@/constants/StatusView';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
+import { ScheduleStatus } from '@/enum/schedule-status.enum';
 
 interface DashboardDataProps {
   item: ScheduleType;
@@ -28,10 +29,11 @@ const CardDashboard = ({ item }: DashboardDataProps) => {
         {
           isScheduleStarted(item) ?
             <p
-              className={`justify-self-end font-medium rounded-full text-xs sm:text-sm text-center text-green-800`}
-            >Em Andamento</p> : <></>
+              className={`px-2 sm:px-3 py-1 justify-self-end font-medium rounded-full text-green-800 w-[133px] text-sm text-white text-center bg-green-800`}
+            >Em Andamento</p> : <p className={`px-3 py-1 justify-self-end rounded-full text-sm text-white font-medium w-[133px] text-center 
+              ${item.status === ScheduleStatus.COMPLETED ? "bg-green-800" : item.status === ScheduleStatus.SCHEDULED ? "bg-amber-600" : item.status === ScheduleStatus.CANCELED ? "bg-red-800" : ''}`}>{StatusView[item.status]}</p>
         }
-        <p className={`px-3 py-1 justify-self-end max-w-28 rounded-full text-sm text-white font-medium w-[120px] text-center bg-${StatusColor[item.status]}`}>{StatusView[item.status]}</p>
+        
         <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'
           onClick={() => setMenuAberto(!menuAberto)}>Editar</button>
         {menuAberto && (
