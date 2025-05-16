@@ -6,6 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useHookFormMask } from 'use-mask-input';
 import { login } from '../actions/login';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { danger } from '@/constants/ToastStyle';
+import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 interface ILogin {
   register: string
@@ -19,12 +24,33 @@ export default function Login() {
   } = useForm<ILogin>()
   const registerWithMask = useHookFormMask(register);
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(data: ILogin) {
-    const token = (await api.post("user/auth", data)).data as {token: string}
-    
-    await login(token)
-    router.replace('/dashboard')
+    try {
+      setIsLoading(true)
+      const token = (await api.post("user/auth", data)).data as {token: string}
+      localStorage.setItem('token', token.token)
+      await login(token)
+      router.replace('/dashboard')
+      setIsLoading(false)
+    }
+    catch(err) {
+      setIsLoading(false)
+      if(!(err instanceof AxiosError)) {
+        toast('Ocorreu um erro', {description: 'Tente novamente mais tarde', style: danger})
+        return
+      }
+      if(err.status === 404) {
+        toast('Usuario não encontrado', {style: danger})
+        return
+      }
+      if(err.status === 401) {
+        toast('Senha incorreta', {style: danger})
+        return
+      }
+      toast('Ocorreu um erro', {description: 'Tente novamente mais tarde', style: danger})
+    }
   }
 
   return (
@@ -69,7 +95,11 @@ export default function Login() {
             <button 
               className='cursor-pointer h-11 w-full mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
               type="submit"
-              >Login</button>
+              >
+                {
+                  isLoading ? <CircularProgress color='inherit' /> : 'Login'
+                }
+                </button>
           </form>
 
         </div>

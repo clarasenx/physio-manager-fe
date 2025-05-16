@@ -61,9 +61,6 @@ export const ConsultaEditForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const triggerCalendarRef = useRef<HTMLButtonElement>(null)
 
-  console.log(schedule);
-
-
   const form = useForm<UpdateScheduleType>({
     resolver: zodResolver(UpdateScheduleSchema),
     defaultValues: {
@@ -302,7 +299,7 @@ export const ConsultaEditForm = ({
             render={({ field }) => (
               <FormItem className="flex flex-col flex-1">
                 <FormLabel>Notas</FormLabel>
-                <Textarea className="bg-white border-black" placeholder="Escreva suas notas aqui" {...field} value={field.value ?? undefined} />
+                <Textarea className="bg-white border-black" placeholder="Escreva suas anotações aqui" {...field} value={field.value ?? undefined} />
                 <FormMessage />
               </FormItem>
             )}

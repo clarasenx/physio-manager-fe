@@ -25,9 +25,6 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
 
       setInitialDate(startOfDay)
       setFinalDate(endOfDay)
-
-      console.log("Data inicial:", startOfDay)
-      console.log("Data final:", endOfDay)
     }
   }
 
