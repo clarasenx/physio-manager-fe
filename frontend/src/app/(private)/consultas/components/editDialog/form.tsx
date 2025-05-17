@@ -1,3 +1,15 @@
+import api from "@/api/axios"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Combobox } from '@/components/ui/combobox'
+import { CommandGroup, CommandItem } from '@/components/ui/command'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -7,6 +19,12 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -14,39 +32,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { UpdateScheduleSchema, UpdateScheduleType } from "@/dtos/schedule/update-schedule.dto"
-import { usePatient } from "@/hooks/usePatient"
-import { useForm } from "react-hook-form"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { pt } from 'date-fns/locale/pt';
-import { Input } from "@/components/ui/input"
-import { useRef, useState } from "react"
-import { zodResolver } from '@hookform/resolvers/zod';
-import api from "@/api/axios"
-import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
-import { scheduleKey } from "@/hooks/useSchedule"
-import { AxiosError } from "axios"
+import { Textarea } from "@/components/ui/textarea"
 import { danger } from "@/constants/ToastStyle"
 import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
-import { Textarea } from "@/components/ui/textarea"
+import { UpdateScheduleSchema, UpdateScheduleType } from "@/dtos/schedule/update-schedule.dto"
 import { ScheduleStatus } from "@/enum/schedule-status.enum"
+import { useDebounce } from '@/hooks/useDebounce'
+import { usePatient } from "@/hooks/usePatient"
+import { scheduleKey } from "@/hooks/useSchedule"
+import { cn } from "@/lib/utils"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CircularProgress } from '@mui/material'
+import { useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { format } from "date-fns"
+import { pt } from 'date-fns/locale/pt'
+import { CalendarIcon, Check } from "lucide-react"
+import { useRef, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export const ConsultaEditForm = ({
   closeModal,
@@ -60,6 +64,8 @@ export const ConsultaEditForm = ({
   const [openDialog, setOpenDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const triggerCalendarRef = useRef<HTMLButtonElement>(null)
+  const [ searchPatient, setSearchPatient ] = useState<string>()
+    const debouncedSearch = useDebounce(searchPatient, 500)
 
   const form = useForm<UpdateScheduleType>({
     resolver: zodResolver(UpdateScheduleSchema),
@@ -71,7 +77,7 @@ export const ConsultaEditForm = ({
       finalDiscomfort: schedule.finalDiscomfort || 0,
     }
   })
-  const patients = usePatient()
+  const patients = usePatient( { search: debouncedSearch } )
 
   function setHours(date: Date) {
     const auxDate = new Date(date);
@@ -178,21 +184,43 @@ export const ConsultaEditForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Paciente</FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
-                    <FormControl>
-                      <SelectTrigger className="w-full bg-white border-black">
-                        <SelectValue placeholder="Selecione um paciente" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {
-                        !patients.isPending && !patients.isError &&
-                        patients.data.map((patient, index) => (
-                          <SelectItem key={`patient-${index}`} value={String(patient.id)}>{patient.name}</SelectItem>
-                        ))
-                      }
-                    </SelectContent>
-                  </Select>
+                  <Combobox
+                    onSearch={setSearchPatient}
+                    className='font-normal border-black'
+                    searchPlaceholder="Pesquise um paciente..."
+                    placheholder={field.value
+                      ? patients.data?.data.find((patient) => patient.id === field.value)?.name || schedule.patient?.name
+                      : 'Selecione um paciente'}
+                    children={(close) =>
+                      <CommandGroup>
+                        {patients.isPending ?
+                          <div className='w-full flex justify-center py-3'>
+                            <CircularProgress />
+                          </div>
+                          :
+                          !patients.data?.data.length ? <p className='text-sm text-center'>Sem pacientes encontrados</p> :
+                            !patients.isError &&
+                            patients.data.data.map((patient, index) => (
+                              <CommandItem
+                                key={`patient-${index}`}
+                                value={String(patient.id)}
+                                onSelect={() => {
+                                  close()
+                                  field.onChange(patient.id)
+                                }}
+                              >
+                                {patient.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === patient.id ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                      </CommandGroup>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}

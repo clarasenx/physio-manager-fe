@@ -1,3 +1,15 @@
+import api from "@/api/axios"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Combobox } from '@/components/ui/combobox'
+import { CommandGroup, CommandItem } from '@/components/ui/command'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -7,6 +19,12 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -14,36 +32,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
-import { usePatient } from "@/hooks/usePatient"
-import { useForm } from "react-hook-form"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { pt } from 'date-fns/locale/pt';
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { zodResolver } from '@hookform/resolvers/zod';
-import api from "@/api/axios"
-import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
-import { scheduleKey } from "@/hooks/useSchedule"
-import { AxiosError } from "axios"
 import { danger } from "@/constants/ToastStyle"
+import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
+import { useDebounce } from '@/hooks/useDebounce'
+import { usePatient } from "@/hooks/usePatient"
+import { scheduleKey } from "@/hooks/useSchedule"
+import { cn } from "@/lib/utils"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CircularProgress } from '@mui/material'
+import { useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { format } from "date-fns"
+import { pt } from 'date-fns/locale/pt'
+import { CalendarIcon, Check } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export const ConsultaCreateForm = ({
   closeModal,
@@ -53,9 +57,11 @@ export const ConsultaCreateForm = ({
   date?: Date
 }) => {
   const queryClient = useQueryClient()
-  const [time, setTime] = useState<string>('00:00')
-  const [openDialog, setOpenDialog] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [ time, setTime ] = useState<string>('00:00')
+  const [ openDialog, setOpenDialog ] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(false)
+  const [ searchPatient, setSearchPatient ] = useState<string>()
+  const debouncedSearch = useDebounce(searchPatient, 500)
 
   const form = useForm<CreateScheduleType>({
     resolver: zodResolver(CreateScheduleSchema),
@@ -63,12 +69,12 @@ export const ConsultaCreateForm = ({
       date: date
     }
   })
-  const patients = usePatient()
+  const patients = usePatient({ search: debouncedSearch })
 
   function setHours(date: Date) {
     const auxDate = new Date(date);
 
-    const [hours, minutes] = time.split(":").map(Number);
+    const [ hours, minutes ] = time.split(":").map(Number);
     auxDate.setHours(hours);
     auxDate.setMinutes(minutes);
     auxDate.setSeconds(0); // opcional, zera os segundos
@@ -82,9 +88,9 @@ export const ConsultaCreateForm = ({
     try {
       setIsLoading(true)
       await api.post('schedule', data, { params })
-      
-      queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
-      
+
+      queryClient.invalidateQueries({ queryKey: [ scheduleKey ], type: 'all' })
+
       setIsLoading(false)
       toast("Consulta criada com sucesso.")
       closeModal()
@@ -98,7 +104,7 @@ export const ConsultaCreateForm = ({
         })
         return
       }
-      
+
       if (err.status === 409) {
         if (err.response?.data.code === 'EXACT_CONFLICT') {
           toast("Existe uma consulta no horário definido.", {
@@ -145,21 +151,43 @@ export const ConsultaCreateForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Paciente</FormLabel>
-                  <Select onValueChange={(value) => field.onChange(Number(value))}>
-                    <FormControl>
-                      <SelectTrigger className="w-full bg-white border-black">
-                        <SelectValue placeholder="Selecione um paciente" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {
-                        !patients.isPending && !patients.isError &&
-                        patients.data.map((patient, index) => (
-                          <SelectItem key={`patient-${index}`} value={String(patient.id)}>{patient.name}</SelectItem>
-                        ))
-                      }
-                    </SelectContent>
-                  </Select>
+                  <Combobox
+                    onSearch={setSearchPatient}
+                    className='font-normal border-black'
+                    searchPlaceholder="Pesquise um paciente..."
+                    placheholder={field.value
+                      ? patients.data?.data.find((patient) => patient.id === field.value)?.name
+                      : 'Selecione um paciente'}
+                    children={(close) =>
+                      <CommandGroup>
+                        {patients.isPending ?
+                          <div className='w-full flex justify-center py-3'>
+                            <CircularProgress />
+                          </div>
+                          :
+                          !patients.data?.data.length ? <p className='text-sm text-center'>Sem pacientes encontrados</p> :
+                            !patients.isError &&
+                            patients.data.data.map((patient, index) => (
+                              <CommandItem
+                                key={`patient-${index}`}
+                                value={String(patient.id)}
+                                onSelect={() => {
+                                  close()
+                                  field.onChange(patient.id)
+                                }}
+                              >
+                                {patient.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === patient.id ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                      </CommandGroup>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -227,3 +255,4 @@ export const ConsultaCreateForm = ({
     </div>
   )
 }
+
