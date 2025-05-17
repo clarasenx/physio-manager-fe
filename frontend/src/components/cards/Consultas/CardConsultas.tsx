@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
-import { ScheduleMenu } from '../../../app/consultas/components/scheduleMenu';
 import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
+import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
 
 
 interface CardConsultaProps {

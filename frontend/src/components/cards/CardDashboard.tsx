@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
-import { ScheduleMenu } from '../../app/consultas/components/scheduleMenu';
+
 import { ScheduleType } from '@/dtos/schedule/schedule.schema';
 import { StatusView } from '@/constants/StatusView';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
 import { ScheduleStatus } from '@/enum/schedule-status.enum';
+import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
 
 interface DashboardDataProps {
   item: ScheduleType;
