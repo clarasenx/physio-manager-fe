@@ -21,7 +21,7 @@ interface ComboboxProps {
   placheholder?: string
   className?: string
   onSearch: (value: string) => void
-  children: (close: () => void) => React.ReactNode
+  listItems: (close: () => void) => React.ReactNode
 }
 
 export function Combobox({
@@ -29,7 +29,7 @@ export function Combobox({
   searchPlaceholder,
   className,
   onSearch,
-  children
+  listItems
 }: ComboboxProps) {
   const [ open, setOpen ] = React.useState(false)
 
@@ -56,7 +56,7 @@ export function Combobox({
             onChange={(e) => onSearch(e.target.value)}
           />
           <CommandList>
-            {children(() => setOpen(false))}
+            {listItems(() => setOpen(false))}
           </CommandList>
         </Command>
       </PopoverContent>

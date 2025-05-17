@@ -25,13 +25,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { danger } from "@/constants/ToastStyle"
 import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
@@ -191,7 +184,7 @@ export const ConsultaEditForm = ({
                     placheholder={field.value
                       ? patients.data?.data.find((patient) => patient.id === field.value)?.name || schedule.patient?.name
                       : 'Selecione um paciente'}
-                    children={(close) =>
+                    listItems={(close) =>
                       <CommandGroup>
                         {patients.isPending ?
                           <div className='w-full flex justify-center py-3'>
