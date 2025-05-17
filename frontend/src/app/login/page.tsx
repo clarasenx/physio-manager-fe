@@ -1,9 +1,11 @@
 "use client"
 import Logo from "@/../public/iconDark.svg";
 import api from '@/api/axios';
+import { Input } from '@/components/ui/input';
 import { danger } from '@/constants/ToastStyle';
 import { CircularProgress } from '@mui/material';
 import { AxiosError } from 'axios';
+import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -11,8 +13,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useHookFormMask } from 'use-mask-input';
 import { login } from '../actions/login';
-import { Input } from '@/components/ui/input';
-import { Eye, EyeOff } from 'lucide-react';
 
 interface ILogin {
   register: string
@@ -103,12 +103,12 @@ export default function Login() {
             </div>
             <div className='flex flex-col pt-3'>
               <label className='font-medium text-[#2D231C]'>Senha</label>
-              {/* <input 
-              required
-                className='border border-[#B7A17D] h-11 px-3' 
-                type="password"
-                {...register('password', {required: true})}/> */}
-                <Input  type={typeInput} rightIcon={<InputIcon/>} className='border border-[#B7A17D] h-11 px-3 rounded-none'/>
+                <Input 
+                type={typeInput}
+                rightIcon={<InputIcon/>}
+                className='border border-[#B7A17D] h-11 px-3 rounded-none'
+                {...register('password', {required: true})}
+                />
             </div>
             
             <button 
