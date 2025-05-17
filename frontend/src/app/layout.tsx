@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google';
 import "./globals.css";
@@ -24,8 +25,8 @@ export default function RootLayout({
           <div className="max-h-dvh overflow-auto w-full">
             {children}
           </div>
-           
         <Toaster position="top-right"/>
+        <Analytics />
       </body>
     </html>
   );

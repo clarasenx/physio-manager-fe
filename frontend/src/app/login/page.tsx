@@ -1,16 +1,18 @@
 "use client"
-import api from '@/api/axios';
 import Logo from "@/../public/iconDark.svg";
+import api from '@/api/axios';
+import { danger } from '@/constants/ToastStyle';
+import { CircularProgress } from '@mui/material';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { useHookFormMask } from 'use-mask-input';
 import { login } from '../actions/login';
-import { AxiosError } from 'axios';
-import { toast } from 'sonner';
-import { danger } from '@/constants/ToastStyle';
-import { useState } from 'react';
-import { CircularProgress } from '@mui/material';
+import { Input } from '@/components/ui/input';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface ILogin {
   register: string
@@ -25,6 +27,7 @@ export default function Login() {
   const registerWithMask = useHookFormMask(register);
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [typeInput, setTypeInput] = useState<'password' | 'text'>('password')
 
   async function onSubmit(data: ILogin) {
     try {
@@ -51,6 +54,21 @@ export default function Login() {
       }
       toast('Ocorreu um erro', {description: 'Tente novamente mais tarde', style: danger})
     }
+  }
+
+  function handleEye() {
+    if(typeInput === 'password') {
+      setTypeInput('text')
+    } else {
+      setTypeInput('password')
+    }
+  }
+
+  function InputIcon() {
+    if(typeInput === 'password') {
+      return <EyeOff className='cursor-pointer text-[#82654C]' onClick={handleEye}/>
+    }
+    return <Eye className='cursor-pointer text-[#82654C]' onClick={handleEye} />
   }
 
   return (
@@ -85,19 +103,20 @@ export default function Login() {
             </div>
             <div className='flex flex-col pt-3'>
               <label className='font-medium text-[#2D231C]'>Senha</label>
-              <input 
+              {/* <input 
               required
                 className='border border-[#B7A17D] h-11 px-3' 
                 type="password"
-                {...register('password', {required: true})}/>
+                {...register('password', {required: true})}/> */}
+                <Input  type={typeInput} rightIcon={<InputIcon/>} className='border border-[#B7A17D] h-11 px-3 rounded-none'/>
             </div>
             
             <button 
-              className='cursor-pointer h-11 w-full mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
+              className='cursor-pointer h-11 w-full flex items-center justify-center mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
               type="submit"
               >
                 {
-                  isLoading ? <CircularProgress color='inherit' /> : 'Login'
+                  isLoading ? <CircularProgress size={20} color='inherit' /> : 'Login'
                 }
                 </button>
           </form>
