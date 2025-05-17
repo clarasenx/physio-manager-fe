@@ -25,13 +25,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { danger } from "@/constants/ToastStyle"
 import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
 import { useDebounce } from '@/hooks/useDebounce'
@@ -45,7 +38,7 @@ import { AxiosError } from "axios"
 import { format } from "date-fns"
 import { pt } from 'date-fns/locale/pt'
 import { CalendarIcon, Check } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -158,7 +151,7 @@ export const ConsultaCreateForm = ({
                     placheholder={field.value
                       ? patients.data?.data.find((patient) => patient.id === field.value)?.name
                       : 'Selecione um paciente'}
-                    children={(close) =>
+                    listItems={(close) =>
                       <CommandGroup>
                         {patients.isPending ?
                           <div className='w-full flex justify-center py-3'>
