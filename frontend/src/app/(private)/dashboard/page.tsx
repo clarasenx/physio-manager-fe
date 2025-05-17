@@ -2,7 +2,7 @@ import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
 import { DashboardResult } from './components/result';
 import { TodaySchedules } from './components/todaySchedules';
 
-export default function Dashboard() {
+export default async function Dashboard() {
 
   return (
     <div className='flex flex-col h-full w-full items-center px-2 sm:px-8 sm:py-5'>
