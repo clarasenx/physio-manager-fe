@@ -1,8 +1,8 @@
 'use client'
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
-import CardTratamentos from './../../components/cards/CardTratamentos';
 import { TratamentoCreateDialog } from './components/createDialog';
 import { Button } from '@/components/ui/button';
+import CardTratamentos from '@/components/cards/CardTratamentos';
 
 export default function Tratamentos() {
   return (

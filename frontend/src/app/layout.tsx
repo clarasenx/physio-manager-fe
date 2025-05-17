@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
-import { Poppins } from 'next/font/google'
-import "./globals.css";
-import Navbar from '@/components/Navbar';
-import { UseClientProvider } from '@/hooks/useClientProvider';
 import { Toaster } from "@/components/ui/sonner";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import type { Metadata } from "next";
+import { Poppins } from 'next/font/google';
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Physio Manager",
@@ -23,14 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} relative flex md:h-fit  w-content bg-[#F6F5F2]`}>
-        <Navbar />
-        <UseClientProvider>
-          <div className="max-h-[calc(100dvh-80px)] lg:max-h-dvh overflow-auto w-full">
+      <body className={`${poppins.className} relative w-content bg-[#F6F5F2]`}>
+          <div className="max-h-dvh overflow-auto w-full">
             {children}
           </div>
-           <ReactQueryDevtools initialIsOpen={false} />
-        </UseClientProvider>
+           
         <Toaster position="top-right"/>
       </body>
     </html>

@@ -1,10 +1,10 @@
 'use client'
   
-import Logo from "../../public/icon.svg";
-import { usePathname, useRouter } from 'next/navigation';
-import { LuLayoutGrid, LuCalendarDays, LuUserPen, LuList, LuLogOut, LuBell } from "react-icons/lu";
-import Image from 'next/image';
 import { logout } from "@/app/actions/logout";
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { LuBell, LuCalendarDays, LuLayoutGrid, LuList, LuLogOut, LuUserPen } from "react-icons/lu";
+import Logo from "../../public/icon.svg";
 
 const Navbar = () => {
     const router = useRouter();
@@ -21,9 +21,6 @@ const Navbar = () => {
   ];
 
   const pathname = usePathname();
-  const hideHeader = pathname === '/login';
-
-  if (hideHeader) return null;
   
   return (
     <section className='flex flex-col lg:h-dvh lg:w-36 lg:px-10 py-5 justify-items-center sm:items-center justify-between'>

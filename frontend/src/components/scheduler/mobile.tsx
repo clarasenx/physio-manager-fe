@@ -5,9 +5,9 @@ import CardConsulta from "../cards/Consultas/CardConsultas"
 
 import { ErrorMessage } from "../ErrorMessage"
 import { CircularProgress } from "@mui/material"
-import { ConsultaCreateDialog } from "@/app/consultas/components/createDialog"
 import { Button } from "../ui/button"
 import { LuCirclePlus } from "react-icons/lu"
+import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog'
 
 export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m: Date) => void }) => {
   const [initialDate, setInitialDate] = useState<Date | undefined>(new Date())
