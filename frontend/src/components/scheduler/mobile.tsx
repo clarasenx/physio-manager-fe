@@ -48,7 +48,7 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
 
       <div className="w-full bg-[#B7A17D] items-center flex flex-col p-4 gap-2 rounded-lg mt-4">
         {
-          schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage refetch={schedule.refetch} /> :
+          schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage name='consultas' refetch={schedule.refetch} /> :
             !schedule.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
               schedule.data?.map(item => <CardConsulta key={item.id} item={item} />)
         }

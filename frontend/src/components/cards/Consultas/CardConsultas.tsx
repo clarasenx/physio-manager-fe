@@ -37,7 +37,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
         </div>
         <div className='grid sm:grid-cols-2'>
           <div className='flex items-center px-2 sm:col-start-2 row-start-1'>
-            <p className='line-clamp-1 font-medium px-0.5'>{item.patient?.name}</p>
+            <p className='line-clamp-1 font-medium px-0.5'>{item.appointmentType?.name}</p>
           </div>
           <div className='flex flex-col justify-between px-2  sm:py-2 sm:w-60 col-start-1 '>
             <div className='flex items-center gap-2'>

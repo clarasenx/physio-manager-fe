@@ -30,6 +30,7 @@ import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
 import { scheduleKey } from "@/hooks/useSchedule"
+import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CircularProgress } from '@mui/material'
@@ -54,7 +55,10 @@ export const ConsultaCreateForm = ({
   const [ openDialog, setOpenDialog ] = useState(false)
   const [ isLoading, setIsLoading ] = useState(false)
   const [ searchPatient, setSearchPatient ] = useState<string>()
-  const debouncedSearch = useDebounce(searchPatient, 500)
+  const debouncedSearchPatient = useDebounce(searchPatient, 500)
+
+  const [ searchTratamento, setSearchTratamento ] = useState<string>()
+  const debouncedSearchTratamento = useDebounce(searchTratamento, 500)
 
   const form = useForm<CreateScheduleType>({
     resolver: zodResolver(CreateScheduleSchema),
@@ -62,7 +66,9 @@ export const ConsultaCreateForm = ({
       date: date
     }
   })
-  const patients = usePatient({ search: debouncedSearch })
+
+  const patients = usePatient({ search: debouncedSearchPatient })
+  const tratamento = useTratamento({ name: debouncedSearchTratamento })
 
   function setHours(date: Date) {
     const auxDate = new Date(date);
@@ -82,7 +88,9 @@ export const ConsultaCreateForm = ({
       setIsLoading(true)
       await api.post('schedule', data, { params })
 
-      queryClient.invalidateQueries({ queryKey: [ scheduleKey ], type: 'all' })
+      queryClient.refetchQueries({
+        queryKey: [ scheduleKey ]
+      })
 
       setIsLoading(false)
       toast("Consulta criada com sucesso.")
@@ -137,7 +145,7 @@ export const ConsultaCreateForm = ({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => onSubmit(data, false))}>
-          <div className="xl:w-9/12 mb-4">
+          <div className="xl:w-9/12 mb-4 flex flex-col gap-4">
             <FormField
               control={form.control}
               name="patientId"
@@ -174,6 +182,53 @@ export const ConsultaCreateForm = ({
                                   className={cn(
                                     "ml-auto",
                                     field.value === patient.id ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                      </CommandGroup>
+                    }
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="appointmentTypeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tratamento</FormLabel>
+                  <Combobox
+                    onSearch={setSearchTratamento}
+                    className='font-normal border-black'
+                    searchPlaceholder="Pesquise um tratamento..."
+                    placheholder={field.value
+                      ? tratamento.data?.data.find((patient) => patient.id === field.value)?.name
+                      : 'Selecione um tratamento'}
+                    listItems={(close) =>
+                      <CommandGroup>
+                        {tratamento.isPending ?
+                          <div className='w-full flex justify-center py-3'>
+                            <CircularProgress />
+                          </div>
+                          :
+                          !tratamento.data?.data.length ? <p className='text-sm text-center'> Sem tratamentos encontrados</p> :
+                            !tratamento.isError &&
+                            tratamento.data.data.map((tratamento, index) => (
+                              <CommandItem
+                                key={`tratamento-${index}`}
+                                value={String(tratamento.id)}
+                                onSelect={() => {
+                                  close()
+                                  field.onChange(tratamento.id)
+                                }}
+                              >
+                                {tratamento.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === tratamento.id ? "opacity-100" : "opacity-0"
                                   )}
                                 />
                               </CommandItem>

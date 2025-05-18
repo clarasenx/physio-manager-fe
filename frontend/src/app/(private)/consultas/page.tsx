@@ -115,7 +115,7 @@ export default function Consultas() {
                   {/*Seção das consultas do dia*/}
                   {
                     schedules.isLoading ? <Loading /> :
-                      schedules.isError ? <ErrorMessage refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
+                      schedules.isError ? <ErrorMessage name='consultas' refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
                         activeToggleConsultas === 1 ?
                           <ConsultasAgendadas schedules={schedules.data} /> :
                           <ConsultasConcluidasECanceladas schedules={schedules.data} />

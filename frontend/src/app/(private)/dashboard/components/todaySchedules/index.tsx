@@ -29,7 +29,7 @@ export const TodaySchedules = () => {
   return (
     <div className='bg-white flex flex-col w-full px-2 py-5 sm:p-5 rounded-lg gap-3 text-zinc-950 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[65dvh]'>
       {
-        isPending ? <Loading /> : isError ? <ErrorMessage refetch={refetch} isLoading={isFetching} /> :
+        isPending ? <Loading /> : isError ? <ErrorMessage name='consultas' refetch={refetch} isLoading={isFetching} /> :
           !dashboard?.todaySchedules.length ? <p className="font-medium">Você ainda não tem consultas marcadas para hoje.</p> :
             dashboard?.todaySchedules.map((schedule) => (
               <CardDashboard key={`CardDashboard-${schedule.id}`} item={schedule} />

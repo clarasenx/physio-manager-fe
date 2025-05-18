@@ -33,6 +33,7 @@ import { ScheduleStatus } from "@/enum/schedule-status.enum"
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
 import { scheduleKey } from "@/hooks/useSchedule"
+import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CircularProgress } from '@mui/material'
@@ -53,29 +54,34 @@ export const ConsultaEditForm = ({
   schedule: ListScheduleType
 }) => {
   const queryClient = useQueryClient()
-  const [time, setTime] = useState<string>(schedule.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))
-  const [openDialog, setOpenDialog] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [ time, setTime ] = useState<string>(schedule.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))
+  const [ openDialog, setOpenDialog ] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(false)
   const triggerCalendarRef = useRef<HTMLButtonElement>(null)
   const [ searchPatient, setSearchPatient ] = useState<string>()
-    const debouncedSearch = useDebounce(searchPatient, 500)
+  const debouncedSearch = useDebounce(searchPatient, 500)
+
+  const [ searchTratamento, setSearchTratamento ] = useState<string>()
+  const debouncedSearchTratamento = useDebounce(searchTratamento, 500)
 
   const form = useForm<UpdateScheduleType>({
     resolver: zodResolver(UpdateScheduleSchema),
     defaultValues: {
       date: schedule.date,
       patientId: schedule.patientId,
+      appointmentTypeId: schedule.appointmentTypeId,
       notes: schedule.notes || '',
       initialDiscomfort: schedule.initialDiscomfort || 0,
       finalDiscomfort: schedule.finalDiscomfort || 0,
     }
   })
-  const patients = usePatient( { search: debouncedSearch } )
+  const patients = usePatient({ search: debouncedSearch })
+  const tratamento = useTratamento({ name: debouncedSearchTratamento })
 
   function setHours(date: Date) {
     const auxDate = new Date(date);
 
-    const [hours, minutes] = time.split(":").map(Number);
+    const [ hours, minutes ] = time.split(":").map(Number);
     auxDate.setHours(hours);
     auxDate.setMinutes(minutes);
     auxDate.setSeconds(0); // opcional, zera os segundos
@@ -90,21 +96,21 @@ export const ConsultaEditForm = ({
 
     const payload: UpdateScheduleType = { ...data }
 
-    Object.entries(data).forEach(([key, value]) => {
+    Object.entries(data).forEach(([ key, value ]) => {
 
       if (
-        schedule[key as keyof typeof schedule] !== value ||
+        schedule[ key as keyof typeof schedule ] !== value ||
         (
           value instanceof Date &&
-          value.getTime() !== new Date(schedule[key as keyof typeof schedule] as Date).getTime()
+          value.getTime() !== new Date(schedule[ key as keyof typeof schedule ] as Date).getTime()
         )
       ) {
         return;
       }
-      delete payload[key as keyof typeof payload]
+      delete payload[ key as keyof typeof payload ]
     });
 
-    if(schedule.status === ScheduleStatus.SCHEDULED) {
+    if (schedule.status === ScheduleStatus.SCHEDULED) {
       delete payload.finalDiscomfort
       delete payload.initialDiscomfort
     }
@@ -115,7 +121,9 @@ export const ConsultaEditForm = ({
       setIsLoading(true)
       await api.patch(`schedule/${schedule.id}`, payload, { params })
 
-      queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
+      queryClient.refetchQueries({
+        queryKey: [ scheduleKey ]
+      })
 
       setIsLoading(false)
       toast("Consulta editada com sucesso.")
@@ -170,7 +178,7 @@ export const ConsultaEditForm = ({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => onSubmit(data, false))}>
-          <div className="xl:w-9/12 mb-4">
+          <div className="xl:w-9/12 mb-4 flex flex-col gap-4">
             <FormField
               control={form.control}
               name="patientId"
@@ -207,6 +215,53 @@ export const ConsultaEditForm = ({
                                   className={cn(
                                     "ml-auto",
                                     field.value === patient.id ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                      </CommandGroup>
+                    }
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="appointmentTypeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tratamento</FormLabel>
+                  <Combobox
+                    onSearch={setSearchTratamento}
+                    className='font-normal border-black'
+                    searchPlaceholder="Pesquise um tratamento..."
+                    placheholder={field.value
+                      ? tratamento.data?.data.find((appointmentType) => appointmentType.id === field.value)?.name || schedule.appointmentType?.name
+                      : 'Selecione um tratamento'}
+                    listItems={(close) =>
+                      <CommandGroup>
+                        {tratamento.isPending ?
+                          <div className='w-full flex justify-center py-3'>
+                            <CircularProgress />
+                          </div>
+                          :
+                          !tratamento.data?.data.length ? <p className='text-sm text-center'> Sem tratamentos encontrados</p> :
+                            !tratamento.isError &&
+                            tratamento.data.data.map((tratamento, index) => (
+                              <CommandItem
+                                key={`tratamento-${index}`}
+                                value={String(tratamento.id)}
+                                onSelect={() => {
+                                  close()
+                                  field.onChange(tratamento.id)
+                                }}
+                              >
+                                {tratamento.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === tratamento.id ? "opacity-100" : "opacity-0"
                                   )}
                                 />
                               </CommandItem>
