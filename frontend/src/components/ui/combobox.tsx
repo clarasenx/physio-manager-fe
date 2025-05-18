@@ -41,9 +41,11 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn(`sm:w-[200px] justify-between`, className)}
+          className={cn(`sm:w-[200px] justify-`, className)}
         >
-          {placheholder}
+          <span className="truncate text-start w-full">
+            {placheholder}
+          </span>
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>

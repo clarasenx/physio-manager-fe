@@ -3,8 +3,13 @@ import { LuCirclePlus, LuSearch } from 'react-icons/lu';
 import { TratamentoCreateDialog } from './components/createDialog';
 import { Button } from '@/components/ui/button';
 import CardTratamentos from '@/components/cards/CardTratamentos';
+import { useTratamento } from '@/hooks/useTratamento';
+import { ErrorMessage } from '@/components/ErrorMessage';
+import { CircularProgress } from '@mui/material';
 
 export default function Tratamentos() {
+  const tratamentos = useTratamento()
+
   return (
     <div className='w-full'>
       <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4'>
@@ -22,17 +27,19 @@ export default function Tratamentos() {
             </TratamentoCreateDialog>
           </section>
 
-          <div className='w-full flex flex-col flex-wrap gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh]'>
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
-          <CardTratamentos />
+          <div className='w-full flex flex-col flex-wrap gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[70dvh] sm:items-stretch py-1'>
+            {
+              tratamentos.isLoading ? <div className='py-5 flex sm:col-span-full'>
+                <CircularProgress className='mx-auto' />
+              </div> : 
+                tratamentos.isError ? <div className='sm:col-span-full'>
+                  <ErrorMessage name='tratamentos' refetch={tratamentos.refetch} />
+                </div> :
+              !tratamentos.data?.data.length ? <p>Não há tratamentos cadastrados</p> :
+            tratamentos.data?.data.map((tratamento) => (
+              <CardTratamentos key={`cardsTratamento${tratamento.id}`} tratamento={tratamento} />
+            ))
+            } 
           </div>
         </div>
       </section>
