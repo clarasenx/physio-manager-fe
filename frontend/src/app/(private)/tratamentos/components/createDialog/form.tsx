@@ -46,7 +46,7 @@ export const TratamentoCreateForm = ({
       toast("Tratamento criado com sucesso.")
       closeModal()
     }
-    catch (err) {
+    catch {
       setIsLoading(false)
       toast("Ocorreu uma falha ao criar o tratamento.", {
       description: "Tente novamente mais tarde",
