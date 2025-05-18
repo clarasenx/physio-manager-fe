@@ -22,7 +22,7 @@ const CardDashboard = ({ item }: DashboardDataProps) => {
       </div>
       <div className='py-2 md:p-3 md:w-2/5 text-nowrap'>
         <p className='text-lg leading-5 font-semibold'>{item.patient?.name}</p>
-        <p className='md:text-sm'>{item.patient?.name}</p>
+        <p className='md:text-sm'>{item.appointmentType?.name}</p>
       </div>
       <div className='relative flex justify-end md:justify-between gap-2 items-center md:w-2/5'>
         {
