@@ -24,7 +24,7 @@ type TratamentoFormProps = {
   tratamento?: TratamentoType; // ou o tipo completo vindo do backend
 };
 
-export const TratamentoCreateForm = ({ closeModal, tratamento }: TratamentoFormProps) => {
+export const TratamentoForm = ({ closeModal, tratamento }: TratamentoFormProps) => {
   const queryClient = useQueryClient();
   const [ isLoading, setIsLoading ] = useState(false);
 

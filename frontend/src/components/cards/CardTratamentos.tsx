@@ -1,6 +1,8 @@
-import { TratamentoCreateDialog } from '@/app/(private)/tratamentos/components/createDialog';
+import { TratamentoDialog } from '@/app/(private)/tratamentos/components/formDialog';
 import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema';
-import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { tratamentoKey } from '@/hooks/useTratamento';
+import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { DeleteDialog } from '../deleteDialog';
 
 
 const CardTratamentos = ({ tratamento }: { tratamento: TratamentoType }) => {
@@ -13,27 +15,23 @@ const CardTratamentos = ({ tratamento }: { tratamento: TratamentoType }) => {
 
         <div className='flex flex-col h-full justify-between rounded-b-lg px-4 py-3 gap-3'>
           <p>{tratamento.description}</p>
-          <div className='flex justify-between'>
-            <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-              <FaTrash size={14} />
-            </button>
-            <div className='flex gap-1'>
+          <div className='flex justify-end gap-1'>
+            <DeleteDialog
+              title="Tem certeza que deseja apagar o tratamento: "
+              name={tratamento.name}
+              queryKey={tratamentoKey}
+              path={`/appointment-type/${tratamento.id}`}
+            >
               <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-              <FaEye size={14} />
+                <FaTrash size={14} />
               </button>
-              <TratamentoCreateDialog
-                tratamento={{
-                  id: tratamento.id,
-                  name: tratamento.name,
-                  description: tratamento.description
-                }}
-              >
-                <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                  <FaPencilAlt size={14} />
-                </button>
-              </TratamentoCreateDialog>
+            </DeleteDialog>
+            <TratamentoDialog tratamento={tratamento}>
+              <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+                <FaPencilAlt size={14} />
+              </button>
+            </TratamentoDialog>
 
-            </div>
           </div>
         </div>
       </section>

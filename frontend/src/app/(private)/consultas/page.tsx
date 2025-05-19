@@ -15,13 +15,13 @@ import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 
 export default function Consultas() {
 
-  const [activeToggleInicial, setActiveToggleInicial] = useState(1);
+  const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Consultas" },
     { id: 2, label: "Calendário" },
   ]
 
-  const [activeToggleConsultas, setActiveToggleConsultas] = useState(1);
+  const [ activeToggleConsultas, setActiveToggleConsultas ] = useState(1);
   const toggleConsultas = [
     { id: 1, label: "Agendadas", status: ScheduleStatus.SCHEDULED },
     { id: 2, label: "Concluídas", status: ScheduleStatus.COMPLETED },
@@ -118,7 +118,7 @@ export default function Consultas() {
                       schedules.isError ? <ErrorMessage name='consultas' refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
                         activeToggleConsultas === 1 ?
                           <ConsultasAgendadas schedules={schedules.data} /> :
-                          <ConsultasConcluidasECanceladas schedules={schedules.data} />
+                          <ConsultasConcluidasECanceladas schedules={schedules.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'}/>
                   }
                 </div>
 
@@ -143,7 +143,7 @@ function ConsultasAgendadas({ schedules }: { schedules?: ListScheduleType[] }) {
       <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
       <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
       {
-        Object.entries(grouped.months).map(([month, items]) => (
+        Object.entries(grouped.months).map(([ month, items ]) => (
           <ScheduleSection key={month} title={`Para ${month}`} items={items} />
         ))
       }
@@ -151,20 +151,23 @@ function ConsultasAgendadas({ schedules }: { schedules?: ListScheduleType[] }) {
   )
 }
 
-function ConsultasConcluidasECanceladas({ schedules }: { schedules?: ListScheduleType[] }) {
+function ConsultasConcluidasECanceladas({ schedules, status }: { schedules?: ListScheduleType[], status: string }) {
   const grouped = groupSchedulesByMonth(schedules || [])
 
   const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
-    const dateA = new Date(a[1][0].date).getTime()
-    const dateB = new Date(b[1][0].date).getTime()
+    const dateA = new Date(a[ 1 ][ 0 ].date).getTime()
+    const dateB = new Date(b[ 1 ][ 0 ].date).getTime()
     return dateB - dateA // Mais recente primeiro
   })
 
   return (
     <>
-      {sortedEntries.map(([month, items]) => (
-        <ScheduleSection key={month} title={`${month}`} items={items} />
-      ))}
+      {
+        !sortedEntries.length ? <p className='py-2 sm:py-4 px-3 md:px-6'>Não há Nenhuma consulta {status}</p>
+          :
+          sortedEntries.map(([ month, items ]) => (
+            <ScheduleSection key={month} title={`${month}`} items={items} />
+          ))}
     </>
   )
 }

@@ -7,15 +7,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { ReactNode, useState } from "react"
-import { TratamentoCreateForm } from "./form"
+import { TratamentoForm } from "./form"
 import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema'
 
-type TratamentoCreateDialogProps = {
+type TratamentoDialogProps = {
   children: ReactNode
   tratamento?: TratamentoType
 }
 
-export const TratamentoCreateDialog = ({ children, tratamento }: TratamentoCreateDialogProps) => {
+export const TratamentoDialog = ({ children, tratamento }: TratamentoDialogProps) => {
   const [ openDialog, setOpenDialog ] = useState(false)
 
   const isEditing = !!tratamento?.id
@@ -29,7 +29,7 @@ export const TratamentoCreateDialog = ({ children, tratamento }: TratamentoCreat
         <DialogHeader>
           <DialogTitle>{isEditing ? "Editar tratamento" : "Criar tratamento"}</DialogTitle>
         </DialogHeader>
-        <TratamentoCreateForm closeModal={() => { setOpenDialog(false) }}/>
+        <TratamentoForm closeModal={() => { setOpenDialog(false) }} tratamento={tratamento}/>
       </DialogContent>
     </Dialog>
   )

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
 import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
 import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
+import { Portal } from '@/components/portal';
 
 
 interface CardConsultaProps {
@@ -11,7 +12,18 @@ interface CardConsultaProps {
 }
 
 export default function CardConsulta({ item }: CardConsultaProps) {
-  const [menuAberto, setMenuAberto] = useState(false);
+  const [ menuAberto, setMenuAberto ] = useState(false);
+
+  const ref = useRef<HTMLButtonElement>(null);
+  const [ menuPosition, setMenuPosition ] = useState({ top: 0, left: 0 });
+
+  const toggleActions = () => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (rect) {
+      setMenuPosition({ top: rect.top - (rect.height/3), left: rect.left + (rect.width) });
+    }
+    setMenuAberto(!menuAberto);
+  };
 
   const getWeekDay = (date: Date) => {
     const aux = new Date(date)
@@ -60,15 +72,19 @@ export default function CardConsulta({ item }: CardConsultaProps) {
             >Em Andamento</p> : <></>
         }
         <div className='relative flex flex-col md:justify-center'>
-          <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28} /></button>
+          <button className='cursor-pointer' ref={ref} onClick={toggleActions}><HiDotsVertical color='#6A5242' size={28} /></button>
           {/* <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm' onClick={() => setMenuAberto(!menuAberto)}>Editar</button> */}
           {menuAberto && (
-            <ScheduleMenu
-              menuAberto={menuAberto}
-              setMenuAberto={setMenuAberto}
-              className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
-              schedule={item}
-            />
+            <Portal>
+              <div style={{ position: 'absolute', top: menuPosition.top, left: menuPosition.left, zIndex: 10 }}>
+                <ScheduleMenu
+                  menuAberto={menuAberto}
+                  setMenuAberto={setMenuAberto}
+                  className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
+                  schedule={item}
+                />
+              </div>
+            </Portal>
           )}
         </div>
       </div>

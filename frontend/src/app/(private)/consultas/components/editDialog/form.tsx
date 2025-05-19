@@ -1,4 +1,5 @@
 import api from "@/api/axios"
+import { DeleteDialog } from '@/components/deleteDialog'
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Combobox } from '@/components/ui/combobox'
@@ -380,9 +381,19 @@ export const ConsultaEditForm = ({
               </FormItem>
             )}
           />
-          <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
-            <Button type="submit" isLoading={isLoading}>Salvar</Button>
+          <div className='flex justify-between mt-6'>
+            <DeleteDialog
+              title="Tem certeza que deseja apagar esta consulta? "
+              queryKey={scheduleKey}
+              path={`/schedule/${schedule.id}`}
+              close={closeModal}
+            >
+              <Button type="button" variant={'destructive'}>Apagar</Button>
+            </DeleteDialog>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
+              <Button type="submit" isLoading={isLoading}>Salvar</Button>
+            </div>
           </div>
         </form>
       </Form>

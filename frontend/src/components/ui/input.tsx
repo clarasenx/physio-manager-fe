@@ -9,7 +9,7 @@ interface InputProps extends React.ComponentProps<"input"> {
 
 function Input({ noFocusRing, className, type, leftIcon, rightIcon, ...props }: InputProps) {
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center w-full">
       {leftIcon && (
         <div className="absolute left-2 text-muted-foreground">
           {leftIcon}
