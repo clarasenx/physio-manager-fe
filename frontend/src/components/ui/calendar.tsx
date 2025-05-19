@@ -7,13 +7,15 @@ import { pt } from 'date-fns/locale/pt';
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  schedules,
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: React.ComponentProps<typeof DayPicker> & { schedules?: ListScheduleType[] }) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -68,6 +70,24 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("size-4", className)} {...props} />
         ),
+        DayContent: ({ ...props }) => (
+          <div>
+            {props.date.getDate()}
+            {
+              schedules?.some((schedule) => {
+                console.log(schedule.date);
+                
+                const date = new Date(schedule.date)
+                return (
+                  date.getDate() === props.date.getDate() &&
+                  date.getMonth() === props.date.getMonth() &&
+                  date.getFullYear() === props.date.getFullYear()
+                )
+              }) && (
+                <span className='block bg-green-800 h-2 w-2 absolute top-0 left-6 rounded-full'></span>
+              )}
+          </div>
+        )
       }}
       {...props}
     />
