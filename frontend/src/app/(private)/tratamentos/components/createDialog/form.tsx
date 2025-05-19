@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from '@/components/ui/textarea'
 import { danger } from "@/constants/ToastStyle"
 import { CreateTratamentoSchema, CreateTratamentoType } from '@/dtos/tratamentos/create-tratamento.dto'
+import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema'
 import { tratamentoKey } from '@/hooks/useTratamento'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from "@tanstack/react-query"
@@ -18,42 +19,49 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-export const TratamentoCreateForm = ({
-  closeModal,
-}: {
-  closeModal: () => void
-}) => {
-  const queryClient = useQueryClient()
-  const [ isLoading, setIsLoading ] = useState(false)
+type TratamentoFormProps = {
+  closeModal: () => void;
+  tratamento?: TratamentoType; // ou o tipo completo vindo do backend
+};
 
-  const form = useForm<CreateTratamentoType>({ 
+export const TratamentoCreateForm = ({ closeModal, tratamento }: TratamentoFormProps) => {
+  const queryClient = useQueryClient();
+  const [ isLoading, setIsLoading ] = useState(false);
+
+  const form = useForm<CreateTratamentoType>({
     resolver: zodResolver(CreateTratamentoSchema),
     defaultValues: {
-      name: '',
-      description: ''
-    } 
-  })
-
+      name: tratamento?.name ?? '',
+      description: tratamento?.description ?? ''
+    }
+  });
 
   async function onSubmit(data: CreateTratamentoType) {
     try {
-      setIsLoading(true)
-      await api.post('appointment-type', data)
+      setIsLoading(true);
 
-      queryClient.invalidateQueries({ queryKey: [ tratamentoKey ], type: 'all' })
+      if (tratamento?.id) {
+        // Edição
+        await api.patch(`appointment-type/${tratamento.id}`, data);
+        toast("Tratamento atualizado com sucesso.");
+      } else {
+        // Criação
+        await api.post('appointment-type', data);
+        toast("Tratamento criado com sucesso.");
+      }
 
-      setIsLoading(false)
-      toast("Tratamento criado com sucesso.")
-      closeModal()
-    }
-    catch {
-      setIsLoading(false)
-      toast("Ocorreu uma falha ao criar o tratamento.", {
-      description: "Tente novamente mais tarde",
-      style: danger
-    })
+      queryClient.invalidateQueries({ queryKey: [ tratamentoKey ], type: 'all' });
+      closeModal();
+    } catch {
+      toast("Ocorreu uma falha ao salvar o tratamento.", {
+        description: "Tente novamente mais tarde",
+        style: danger
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <div className="w-full">
       <Form {...form}>
@@ -65,7 +73,7 @@ export const TratamentoCreateForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome do tratamento</FormLabel>
-                  <Input  {...field} value={field.value} />
+                  <Input {...field} value={field.value} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -76,18 +84,20 @@ export const TratamentoCreateForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Descrição do tratamento</FormLabel>
-                  <Textarea  {...field} value={field.value ?? undefined} />
+                  <Textarea {...field} value={field.value ?? undefined} />
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
           <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
-            <Button type="submit" isLoading={isLoading}>Criar</Button>
+            <Button type="button" variant="secondary" onClick={closeModal}>Cancelar</Button>
+            <Button type="submit" isLoading={isLoading}>
+              {tratamento?.id ? 'Salvar' : 'Criar'}
+            </Button>
           </div>
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};

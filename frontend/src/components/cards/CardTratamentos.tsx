@@ -1,7 +1,9 @@
+import { TratamentoCreateDialog } from '@/app/(private)/tratamentos/components/createDialog';
 import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema';
 import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
 
-const CardTratamentos = ({tratamento}: {tratamento: TratamentoType}) => {
+
+const CardTratamentos = ({ tratamento }: { tratamento: TratamentoType }) => {
   return (
     <div className='flex flex-col' >
       <section className='flex flex-col justify-between shadow-md rounded-lg h-full bg-[#F6F5F2]'>
@@ -19,9 +21,18 @@ const CardTratamentos = ({tratamento}: {tratamento: TratamentoType}) => {
               <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
               <FaEye size={14} />
               </button>
-              <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                <FaPencilAlt size={14} />
-              </button>
+              <TratamentoCreateDialog
+                tratamento={{
+                  id: tratamento.id,
+                  name: tratamento.name,
+                  description: tratamento.description
+                }}
+              >
+                <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+                  <FaPencilAlt size={14} />
+                </button>
+              </TratamentoCreateDialog>
+
             </div>
           </div>
         </div>
