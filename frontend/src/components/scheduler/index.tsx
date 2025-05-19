@@ -2,7 +2,7 @@
 
 import { getDaysInMonth } from "@/utils/getDaysInMonth";
 import { useCallback, useState } from "react";
-import { CalendarDay, EventType } from "./calendarDay";
+import { CalendarDay } from "./calendarDay";
 import { isSameDay } from "@/utils/isSameDay";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useSchedule } from "@/hooks/useSchedule";
@@ -29,14 +29,6 @@ export const Scheduler = () => {
 
   const schedule = useSchedule()
 
-  const [events, setEvents] = useState<EventType[]>([
-    {
-      date: new Date(),
-      id: '1',
-      time: '23 h',
-      title: 'teste'
-    }
-  ]);
 
   const mounth = useCallback(() => currentMonth.toLocaleDateString('pt-BR', {
     month: 'long',
@@ -61,7 +53,7 @@ export const Scheduler = () => {
       <div className="flex justify-between my-2">
         <div className="flex jusitfy-between items-center gap-2">
           <IoIosArrowBack size={18} className="cursor-pointer" onClick={previousMonth} />
-          <h2 className="font-bold text-xl">{capitalize(mounth())}</h2>
+          <h2 className="font-bold text-xl text-center w-28">{capitalize(mounth())}</h2>
           <IoIosArrowForward size={18} className="cursor-pointer" onClick={nextMonth} />
         </div>
         <span className="flex items-center mr-2 font-medium">{currentMonth.toLocaleDateString('pt-br', { year: 'numeric' })}</span>

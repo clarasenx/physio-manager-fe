@@ -1,9 +1,16 @@
 "use client"
-import api from '@/api/axios';
 import Logo from "@/../public/iconDark.svg";
+import api from '@/api/axios';
+import { Input } from '@/components/ui/input';
+import { danger } from '@/constants/ToastStyle';
+import { CircularProgress } from '@mui/material';
+import { AxiosError } from 'axios';
+import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { useHookFormMask } from 'use-mask-input';
 import { login } from '../actions/login';
 
@@ -15,17 +22,53 @@ interface ILogin {
 export default function Login() {
   const {
     handleSubmit,
-    formState: {errors},
     register
   } = useForm<ILogin>()
   const registerWithMask = useHookFormMask(register);
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [typeInput, setTypeInput] = useState<'password' | 'text'>('password')
 
   async function onSubmit(data: ILogin) {
-    const token = (await api.post("user/auth", data)).data as {token: string}
-    
-    await login(token)
-    router.replace('/dashboard')
+    try {
+      setIsLoading(true)
+      const token = (await api.post("user/auth", data)).data as {token: string}
+      localStorage.setItem('token', token.token)
+      await login(token)
+      router.replace('/dashboard')
+      setIsLoading(false)
+    }
+    catch(err) {
+      setIsLoading(false)
+      if(!(err instanceof AxiosError)) {
+        toast('Ocorreu um erro', {description: 'Tente novamente mais tarde', style: danger})
+        return
+      }
+      if(err.status === 404) {
+        toast('Usuario não encontrado', {style: danger})
+        return
+      }
+      if(err.status === 401) {
+        toast('Senha incorreta', {style: danger})
+        return
+      }
+      toast('Ocorreu um erro', {description: 'Tente novamente mais tarde', style: danger})
+    }
+  }
+
+  function handleEye() {
+    if(typeInput === 'password') {
+      setTypeInput('text')
+    } else {
+      setTypeInput('password')
+    }
+  }
+
+  function InputIcon() {
+    if(typeInput === 'password') {
+      return <EyeOff className='cursor-pointer text-[#82654C]' onClick={handleEye}/>
+    }
+    return <Eye className='cursor-pointer text-[#82654C]' onClick={handleEye} />
   }
 
   return (
@@ -60,17 +103,22 @@ export default function Login() {
             </div>
             <div className='flex flex-col pt-3'>
               <label className='font-medium text-[#2D231C]'>Senha</label>
-              <input 
-              required
-                className='border border-[#B7A17D] h-11 px-3' 
-                type="password"
-                {...register('password', {required: true})}/>
+                <Input 
+                type={typeInput}
+                rightIcon={<InputIcon/>}
+                className='border border-[#B7A17D] h-11 px-3 rounded-none'
+                {...register('password', {required: true})}
+                />
             </div>
             
             <button 
-              className='cursor-pointer h-11 w-full mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
+              className='cursor-pointer h-11 w-full flex items-center justify-center mt-8 bg-[#82654C] text-[#F9F7F3] font-medium' 
               type="submit"
-              >Login</button>
+              >
+                {
+                  isLoading ? <CircularProgress size={20} color='inherit' /> : 'Login'
+                }
+                </button>
           </form>
 
         </div>

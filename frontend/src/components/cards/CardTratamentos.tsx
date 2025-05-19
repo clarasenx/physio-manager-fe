@@ -1,16 +1,16 @@
+import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema';
 import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
 
-const CardTratamentos = () => {
+const CardTratamentos = ({tratamento}: {tratamento: TratamentoType}) => {
   return (
-    <div className='flex flex-col'>
-      <section className='shadow-md rounded-lg '>
+    <div className='flex flex-col' >
+      <section className='flex flex-col justify-between shadow-md rounded-lg h-full bg-[#F6F5F2]'>
         <div className='bg-[#9C7C5A] text-white rounded-t-lg px-4 py-2'>
-          <p className='text-lg font-semibold tracking-wide line-clamp-2'>Liberaçao Miofascial</p>
-          <p className='text-sm font-medium'>Duraçao: 55 min</p>
+          <p className='text-lg font-semibold tracking-wide line-clamp-2'>{tratamento.name}</p>
         </div>
 
-        <div className='flex flex-col bg-[#F6F5F2] rounded-b-lg px-4 py-3 gap-3'>
-          <p>Técnica de massagem terapêutica que trabalha na liberação das fáscias musculares para redução de dores e aumento da mobilidade.</p>
+        <div className='flex flex-col h-full justify-between rounded-b-lg px-4 py-3 gap-3'>
+          <p>{tratamento.description}</p>
           <div className='flex justify-between'>
             <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
               <FaTrash size={14} />

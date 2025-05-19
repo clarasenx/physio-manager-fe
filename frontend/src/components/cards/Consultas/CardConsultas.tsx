@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
-import { LuList } from 'react-icons/lu';
-import { ScheduleMenu } from '../../../app/consultas/components/scheduleMenu';
 import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
-import { ScheduleStatus } from '@/enum/schedule-status.enum';
 import { isScheduleStarted } from '@/utils/isScheduleStarted';
+import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
 
-
-interface ConsultaData {
-  diaSemana: string;
-  diaMes: string;
-}
 
 interface CardConsultaProps {
   item: ListScheduleType;
@@ -35,8 +28,6 @@ export default function CardConsulta({ item }: CardConsultaProps) {
     return aux.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
   }
 
-  const scheduleIsStarted = item.status === ScheduleStatus.SCHEDULED && typeof item.initialDiscomfort === 'number'
-
   return (
     <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg py-2 sm:py-3 px-4 '>
       <div className='flex md:gap-8'>
@@ -46,7 +37,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
         </div>
         <div className='grid sm:grid-cols-2'>
           <div className='flex items-center px-2 sm:col-start-2 row-start-1'>
-            <p className='line-clamp-1 font-medium px-0.5'>{item.patient?.name}</p>
+            <p className='line-clamp-1 font-medium px-0.5'>{item.appointmentType?.name}</p>
           </div>
           <div className='flex flex-col justify-between px-2  sm:py-2 sm:w-60 col-start-1 '>
             <div className='flex items-center gap-2'>
@@ -66,7 +57,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
           isScheduleStarted(item) ?
             <p
               className={`px-1 sm:px-3 py-1 sm:py-1 justify-self-end font-medium rounded-full text-xs text-green-800 sm:text-sm sm:text-white text-center sm:bg-green-800`}
-            >Consulta Iniciada</p> : <></>
+            >Em Andamento</p> : <></>
         }
         <div className='relative flex flex-col md:justify-center'>
           <button className='cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical color='#6A5242' size={28} /></button>

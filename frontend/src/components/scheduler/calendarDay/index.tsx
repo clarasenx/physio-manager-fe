@@ -2,12 +2,12 @@
 
 import { isSameDay } from "@/utils/isSameDay";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { ScheduleMenu } from "../../../app/consultas/components/scheduleMenu";
 import { BiPlus } from "react-icons/bi";
 import { createPortal } from "react-dom";
 import { StatusColor } from "@/constants/StatusColor";
-import { ConsultaCreateDialog } from "@/app/consultas/components/createDialog";
 import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
+import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
+import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog';
 
 export type EventType = {
   id: string;
@@ -91,7 +91,6 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
   const currentDate = new Date()
   const isCurrentDate = isSameDay(currentDate, date)
 
-  const [activeCreateConsultaButton, setActiveCreateConsultaButton] = useState(false)
   const [isHover, setIsHover] = useState<boolean>(false)
 
   return (

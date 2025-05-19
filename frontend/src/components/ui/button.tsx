@@ -49,15 +49,6 @@ function Button({
     isLoading?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
-  const spanRef = React.useRef<HTMLSpanElement>(null)
-  const [width, setWidth] = React.useState<number | null>(null)
-
-  // Medir a largura dos children
-  React.useEffect(() => {
-    if (spanRef.current) {
-      setWidth(spanRef.current.offsetWidth)
-    }
-  }, [props.children])
 
   return (
     <Comp

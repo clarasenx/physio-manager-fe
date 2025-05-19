@@ -5,9 +5,9 @@ import CardConsulta from "../cards/Consultas/CardConsultas"
 
 import { ErrorMessage } from "../ErrorMessage"
 import { CircularProgress } from "@mui/material"
-import { ConsultaCreateDialog } from "@/app/consultas/components/createDialog"
 import { Button } from "../ui/button"
 import { LuCirclePlus } from "react-icons/lu"
+import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog'
 
 export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m: Date) => void }) => {
   const [initialDate, setInitialDate] = useState<Date | undefined>(new Date())
@@ -25,9 +25,6 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
 
       setInitialDate(startOfDay)
       setFinalDate(endOfDay)
-
-      console.log("Data inicial:", startOfDay)
-      console.log("Data final:", endOfDay)
     }
   }
 
@@ -51,7 +48,7 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
 
       <div className="w-full bg-[#B7A17D] items-center flex flex-col p-4 gap-2 rounded-lg mt-4">
         {
-          schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage refetch={schedule.refetch} /> :
+          schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage name='consultas' refetch={schedule.refetch} /> :
             !schedule.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
               schedule.data?.map(item => <CardConsulta key={item.id} item={item} />)
         }
