@@ -1,10 +1,59 @@
-'use client';
-import { useState } from 'react';
-import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
+'use client'
 
-const CardPacienteIndiv = () => {
-  const [buttonStatus, setButtonStatus] = useState(false); // Estado para controlar a exibição do botão "Ver mais"
-  const [activeToggleInicial, setActiveToggleInicial] = useState(1);
+import { PatientType } from '@/dtos/patient/patient.schema'
+import { formatPhone } from '@/utils/formatPhone'
+import { useEffect, useState } from 'react'
+import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa'
+
+export const CardPatient = ({ patient }: { patient: PatientType }) => {
+  const [ formatedDate, setFormatedDate ] = useState<string>('')
+
+  useEffect(() => {
+    const date = new Date(patient.createdAt).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+    setFormatedDate(date)
+  }, [ patient.createdAt, formatedDate, setFormatedDate ])
+
+  return (
+    <tr className="border-t border-gray-200 hover:bg-gray-50">
+      <td className="p-3">{patient.name}</td>
+      <td className="p-3">{formatPhone(patient.phone)}</td>
+      <td className="p-3">{formatedDate}</td>
+      <td className="p-3">
+        <div className="flex justify-center gap-2">
+          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+            <FaTrash size={14} />
+          </button>
+          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+            <FaEye size={14} />
+          </button>
+          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+            <FaPencilAlt size={14} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
+
+  const [ formatedDate, setFormatedDate ] = useState<string>('')
+
+  useEffect(() => {
+    const date = new Date(patient.createdAt).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+    setFormatedDate(date)
+  }, [ patient.createdAt, formatedDate, setFormatedDate ])
+
+  const [ buttonStatus, setButtonStatus ] = useState(false); // Estado para controlar a exibição do botão "Ver mais"
+  const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Agendadas" },
     { id: 2, label: "Finalizadas" },
@@ -15,22 +64,22 @@ const CardPacienteIndiv = () => {
       <section className='flex flex-col py-3'>
         <div className='flex items-center gap-2'>
           <p className='text-[#82654C] font-semibold '>Nome:</p>
-          <p>rafaela silva</p>
+          <p>{patient.name}</p>
         </div>
         <div className='flex items-center gap-2'>
           <p className='text-[#82654C] font-semibold'>Nascimento:</p>
-          <p>12/03/13</p>
+          <p>{formatedDate}</p>
         </div>
         <div className='flex items-center gap-2'>
           <p className='text-[#82654C] font-semibold'>Telefone:</p>
-          <p>999999-9999</p>
+          <p>{formatPhone(patient.phone)}</p>
         </div>
         <div className='flex items-center gap-2'>
           <p className='text-[#82654C] w-fit font-semibold'>Última consulta:</p>
-          <p>23/05/25</p>
+          <p>{formatedDate}</p>
         </div>
       </section>
-      
+
       <section className={`flex items-center ${!buttonStatus ? "justify-between" : "justify-center"}`}>
         <button className={`${!buttonStatus ? "flex" : "hidden"} text-[#82654C] hover:text-[#6B4A2E] hover:cursor-pointer`}
           onClick={() => setButtonStatus(!buttonStatus)}>
@@ -86,5 +135,3 @@ const CardPacienteIndiv = () => {
     </div>
   )
 }
-
-export default CardPacienteIndiv;

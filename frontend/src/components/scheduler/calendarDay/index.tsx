@@ -1,13 +1,13 @@
 'use client'
 
 import { isSameDay } from "@/utils/isSameDay";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BiPlus } from "react-icons/bi";
-import { createPortal } from "react-dom";
 import { StatusColor } from "@/constants/StatusColor";
 import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
 import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog';
+import { Portal } from '@/components/portal';
 
 export type EventType = {
   id: string;
@@ -26,22 +26,9 @@ interface ICalendarDay {
 const indexOfEndWeek = [0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41]
 
 
-type PortalProps = {
-  children: ReactNode;
-};
 
-export const Portal = ({ children }: PortalProps) => {
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
 
-  if (!mounted) return null;
-
-  return createPortal(children, document.body);
-};
 
 
 const EventCard = ({ event, isCurrentMonth }: { event: ListScheduleType, isCurrentMonth: boolean }) => {
@@ -81,7 +68,6 @@ const EventCard = ({ event, isCurrentMonth }: { event: ListScheduleType, isCurre
             />
           </div>
         </Portal>
-
       )}
     </div>
   );

@@ -1,14 +1,21 @@
-import CardPacienteIndiv from '@/components/cards/CardPacienteIndiv';
-import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
+'use client'
+
+import { CardPatient, CardPatientMobile } from '@/components/cards/CardPatient';
+import { ErrorMessage } from '@/components/ErrorMessage';
+import { Input } from '@/components/ui/input';
+import { useDebounce } from '@/hooks/useDebounce';
+import { usePatient } from '@/hooks/usePatient';
+import { CircularProgress } from '@mui/material';
+import { useState } from 'react';
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
 
-export default function Consultas() {
-  const pacientes = Array(10).fill({
-    nome: 'Rafaela Silva',
-    telefone: '+55 69 98765-4321',
-    ultimaConsulta: '12/05/2025',
-    email: 'rafasilva@gmail.com',
-  });
+export default function Pacientes() {
+
+  const [ search, setSearch ] = useState<string>('')
+  
+    const auxSearch = useDebounce(search, 700)
+
+  const patient = usePatient({search: auxSearch})
 
   return (
     <div className='flex flex-col h-full w-full items-center px-2 sm:px-8 sm:py-5'>
@@ -24,9 +31,12 @@ export default function Consultas() {
         <div className='w-full flex justify-center gap-2'>
           <div className='px-2 h-8 w-full flex bg-[#F6F5F2] rounded-lg items-center gap-2 shadow cursor-pointer'>
             <LuSearch className='text-[#6A5242]' />
-            <input type="text"
-              placeholder="Buscar por paciente"
-              className='text-sm w-[145px]' />
+            <Input
+              noFocusRing
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              placeholder="Buscar por tratamento"
+              className='text-sm w-full border-0 shadow-none' />
           </div>
           <div className='hidden sm:flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
             <LuCirclePlus />
@@ -36,64 +46,67 @@ export default function Consultas() {
 
         <div className='w-full flex pt-6 gap-3'>
           {/* Tabela com todos os pacientes */}
-          <section className='w-full hidden lg:grid grid-cols-4 overflow-auto max-h-[50dvh] lg:max-h-[70dvh]'>
-            <table className="w-full col-span-4 overflow-hidden rounded-lg border border-gray-200 text-sm">
-              <thead>
-                <tr className="bg-[#F6F5F2] text-[#2D231C] text-left text-nowrap">
-                  <th className="p-3">Nome</th>
-                  <th className="p-3">Telefone</th>
-                  <th className="p-3">Última consulta</th>
-                  <th className="p-3 text-center">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pacientes.map((paciente, index) => (
-                  <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                    <td className="p-3">{paciente.nome}</td>
-                    <td className="p-3">{paciente.telefone}</td>
-                    <td className="p-3">{paciente.ultimaConsulta}</td>
-                    <td className="p-3">
-                      <div className="flex justify-center gap-2">
-                        <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                          <FaTrash size={14} />
-                        </button>
-                        <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                          <FaEye size={14} />
-                        </button>
-                        <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                          <FaPencilAlt size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <section className='w-full hidden lg:grid grid-cols-4 overflow-auto'>
+            {
+              patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
+                <CircularProgress className='mx-auto' />
+              </div> :
+                patient.isError ? <div className='sm:col-span-full'>
+                  <ErrorMessage name='pacientes' refetch={patient.refetch} />
+                </div> :
+                  !patient.data?.data.length ? <p>{!auxSearch.length ? 'Não há pacientes cadastrados' : `Sem resultados encontrados`}</p> :
+                    <table className="w-full col-span-4 overflow-hidden rounded-lg border border-gray-200 text-sm">
+                      <thead>
+                        <tr className="bg-[#F6F5F2] text-[#2D231C] text-left text-nowrap">
+                          <th className="p-3">Nome</th>
+                          <th className="p-3">Telefone</th>
+                          <th className="p-3">Última consulta</th>
+                          <th className="p-3 text-center">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          patient.data?.data.map((patient, index) => (
+                            <CardPatient key={`patient-${index}`} patient={patient} />
+                          ))
+                        }
+                      </tbody>
+                    </table>
+            }
           </section>
 
           {/* Cards de paciente individual mobile/telas menores*/}
-          <section className='w-full overflow-auto sm:max-h-[60dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md px-2 py-4 sm:p-4'>
-            <CardPacienteIndiv />
-            <CardPacienteIndiv />
-            <CardPacienteIndiv />
-            <CardPacienteIndiv />
-            <CardPacienteIndiv />
+          <section className='w-full overflow-auto max-h-[70dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md px-2 py-4 sm:p-4'>
+            {
+              patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
+                <CircularProgress className='mx-auto' />
+              </div> :
+                patient.isError ? <div className='sm:col-span-full'>
+                  <ErrorMessage name='pacientes' refetch={patient.refetch} />
+                </div> :
+                  !patient.data?.data.length ? <p>Não há pacientes cadastrados</p> :
+
+                    patient.data?.data.map((patient, index) => (
+                      <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
+                    ))
+
+            }
           </section>
 
-          <section className='hidden w-fit text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
+          {/* <section className='hidden w-fit text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
 
-            <p className='font-semibold text-lg px-3 pb-2'>{pacientes[0].nome}</p>
+            <p className='font-semibold text-lg px-3 pb-2'>{pacientes[ 0 ].nome}</p>
 
             <div className='bg-white px-4 py-3 rounded-lg'>
               <p className='font-semibold line-clamp-1'>Telefone</p>
-              <p className='line-clamp-1'>{pacientes[0].telefone}</p>
+              <p className='line-clamp-1'>{pacientes[ 0 ].telefone}</p>
               <p className='font-semibold line-clamp-1'>Última consulta</p>
-              <p className='line-clamp-1'>{pacientes[0].ultimaConsulta}</p>
+              <p className='line-clamp-1'>{pacientes[ 0 ].ultimaConsulta}</p>
               <p className='font-semibold line-clamp-1'>Email</p>
-              <p className='line-clamp-1'>{pacientes[0].email}</p>
+              <p className='line-clamp-1'>{pacientes[ 0 ].email}</p>
             </div>
 
-          </section>
+          </section> */}
         </div>
       </section>
     </div>

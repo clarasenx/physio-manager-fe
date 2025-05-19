@@ -39,6 +39,7 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
           caption: 'hidden'
         }}
         onSelect={handleSelectDate}
+        schedules={schedule.data ? schedule.data : []}
         mode="single"
 
       />
