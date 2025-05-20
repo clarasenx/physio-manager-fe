@@ -47,7 +47,7 @@ export default function Consultas() {
 
 
   return (
-    <div className='w-full max-h-dvh'>
+    <div className='w-full max-h-dvh px-4 sm:px-8 pt-4'>
       {/* toggle Consultas/Calendario */}
       <section className='flex justify-center px-4 mt-3 sm:mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
@@ -73,7 +73,7 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-4 px-7 md:pl-4 md:pr-7 py-4 '>
+      <section className='flex flex-col gap-4 py-4 '>
         <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
 
 
@@ -111,7 +111,6 @@ export default function Consultas() {
 
                 <div className='w-full max-h-[63dvh] md:max-h-[75dvh] my-2 overflow-auto'>
 
-                  {/* arrumar um jeito de exibir consultas especificas po dia e por status */}
                   {/*Seção das consultas do dia*/}
                   {
                     schedules.isLoading ? <Loading /> :

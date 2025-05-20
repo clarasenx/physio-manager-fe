@@ -15,7 +15,7 @@ interface DashboardDataProps {
 const CardDashboard = ({ item }: DashboardDataProps) => {
   const [menuAberto, setMenuAberto] = useState(false);
   return (
-    <section className='bg-[#F6F5F2] flex flex-col rounded-lg p-4 md:px-5 md:flex-row w-full'>
+    <section className='bg-[#F6F5F2] flex flex-col rounded-lg p-4 md:px-5 md:flex-row w-full shadow'>
       <div className='flex justify-between items-center pb-2 md:pb-0  md:border-r-2 border-[#6B4A2E] md:justify-center lg:mr-10 md:h-16 md:w-1/5 lg:w-40'>
         <p className='text-nowrap font-medium md:text-lg lg:text-xl md:font-semibold md:leading-5'>{new Date(item.date).toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' })}</p>
         <button className='md:hidden cursor-pointer' onClick={() => setMenuAberto(!menuAberto)}><HiDotsVertical /></button>
@@ -28,7 +28,7 @@ const CardDashboard = ({ item }: DashboardDataProps) => {
         {
           isScheduleStarted(item) ?
             <p
-              className={`px-2 sm:px-3 py-1 justify-self-end font-medium rounded-full text-green-800 w-[133px] text-sm text-white text-center bg-green-800`}
+              className={`px-2 sm:px-3 py-1 justify-self-end font-medium rounded-full w-[133px] text-sm text-white text-center bg-green-800`}
             >Em Andamento</p> : <p className={`px-3 py-1 justify-self-end rounded-full text-sm text-white font-medium w-[133px] text-center 
               ${item.status === ScheduleStatus.COMPLETED ? "bg-green-800" : item.status === ScheduleStatus.SCHEDULED ? "bg-amber-600" : item.status === ScheduleStatus.CANCELED ? "bg-red-800" : ''}`}>{StatusView[item.status]}</p>
         }
@@ -39,7 +39,7 @@ const CardDashboard = ({ item }: DashboardDataProps) => {
           <ScheduleMenu
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
-            className='top-[-50px] right-5 md:right-26 md:top-5 bg-[#F6F5F2]'
+            className='top-[-84px] right-5 md:right-28 md:top-5 bg-[#F6F5F2]'
             schedule={item}
           />
         )}
