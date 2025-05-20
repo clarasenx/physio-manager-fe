@@ -5,10 +5,10 @@ import { useCallback, useState } from "react";
 import { CalendarDay } from "./calendarDay";
 import { isSameDay } from "@/utils/isSameDay";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useSchedule } from "@/hooks/useSchedule";
 import { StatusView } from "@/constants/StatusView";
 import { StatusColor } from "@/constants/StatusColor";
-import { SchedulerMobile } from "./mobile";
+import { AppointmentrMobile } from "./mobile";
+import { useAppointment } from "@/hooks/useAppointment";
 
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -27,7 +27,7 @@ const weekDays = [
 export const Scheduler = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const schedule = useSchedule()
+  const appointment = useAppointment()
 
 
   const mounth = useCallback(() => currentMonth.toLocaleDateString('pt-BR', {
@@ -66,13 +66,13 @@ export const Scheduler = () => {
         </div>
         <div className="grid grid-cols-7 grid-rows-5 gap-[1px] w-full bg-[#D4D0C6] rounded-b-xl overflow-hidden">
           {
-            !schedule.isPending && !schedule.isError ?
+            !appointment.isPending && !appointment.isError ?
               days().map((date, index) => (
                 <CalendarDay
                   key={`CalendarDay-${index}`}
                   date={date.date}
                   isCurrentMonth={date.isCurrentMonth}
-                  events={schedule.data?.filter(e => isSameDay(e.date, date.date)) || []}
+                  events={appointment.data?.filter(e => isSameDay(e.date, date.date)) || []}
                   index={index}
                 />
               )) : <></>
@@ -91,7 +91,7 @@ export const Scheduler = () => {
         </div>
       </div>
       <div className="block lg:hidden mt-4">
-        <SchedulerMobile
+        <AppointmentrMobile
           month={currentMonth}
           setMonth={setCurrentMonth}
         />

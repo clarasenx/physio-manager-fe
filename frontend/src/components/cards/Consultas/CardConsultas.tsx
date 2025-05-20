@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
-import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
-import { isScheduleStarted } from '@/utils/isScheduleStarted';
-import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
+import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
+import { isAppointmentStarted } from '@/utils/isAppointmentStarted';
+import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmentMenu';
 import { Portal } from '@/components/portal';
 
 
 interface CardConsultaProps {
-  item: ListScheduleType;
+  item: ListAppointmentType;
 }
 
 export default function CardConsulta({ item }: CardConsultaProps) {
@@ -66,7 +66,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
 
       <div className='flex items-start gap-2 sm:gap-6'>
         {
-          isScheduleStarted(item) ?
+          isAppointmentStarted(item) ?
             <p
               className={`px-1 sm:px-3 py-1 sm:py-1 justify-self-end font-medium rounded-full text-xs text-green-800 sm:text-sm sm:text-white text-center sm:bg-green-800`}
             >Em Andamento</p> : <></>
@@ -77,11 +77,11 @@ export default function CardConsulta({ item }: CardConsultaProps) {
           {menuAberto && (
             <Portal>
               <div style={{ position: 'absolute', top: menuPosition.top, left: menuPosition.left, zIndex: 10 }}>
-                <ScheduleMenu
+                <AppointmentMenu
                   menuAberto={menuAberto}
                   setMenuAberto={setMenuAberto}
                   className='top-1 right-8 md:top-5 bg-[#F6F5F2]'
-                  schedule={item}
+                  appointment={item}
                 />
               </div>
             </Portal>

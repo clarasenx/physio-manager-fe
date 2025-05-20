@@ -12,32 +12,32 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import api from "@/api/axios"
 import { toast } from "sonner"
 import { useQueryClient } from "@tanstack/react-query"
-import { scheduleKey } from "@/hooks/useSchedule"
 import { danger } from "@/constants/ToastStyle"
-import { StartScheduleSchema } from "@/dtos/schedule/start-schedule.dto"
+import { StartAppointmentSchema } from "@/dtos/appointment/start-appointment.dto"
 import { Textarea } from "@/components/ui/textarea"
 import { actionTypeView } from "@/constants/actionTypeView";
-import { ConcludeScheduleSchema } from "@/dtos/schedule/conclude-schedule.dto";
+import { ConcludeAppointmentSchema } from "@/dtos/appointment/conclude-appointment.dto";
 import { z } from "zod";
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
-import { isScheduleStarted } from "@/utils/isScheduleStarted";
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
 import { useState } from "react";
 import { GoPencil } from "react-icons/go";
+import { isAppointmentStarted } from "@/utils/isAppointmentStarted";
+import { appointmentKey } from "@/hooks/useAppointment";
 
 export const ConsultaActionForm = ({
   closeModal,
-  schedule,
+  appointment,
 }: {
   closeModal: () => void,
-  schedule: ListScheduleType,
+  appointment: ListAppointmentType,
 }) => {
-  const actionType: 'START' | 'CONCLUDE' = isScheduleStarted(schedule) ?
+  const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'
 
   const [disbled, setDisabled] = useState(actionType === 'CONCLUDE')
   const [isLoading, setIsLoading] = useState(false)
 
-  const schema = z.union([ConcludeScheduleSchema, StartScheduleSchema])
+  const schema = z.union([ConcludeAppointmentSchema, StartAppointmentSchema])
   type SchemaType = typeof schema extends z.ZodTypeAny ? z.infer<typeof schema> : never
 
   const queryClient = useQueryClient()
@@ -45,9 +45,9 @@ export const ConsultaActionForm = ({
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      initialDiscomfort: schedule.initialDiscomfort || 0,
+      initialDiscomfort: appointment.initialDiscomfort || 0,
       finalDiscomfort: 0,
-      notes: schedule.notes || ''
+      notes: appointment.notes || ''
     } as Partial<SchemaType>
   })
 
@@ -57,9 +57,9 @@ export const ConsultaActionForm = ({
 
     try {
       setIsLoading(true)
-      await api.patch(`schedule/${schedule.id}/${endPoint}`, data)
+      await api.patch(`appointment/${appointment.id}/${endPoint}`, data)
       
-      queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
+      queryClient.invalidateQueries({ queryKey: [appointmentKey], type: 'all' })
       
       const message = actionType === 'CONCLUDE' ? "Consulta finalizada com sucesso." : "Consulta iniciada com sucesso."
       

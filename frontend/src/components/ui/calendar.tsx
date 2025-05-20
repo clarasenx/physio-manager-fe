@@ -7,15 +7,15 @@ import { pt } from 'date-fns/locale/pt';
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
+import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  schedules,
+  appointments,
   ...props
-}: React.ComponentProps<typeof DayPicker> & { schedules?: ListScheduleType[] }) {
+}: React.ComponentProps<typeof DayPicker> & { appointments?: ListAppointmentType[] }) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -74,10 +74,10 @@ function Calendar({
           <div>
             {props.date.getDate()}
             {
-              schedules?.some((schedule) => {
-                console.log(schedule.date);
+              appointments?.some((appointment) => {
+                console.log(appointment.date);
                 
-                const date = new Date(schedule.date)
+                const date = new Date(appointment.date)
                 return (
                   date.getDate() === props.date.getDate() &&
                   date.getMonth() === props.date.getMonth() &&

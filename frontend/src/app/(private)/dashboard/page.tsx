@@ -1,6 +1,6 @@
 import { LuCalendarDays, LuPin, LuSquareCheck, LuUser } from 'react-icons/lu';
 import { DashboardResult } from './components/result';
-import { TodaySchedules } from './components/todaySchedules';
+import { TodayAppointments } from './components/todayAppointments';
 
 export default async function Dashboard() {
 
@@ -20,7 +20,7 @@ export default async function Dashboard() {
           <LuCalendarDays className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
 
-            <DashboardResult dataKey='todaySchedules' />
+            <DashboardResult dataKey='todayAppointments' />
             <p className='text-sm leading-4 sm:text-base'>Consultas para hoje</p>
           </div>
         </div>
@@ -28,7 +28,7 @@ export default async function Dashboard() {
         <div className='bg-white flex px-6 py-4 gap-2 rounded-lg w-full md:w-full md:h-[108px] lg:h-full shadow'>
           <LuSquareCheck className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
-            <DashboardResult dataKey='totalSchedulesCompleted' />
+            <DashboardResult dataKey='totalAppointmentsCompleted' />
             <p className='text-sm leading-4 sm:text-base'>Consultas concluídas</p>
           </div>
         </div>
@@ -50,7 +50,7 @@ export default async function Dashboard() {
           <p className='text-xl text-center font-medium py-2'>Compromissos para hoje</p>
         </div>
 
-        <TodaySchedules />
+        <TodayAppointments />
       </section>
     </div>
   )
