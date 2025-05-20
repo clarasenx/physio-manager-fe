@@ -13,21 +13,21 @@ const Usuario = () => {
         </div>
 
         <section className='flex flex-col gap-2 px-4 py-2'>
-          <div className='flex justify-between gap-4 py-1 border-b border-[#6A5242]/45'>
-            <p className='font-medium'>Nome:</p>
-            <p className='line-clamp-1'>Rafaella Kalena</p>
+          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
+            <p className='text-sm sm:text-base sm:font-medium'>Nome:</p>
+            <p className='font-medium sm:font-normal line-clamp-1'>Rafaella Kalena</p>
           </div>
-          <div className='flex justify-between gap-4 py-1 border-b border-[#6A5242]/45'>
-            <p className='font-medium'>Email:</p>
-            <p className='line-clamp-1'>rafaKalenasouza@gmail.com</p>
+          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
+            <p className='text-sm sm:text-base sm:font-medium'>Email:</p>
+            <p className='font-medium sm:font-normal line-clamp-1'>rafaKalenasouza@gmail.com</p>
           </div>
-          <div className='flex justify-between gap-4 py-1 border-b border-[#6A5242]/45'>
-            <p className='font-medium'>CPF:</p>
-            <p className='line-clamp-1'>111.222.333.44</p>
+          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
+            <p className='text-sm sm:text-base sm:font-medium'>CPF:</p>
+            <p className='font-medium sm:font-normal line-clamp-1'>111.222.333.44</p>
           </div>
-          <div className='flex justify-between gap-4 py-1 border-b border-[#6A5242]/45'>
-            <p className='font-medium'>Senha:</p>
-            <p className='line-clamp-1'>*******</p>
+          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
+            <p className='text-sm sm:text-base sm:font-medium'>Senha:</p>
+            <p className='font-medium sm:font-normal line-clamp-1'>*******</p>
           </div>
         </section>
 
