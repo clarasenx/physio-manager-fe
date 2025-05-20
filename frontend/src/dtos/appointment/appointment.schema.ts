@@ -1,4 +1,4 @@
-import { AnyZodObject, z, ZodObject } from 'zod'
+import { AnyZodObject, z } from 'zod'
 import { AppointmentStatus } from '@/enum/appointment-status.enum'
 import { PatientSchema } from '../patient/patient.schema'
 import { TratamentoSchema } from '../tratamentos/tratamento.schema'
