@@ -26,10 +26,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { danger } from "@/constants/ToastStyle"
-import { CreateScheduleSchema, CreateScheduleType } from "@/dtos/schedule/create-schedule.dto"
+import { CreateAppointmentSchema, CreateAppointmentType } from "@/dtos/appointment/create-appointment.dto"
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
-import { scheduleKey } from "@/hooks/useSchedule"
+import { appointmentKey } from "@/hooks/useAppointment"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -60,8 +60,8 @@ export const ConsultaCreateForm = ({
   const [ searchTratamento, setSearchTratamento ] = useState<string>()
   const debouncedSearchTratamento = useDebounce(searchTratamento, 500)
 
-  const form = useForm<CreateScheduleType>({
-    resolver: zodResolver(CreateScheduleSchema),
+  const form = useForm<CreateAppointmentType>({
+    resolver: zodResolver(CreateAppointmentSchema),
     defaultValues: {
       date: date
     }
@@ -81,15 +81,15 @@ export const ConsultaCreateForm = ({
     return auxDate;
   }
 
-  async function onSubmit(data: CreateScheduleType, force?: boolean) {
+  async function onSubmit(data: CreateAppointmentType, force?: boolean) {
     data.date = setHours(data.date)
     const params = force ? { force } : {}
     try {
       setIsLoading(true)
-      await api.post('schedule', data, { params })
+      await api.post('appointment', data, { params })
 
       queryClient.refetchQueries({
-        queryKey: [ scheduleKey ]
+        queryKey: [ appointmentKey ]
       })
 
       setIsLoading(false)

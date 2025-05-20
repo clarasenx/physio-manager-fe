@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { ScheduleStatus } from '@/enum/schedule-status.enum'
+import { AppointmentStatus } from '@/enum/appointment-status.enum'
 import { PatientSchema } from '../patient/patient.schema'
 
-export const ScheduleSchema = z.object({
+export const AppointmentSchema = z.object({
   id: z.number(),
   patientId: z.number({message: 'Selecione um paciente'}),
   appointmentTypeId: z.number({ message: 'Selecione um tratamento' }),  
@@ -12,9 +12,9 @@ export const ScheduleSchema = z.object({
   notes: z.string().nullable().optional(),
   initialDiscomfort: z.number({message: 'Insira um valor'}).int().min(0, {message: 'O valor mínimo é 0'}).max(10, {message: 'O valor maxímo é 10'}),
   finalDiscomfort: z.number({message: 'Insira um valor'}).int().min(0, {message: 'O valor mínimo é 0'}).max(10, {message: 'O valor maxímo é 10'}),
-  status: z.nativeEnum(ScheduleStatus),
+  status: z.nativeEnum(AppointmentStatus),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 })
 
-export type ScheduleType = z.infer<typeof ScheduleSchema>
+export type AppointmentType = z.infer<typeof AppointmentSchema>

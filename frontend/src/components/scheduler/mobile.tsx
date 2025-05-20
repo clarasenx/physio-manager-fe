@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Calendar } from "../ui/calendar"
-import { useSchedule } from "@/hooks/useSchedule"
+import { useAppointment } from "@/hooks/useAppointment"
 import CardConsulta from "../cards/Consultas/CardConsultas"
 
 import { ErrorMessage } from "../ErrorMessage"
@@ -9,11 +9,11 @@ import { Button } from "../ui/button"
 import { LuCirclePlus } from "react-icons/lu"
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog'
 
-export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m: Date) => void }) => {
+export const AppointmentrMobile = ({ month, setMonth }: { month: Date, setMonth: (m: Date) => void }) => {
   const [initialDate, setInitialDate] = useState<Date | undefined>(new Date())
   const [finalDate, setFinalDate] = useState<Date | undefined>(new Date())
 
-  const schedule = useSchedule({ initialDate, finalDate })
+  const appointment = useAppointment({ initialDate, finalDate })
 
   const handleSelectDate = (selected: Date | undefined) => {
     if (selected) {
@@ -39,7 +39,7 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
           caption: 'hidden'
         }}
         onSelect={handleSelectDate}
-        schedules={schedule.data ? schedule.data : []}
+        appointments={appointment.data ? appointment.data : []}
         mode="single"
 
       />
@@ -49,9 +49,9 @@ export const SchedulerMobile = ({ month, setMonth }: { month: Date, setMonth: (m
 
       <div className="w-full bg-[#B7A17D] items-center flex flex-col p-4 gap-2 rounded-lg mt-4">
         {
-          schedule.isPending ? <CircularProgress color="inherit" /> : schedule.isError ? <ErrorMessage name='consultas' refetch={schedule.refetch} /> :
-            !schedule.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
-              schedule.data?.map(item => <CardConsulta key={item.id} item={item} />)
+          appointment.isPending ? <CircularProgress color="inherit" /> : appointment.isError ? <ErrorMessage name='consultas' refetch={appointment.refetch} /> :
+            !appointment.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
+              appointment.data?.map(item => <CardConsulta key={item.id} item={item} />)
         }
       </div>
     </div>

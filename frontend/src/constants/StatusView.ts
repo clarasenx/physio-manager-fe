@@ -1,6 +1,6 @@
-import { ScheduleStatus } from "@/enum/schedule-status.enum";
+import { AppointmentStatus } from "@/enum/appointment-status.enum";
 
-export const StatusView: Record<ScheduleStatus, string> = {
+export const StatusView: Record<AppointmentStatus, string> = {
   COMPLETED: 'Concluída',
   SCHEDULED: 'Agendada',
   CANCELED: 'Cancelada',

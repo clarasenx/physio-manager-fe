@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
 
-import { ScheduleType } from '@/dtos/schedule/schedule.schema';
+import { AppointmentType } from '@/dtos/appointment/appointment.schema';
 import { StatusView } from '@/constants/StatusView';
-import { isScheduleStarted } from '@/utils/isScheduleStarted';
-import { ScheduleStatus } from '@/enum/schedule-status.enum';
-import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
+import { isAppointmentStarted } from '@/utils/isAppointmentStarted';
+import { AppointmentStatus } from '@/enum/appointment-status.enum';
+import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmentMenu';
 
 interface DashboardDataProps {
-  item: ScheduleType;
+  item: AppointmentType;
 }
 
 const CardDashboard = ({ item }: DashboardDataProps) => {
@@ -26,21 +26,21 @@ const CardDashboard = ({ item }: DashboardDataProps) => {
       </div>
       <div className='relative flex justify-end md:justify-between gap-2 items-center md:w-2/5'>
         {
-          isScheduleStarted(item) ?
+          isAppointmentStarted(item) ?
             <p
               className={`px-2 sm:px-3 py-1 justify-self-end font-medium rounded-full w-[133px] text-sm text-white text-center bg-green-800`}
             >Em Andamento</p> : <p className={`px-3 py-1 justify-self-end rounded-full text-sm text-white font-medium w-[133px] text-center 
-              ${item.status === ScheduleStatus.COMPLETED ? "bg-green-800" : item.status === ScheduleStatus.SCHEDULED ? "bg-amber-600" : item.status === ScheduleStatus.CANCELED ? "bg-red-800" : ''}`}>{StatusView[item.status]}</p>
+              ${item.status === AppointmentStatus.COMPLETED ? "bg-green-800" : item.status === AppointmentStatus.SCHEDULED ? "bg-amber-600" : item.status === AppointmentStatus.CANCELED ? "bg-red-800" : ''}`}>{StatusView[item.status]}</p>
         }
         
         <button className='hidden md:flex bg-[#6A5242] text-white hover:cursor-pointer px-8 py-1 rounded-lg text-sm'
           onClick={() => setMenuAberto(!menuAberto)}>Editar</button>
         {menuAberto && (
-          <ScheduleMenu
+          <AppointmentMenu
             menuAberto={menuAberto}
             setMenuAberto={setMenuAberto}
             className='top-[-84px] right-5 md:right-28 md:top-5 bg-[#F6F5F2]'
-            schedule={item}
+            appointment={item}
           />
         )}
       </div>

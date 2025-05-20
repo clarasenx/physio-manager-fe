@@ -9,31 +9,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { danger } from "@/constants/ToastStyle"
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
-import { scheduleKey } from "@/hooks/useSchedule"
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
+import { appointmentKey } from "@/hooks/useAppointment"
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useState } from "react"
 import { toast } from "sonner"
 
 
 export const ConsultaCancelDialog = ({
-  schedule,
+  appointment,
   children
 }: {
-  schedule: ListScheduleType,
+  appointment: ListAppointmentType,
   children: ReactNode
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const queryClient = useQueryClient()
 
-  async function cancelSchedule() {
+  async function cancelAppointment() {
     try {
       setIsLoading(true)
 
-      await api.patch(`schedule/${schedule.id}/cancel`)
+      await api.patch(`appointment/${appointment.id}/cancel`)
       
-      queryClient.invalidateQueries({ queryKey: [scheduleKey], type: 'all' })
+      queryClient.invalidateQueries({ queryKey: [appointmentKey], type: 'all' })
       
       toast("Consulta cancelada com sucesso.")
 
@@ -58,10 +58,10 @@ export const ConsultaCancelDialog = ({
         <DialogHeader>
           <DialogTitle>Cancelar consulta</DialogTitle>
         </DialogHeader>
-        <p>Tem certeza que deseja cancelar a consulta de <b>{schedule.patient?.name}</b></p>
-        <p>Data da consulta: <b>{schedule.date.toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit' })}</b></p>
+        <p>Tem certeza que deseja cancelar a consulta de <b>{appointment.patient?.name}</b></p>
+        <p>Data da consulta: <b>{appointment.date.toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit' })}</b></p>
         <DialogFooter>
-          <Button variant={'destructive'} isLoading={isLoading} onClick={cancelSchedule}>Cancelar Consulta</Button>
+          <Button variant={'destructive'} isLoading={isLoading} onClick={cancelAppointment}>Cancelar Consulta</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

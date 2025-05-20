@@ -1,34 +1,34 @@
 'use client'
 
-import { ScheduleStatus } from "@/enum/schedule-status.enum";
+import { AppointmentStatus } from "@/enum/appointment-status.enum";
 import { useEffect, useRef } from "react";
 import { GoPencil } from "react-icons/go";
 import { LuX } from "react-icons/lu";
 import { PiEyeBold } from "react-icons/pi";
 import { VscDebugStart } from "react-icons/vsc";
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
 import { ConsultaActionDialog } from "../actionDialog";
-import { isScheduleStarted } from "@/utils/isScheduleStarted";
 import { actionTypeView } from "@/constants/actionTypeView";
 import { ConsultaCancelDialog } from "../cancelDialog";
 import { ConsultaEditDialog } from "../editDialog";
 import { ConsultaActiveDialog } from "../activeDialog";
 import { GrUpdate } from "react-icons/gr";
 import { ConsultaViewDialog } from "../viewDialog";
+import { isAppointmentStarted } from "@/utils/isAppointmentStarted";
 
-interface IScheduleMenu {
+interface IAppointmentMenu {
   setMenuAberto: (p: boolean) => void
   menuAberto: boolean
   className?: string
-  schedule: ListScheduleType
+  appointment: ListAppointmentType
 }
 
-export const ScheduleMenu = ({
+export const AppointmentMenu = ({
   menuAberto,
   setMenuAberto,
   className,
-  schedule,
-}: IScheduleMenu) => {
+  appointment,
+}: IAppointmentMenu) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,44 +55,44 @@ export const ScheduleMenu = ({
     };
   }, [menuAberto, setMenuAberto]);
 
-  const actionType: 'START' | 'CONCLUDE' = isScheduleStarted(schedule) ?
+  const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'
 
 
 
   return (
     <div ref={menuRef} className={'w-[175px] flex flex-col absolute shadow-lg p-1 rounded-lg ' + className}>
-      <ConsultaViewDialog schedule={schedule}>
+      <ConsultaViewDialog appointment={appointment}>
         <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
           <PiEyeBold />
           <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Visualizar consulta</p>
         </button>
       </ConsultaViewDialog>
       {
-        schedule.status === ScheduleStatus.SCHEDULED ?
-          <ConsultaActionDialog schedule={schedule} closeMenu={() => setMenuAberto(false)}>
+        appointment.status === AppointmentStatus.SCHEDULED ?
+          <ConsultaActionDialog appointment={appointment} closeMenu={() => setMenuAberto(false)}>
             <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
               <VscDebugStart />
               <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>{actionTypeView[actionType]} consulta</p>
             </button>
           </ConsultaActionDialog> : <></>
       }
-      <ConsultaEditDialog schedule={schedule} closeMenu={() => setMenuAberto(false)}>
+      <ConsultaEditDialog appointment={appointment} closeMenu={() => setMenuAberto(false)}>
         <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242] '>
           <GoPencil />
           <p className='px-2 p-1 cursor-pointer text-[12px] font-medium'>Editar consulta</p>
         </button>
       </ConsultaEditDialog>
       {
-        schedule.status === ScheduleStatus.SCHEDULED ?
-          <ConsultaCancelDialog schedule={schedule}>
+        appointment.status === AppointmentStatus.SCHEDULED ?
+          <ConsultaCancelDialog appointment={appointment}>
             <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
               <LuX />
               <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Cancelar consulta</p>
             </button>
           </ConsultaCancelDialog> :
-          schedule.status === ScheduleStatus.CANCELED ?
-            <ConsultaActiveDialog schedule={schedule}>
+          appointment.status === AppointmentStatus.CANCELED ?
+            <ConsultaActiveDialog appointment={appointment}>
               <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
                 <GrUpdate />
                 <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Ativar consulta</p>
