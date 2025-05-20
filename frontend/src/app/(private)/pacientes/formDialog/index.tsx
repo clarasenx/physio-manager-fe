@@ -7,29 +7,29 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { ReactNode, useState } from "react"
-import { TratamentoForm } from "./form"
-import { TratamentoType } from '@/dtos/tratamentos/tratamento.schema'
+import { PatientForm } from "./form"
+import { PatientType } from "@/dtos/patient/patient.schema"
 
-type TratamentoDialogProps = {
+type PatientDialogProps = {
   children: ReactNode
-  tratamento?: TratamentoType
+  patient?: PatientType
 }
 
-export const TratamentoDialog = ({ children, tratamento }: TratamentoDialogProps) => {
+export const PatientDialog = ({ children, patient }: PatientDialogProps) => {
   const [ openDialog, setOpenDialog ] = useState(false)
 
-  const isEditing = !!tratamento?.id
+  const isEditing = !!patient?.id
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
+      <DialogContent className="sm:max-w-[647px] bg-[#F6F5F2]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Editar tratamento" : "Criar tratamento"}</DialogTitle>
+          <DialogTitle>{isEditing ? "Editar paciente" : "Criar paciente"}</DialogTitle>
         </DialogHeader>
-        <TratamentoForm closeModal={() => { setOpenDialog(false) }} tratamento={tratamento}/>
+        <PatientForm closeModal={() => { setOpenDialog(false) }} patient={patient}/>
       </DialogContent>
     </Dialog>
   )

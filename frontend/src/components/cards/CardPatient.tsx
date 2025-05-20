@@ -10,18 +10,25 @@ import { PatientType } from '@/dtos/patient/patient.schema'
 import { formatPhone } from '@/utils/formatPhone'
 import { useEffect, useState } from 'react'
 import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa'
+import { DeleteDialog } from "../deleteDialog"
+import { patientKey } from "@/hooks/usePatient"
+import { PatientDialog } from "@/app/(private)/pacientes/formDialog"
 
 export const CardPatient = ({ patient }: { patient: PatientType }) => {
-  const [ formatedDate, setFormatedDate ] = useState<string>('')
+  const [formatedDate, setFormatedDate] = useState<string>('')
 
   useEffect(() => {
-    const date = new Date(patient.createdAt).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
-    setFormatedDate(date)
-  }, [ patient.createdAt, formatedDate, setFormatedDate ])
+    if (patient.lastCompletedAppointment?.date) {
+      const date = new Date(patient.lastCompletedAppointment?.date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+      setFormatedDate(date)
+      return
+    }
+    setFormatedDate('-')
+  }, [patient.lastCompletedAppointment?.date, formatedDate, setFormatedDate])
 
   return (
     <tr className="border-t border-gray-200 hover:bg-gray-50">
@@ -30,15 +37,24 @@ export const CardPatient = ({ patient }: { patient: PatientType }) => {
       <td className="p-3">{formatedDate}</td>
       <td className="p-3">
         <div className="flex justify-center gap-2">
-          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-            <FaTrash size={14} />
-          </button>
-          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+          <DeleteDialog
+            title="Tem certeza que deseja apagar o paciente: "
+            name={patient.name}
+            queryKey={patientKey}
+            path={`/patient/${patient.id}`}
+          >
+            <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+              <FaTrash size={14} />
+            </button>
+          </DeleteDialog>
+          <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
             <FaEye size={14} />
           </button>
-          <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-            <FaPencilAlt size={14} />
-          </button>
+          <PatientDialog patient={patient}>
+            <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+              <FaPencilAlt size={14} />
+            </button>
+          </PatientDialog>
         </div>
       </td>
     </tr>
@@ -47,18 +63,36 @@ export const CardPatient = ({ patient }: { patient: PatientType }) => {
 
 export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
 
-  const [ formatedDate, setFormatedDate ] = useState<string>('')
+  const [formatedDateLastAppointment, setFormatedDateLastAppointment] = useState<string>('')
+  const [formatedDateBirthday, setFormatedDateBirthday] = useState<string>('')
 
   useEffect(() => {
-    const date = new Date(patient.createdAt).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
-    setFormatedDate(date)
-  }, [ patient.createdAt, formatedDate, setFormatedDate ])
+    if (patient.lastCompletedAppointment?.date) {
+      const date = new Date(patient.lastCompletedAppointment?.date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+      setFormatedDateLastAppointment(date)
+      return
+    }
+    setFormatedDateLastAppointment('-')
+  }, [patient.lastCompletedAppointment?.date, formatedDateLastAppointment, setFormatedDateLastAppointment])
 
-  const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
+  useEffect(() => {
+    if (patient.birthday) {
+      const date = new Date(patient.birthday).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+      setFormatedDateBirthday(date)
+      return
+    }
+    setFormatedDateLastAppointment('-')
+  }, [patient.birthday, formatedDateBirthday, setFormatedDateLastAppointment])
+
+  const [activeToggleInicial, setActiveToggleInicial] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Agendadas" },
     { id: 2, label: "Finalizadas" },
@@ -76,11 +110,11 @@ export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
             </div>
             <div className='flex items-center gap-2'>
               <p className='text-[#82654C] font-semibold'>Nascimento:</p>
-              <p>{formatedDate}</p>
+              <p>{formatedDateBirthday}</p>
             </div>
             <div className='flex items-center gap-2'>
               <p className='text-[#82654C] w-fit font-semibold'>Última consulta:</p>
-              <p>{formatedDate}</p>
+              <p>{formatedDateLastAppointment}</p>
             </div>
             <div className='flex flex-col items-center justify-center py-3 gap-3'>
               <div className="relative inline-flex bg-white rounded-full p-1">
