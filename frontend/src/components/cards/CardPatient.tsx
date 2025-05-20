@@ -58,7 +58,6 @@ export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
     setFormatedDate(date)
   }, [ patient.createdAt, formatedDate, setFormatedDate ])
 
-  const [ buttonStatus, setButtonStatus ] = useState(false); // Estado para controlar a exibição do botão "Ver mais"
   const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Agendadas" },
@@ -132,11 +131,6 @@ export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      
-
-      <section className={`flex items-center ${!buttonStatus ? "justify-between" : "justify-center"}`}>
-        
-      </section>
     </div>
   )
 }
