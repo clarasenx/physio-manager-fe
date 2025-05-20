@@ -3,7 +3,7 @@
 import { logout } from "@/app/actions/logout";
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { LuBell, LuCalendarDays, LuLayoutGrid, LuList, LuLogOut, LuUserPen } from "react-icons/lu";
+import { LuCalendarDays, LuLayoutGrid, LuList, LuLogOut, LuUser, LuUserPen } from "react-icons/lu";
 import Logo from "../../public/icon.svg";
 
 const Navbar = () => {
@@ -17,7 +17,7 @@ const Navbar = () => {
     { id: 'dashboard', icon: <LuLayoutGrid />, rota: "/dashboard" },
     { id: 'calendar', icon: <LuCalendarDays />, rota: "/consultas" },
     { id: 'users', icon: <LuUserPen />, rota: "/pacientes" },
-    { id: 'menu', icon: <LuList />, rota: "/tratamentos"},
+    { id: 'tratamento', icon: <LuList />, rota: "/tratamentos"},
   ];
 
   const pathname = usePathname();
@@ -49,8 +49,11 @@ const Navbar = () => {
 
         <div className="hidden lg:flex h-[100px] w-[60px] bg-[#ece2c9] rounded-4xl flex-col items-center justify-between py-2 my-9">
           <button
+            onClick={() => {
+              router.push('/usuario')
+            }}
             className='w-14 h-14 flex items-center justify-center rounded-full text-[#2D231C] cursor-pointer transition-all py-2 px-3 duration-300 text-2xl'>
-            <LuBell />
+            <LuUser />
           </button>
           <button 
             onClick={handleLogout}
