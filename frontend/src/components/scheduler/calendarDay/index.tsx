@@ -4,8 +4,8 @@ import { isSameDay } from "@/utils/isSameDay";
 import { useRef, useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { StatusColor } from "@/constants/StatusColor";
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto";
-import { ScheduleMenu } from '@/app/(private)/consultas/components/scheduleMenu';
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
+import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmentMenu';
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog';
 import { Portal } from '@/components/portal';
 
@@ -18,7 +18,7 @@ export type EventType = {
 
 interface ICalendarDay {
   date: Date,
-  events: ListScheduleType[]
+  events: ListAppointmentType[]
   index: number
   isCurrentMonth: boolean
 }
@@ -31,7 +31,7 @@ const indexOfEndWeek = [0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41]
 
 
 
-const EventCard = ({ event, isCurrentMonth }: { event: ListScheduleType, isCurrentMonth: boolean }) => {
+const EventCard = ({ event, isCurrentMonth }: { event: ListAppointmentType, isCurrentMonth: boolean }) => {
   const [showActions, setShowActions] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -60,11 +60,11 @@ const EventCard = ({ event, isCurrentMonth }: { event: ListScheduleType, isCurre
       {showActions && (
         <Portal>
           <div style={{ position: 'absolute', top: menuPosition.top, left: menuPosition.left, zIndex: 10 }} className="hidden lg:block">
-            <ScheduleMenu
+            <AppointmentMenu
               menuAberto={showActions}
               setMenuAberto={setShowActions}
               className='absolute top-7 right-0 bg-[#F6F5F2] z-50'
-              schedule={event}
+              appointment={event}
             />
           </div>
         </Portal>

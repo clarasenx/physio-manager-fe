@@ -6,16 +6,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { StatusView } from "@/constants/StatusView"
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 import { formatPhone } from "@/utils/formatPhone"
 import { ReactNode } from "react"
 
 
 export const ConsultaViewDialog = ({
-  schedule,
+  appointment,
   children
 }: {
-  schedule: ListScheduleType,
+  appointment: ListAppointmentType,
   children: ReactNode
 }) => {
 
@@ -28,24 +28,24 @@ export const ConsultaViewDialog = ({
         <DialogHeader>
           <DialogTitle>Dados da Consulta</DialogTitle>
         </DialogHeader>
-        <p>Nome do paciente: <b>{schedule.patient?.name}</b></p>
-        <p>Telefone do paciente: <b>{formatPhone(schedule.patient?.phone)}</b></p>
-        <p>Data da consulta: <b>{schedule.date.toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}</b></p>
-        <p>Status: <b>{StatusView[schedule.status]}</b></p>
+        <p>Nome do paciente: <b>{appointment.patient?.name}</b></p>
+        <p>Telefone do paciente: <b>{formatPhone(appointment.patient?.phone)}</b></p>
+        <p>Data da consulta: <b>{appointment.date.toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}</b></p>
+        <p>Status: <b>{StatusView[appointment.status]}</b></p>
         <div className="flex gap-10">
         {
-          schedule.initialDiscomfort &&
-            <p>Dor Inicial: <b>{schedule.initialDiscomfort}</b></p>
+          appointment.initialDiscomfort &&
+            <p>Dor Inicial: <b>{appointment.initialDiscomfort}</b></p>
         }
         {
-          schedule.finalDiscomfort &&
-            <p>Dor Final: <b>{schedule.finalDiscomfort}</b></p>
+          appointment.finalDiscomfort &&
+            <p>Dor Final: <b>{appointment.finalDiscomfort}</b></p>
         }
 
         </div>
         {
-          schedule.notes &&
-          <p>Anotações da consulta: <br /> <i>{schedule.notes}</i></p>
+          appointment.notes &&
+          <p>Anotações da consulta: <br /> <i>{appointment.notes}</i></p>
         }
 
       </DialogContent>

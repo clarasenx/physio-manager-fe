@@ -28,12 +28,12 @@ import {
 } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { danger } from "@/constants/ToastStyle"
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
-import { UpdateScheduleSchema, UpdateScheduleType } from "@/dtos/schedule/update-schedule.dto"
-import { ScheduleStatus } from "@/enum/schedule-status.enum"
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
+import { UpdateAppointmentSchema, UpdateAppointmentType } from "@/dtos/appointment/update-appointment.dto"
+import { AppointmentStatus } from "@/enum/appointment-status.enum"
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
-import { scheduleKey } from "@/hooks/useSchedule"
+import { appointmentKey } from "@/hooks/useAppointment"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -49,13 +49,13 @@ import { toast } from "sonner"
 
 export const ConsultaEditForm = ({
   closeModal,
-  schedule
+  appointment
 }: {
   closeModal: () => void,
-  schedule: ListScheduleType
+  appointment: ListAppointmentType
 }) => {
   const queryClient = useQueryClient()
-  const [ time, setTime ] = useState<string>(schedule.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))
+  const [ time, setTime ] = useState<string>(appointment.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))
   const [ openDialog, setOpenDialog ] = useState(false)
   const [ isLoading, setIsLoading ] = useState(false)
   const triggerCalendarRef = useRef<HTMLButtonElement>(null)
@@ -65,15 +65,15 @@ export const ConsultaEditForm = ({
   const [ searchTratamento, setSearchTratamento ] = useState<string>()
   const debouncedSearchTratamento = useDebounce(searchTratamento, 500)
 
-  const form = useForm<UpdateScheduleType>({
-    resolver: zodResolver(UpdateScheduleSchema),
+  const form = useForm<UpdateAppointmentType>({
+    resolver: zodResolver(UpdateAppointmentSchema),
     defaultValues: {
-      date: schedule.date,
-      patientId: schedule.patientId,
-      appointmentTypeId: schedule.appointmentTypeId,
-      notes: schedule.notes || '',
-      initialDiscomfort: schedule.initialDiscomfort || 0,
-      finalDiscomfort: schedule.finalDiscomfort || 0,
+      date: appointment.date,
+      patientId: appointment.patientId,
+      appointmentTypeId: appointment.appointmentTypeId,
+      notes: appointment.notes || '',
+      initialDiscomfort: appointment.initialDiscomfort || 0,
+      finalDiscomfort: appointment.finalDiscomfort || 0,
     }
   })
   const patients = usePatient({ search: debouncedSearch })
@@ -90,20 +90,20 @@ export const ConsultaEditForm = ({
     return auxDate;
   }
 
-  async function onSubmit(data: UpdateScheduleType, force?: boolean) {
+  async function onSubmit(data: UpdateAppointmentType, force?: boolean) {
     if (data.date) {
       data.date = setHours(data.date)
     }
 
-    const payload: UpdateScheduleType = { ...data }
+    const payload: UpdateAppointmentType = { ...data }
 
     Object.entries(data).forEach(([ key, value ]) => {
 
       if (
-        schedule[ key as keyof typeof schedule ] !== value ||
+        appointment[ key as keyof typeof appointment ] !== value ||
         (
           value instanceof Date &&
-          value.getTime() !== new Date(schedule[ key as keyof typeof schedule ] as Date).getTime()
+          value.getTime() !== new Date(appointment[ key as keyof typeof appointment ] as Date).getTime()
         )
       ) {
         return;
@@ -111,7 +111,7 @@ export const ConsultaEditForm = ({
       delete payload[ key as keyof typeof payload ]
     });
 
-    if (schedule.status === ScheduleStatus.SCHEDULED) {
+    if (appointment.status === AppointmentStatus.SCHEDULED) {
       delete payload.finalDiscomfort
       delete payload.initialDiscomfort
     }
@@ -120,10 +120,10 @@ export const ConsultaEditForm = ({
 
     try {
       setIsLoading(true)
-      await api.patch(`schedule/${schedule.id}`, payload, { params })
+      await api.patch(`appointment/${appointment.id}`, payload, { params })
 
       queryClient.refetchQueries({
-        queryKey: [ scheduleKey ]
+        queryKey: [ appointmentKey ]
       })
 
       setIsLoading(false)
@@ -191,7 +191,7 @@ export const ConsultaEditForm = ({
                     className='font-normal border-black'
                     searchPlaceholder="Pesquise um paciente..."
                     placheholder={field.value
-                      ? patients.data?.data.find((patient) => patient.id === field.value)?.name || schedule.patient?.name
+                      ? patients.data?.data.find((patient) => patient.id === field.value)?.name || appointment.patient?.name
                       : 'Selecione um paciente'}
                     listItems={(close) =>
                       <CommandGroup>
@@ -238,7 +238,7 @@ export const ConsultaEditForm = ({
                     className='font-normal border-black'
                     searchPlaceholder="Pesquise um tratamento..."
                     placheholder={field.value
-                      ? tratamento.data?.data.find((appointmentType) => appointmentType.id === field.value)?.name || schedule.appointmentType?.name
+                      ? tratamento.data?.data.find((appointmentType) => appointmentType.id === field.value)?.name || appointment.appointmentType?.name
                       : 'Selecione um tratamento'}
                     listItems={(close) =>
                       <CommandGroup>
@@ -312,7 +312,7 @@ export const ConsultaEditForm = ({
                           setTimeout(() => triggerCalendarRef.current?.click(), 0)
                         }}
                         disabled={(date) => {
-                          if (schedule.status !== ScheduleStatus.SCHEDULED) return false
+                          if (appointment.status !== AppointmentStatus.SCHEDULED) return false
                           const today = new Date()
                           today.setHours(0, 0, 0, 0)
                           return (date < today)
@@ -335,7 +335,7 @@ export const ConsultaEditForm = ({
             </FormItem>
 
             {
-              schedule.status !== ScheduleStatus.SCHEDULED ?
+              appointment.status !== AppointmentStatus.SCHEDULED ?
                 <>
                   <FormField
                     control={form.control}
@@ -384,8 +384,8 @@ export const ConsultaEditForm = ({
           <div className='flex justify-between mt-6'>
             <DeleteDialog
               title="Tem certeza que deseja apagar esta consulta? "
-              queryKey={scheduleKey}
-              path={`/schedule/${schedule.id}`}
+              queryKey={appointmentKey}
+              path={`/appointment/${appointment.id}`}
               close={closeModal}
             >
               <Button type="button" variant={'destructive'}>Apagar</Button>

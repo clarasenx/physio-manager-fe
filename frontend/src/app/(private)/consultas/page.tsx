@@ -1,16 +1,16 @@
 'use client'
 import { useState } from 'react';
-import { Scheduler } from '@/components/scheduler';
 import { LuCirclePlus } from 'react-icons/lu';
 import { Button } from "@/components/ui/button"
-import { useSchedule } from '@/hooks/useSchedule';
-import { ScheduleStatus } from '@/enum/schedule-status.enum';
+import { AppointmentStatus } from '@/enum/appointment-status.enum';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ScheduleSection } from './components/scheduleSection';
-import { groupSchedulesByDate, groupSchedulesByMonth } from '@/utils/scheduleUtils';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ConsultaCreateDialog } from './components/createDialog';
-import { ListScheduleType } from '@/dtos/schedule/list-schedule.dto';
+import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
+import { useAppointment } from '@/hooks/useAppointment';
+import { groupAppointmentsByDate, groupAppointmentsByMonth } from '@/utils/appointmentUtils';
+import { Scheduler } from '@/components/scheduler';
+import { AppointmentSection } from './components/appointmentSection';
 
 
 export default function Consultas() {
@@ -23,14 +23,14 @@ export default function Consultas() {
 
   const [ activeToggleConsultas, setActiveToggleConsultas ] = useState(1);
   const toggleConsultas = [
-    { id: 1, label: "Agendadas", status: ScheduleStatus.SCHEDULED },
-    { id: 2, label: "Concluídas", status: ScheduleStatus.COMPLETED },
-    { id: 3, label: "Canceladas", status: ScheduleStatus.CANCELED },
+    { id: 1, label: "Agendadas", status: AppointmentStatus.SCHEDULED },
+    { id: 2, label: "Concluídas", status: AppointmentStatus.COMPLETED },
+    { id: 3, label: "Canceladas", status: AppointmentStatus.CANCELED },
   ]
 
-  const scheduleStatus = toggleConsultas.find(t => t.id === activeToggleConsultas)?.status
+  const appointmentStatus = toggleConsultas.find(t => t.id === activeToggleConsultas)?.status
 
-  const schedules = useSchedule({ status: scheduleStatus })
+  const appointments = useAppointment({ status: appointmentStatus })
 
   function Loading() {
     return (
@@ -113,11 +113,11 @@ export default function Consultas() {
 
                   {/*Seção das consultas do dia*/}
                   {
-                    schedules.isLoading ? <Loading /> :
-                      schedules.isError ? <ErrorMessage name='consultas' refetch={schedules.refetch} isLoading={schedules.isFetching} /> :
+                    appointments.isLoading ? <Loading /> :
+                      appointments.isError ? <ErrorMessage name='consultas' refetch={appointments.refetch} isLoading={appointments.isFetching} /> :
                         activeToggleConsultas === 1 ?
-                          <ConsultasAgendadas schedules={schedules.data} /> :
-                          <ConsultasConcluidasECanceladas schedules={schedules.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'}/>
+                          <ConsultasAgendadas appointments={appointments.data} /> :
+                          <ConsultasConcluidasECanceladas appointments={appointments.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'}/>
                   }
                 </div>
 
@@ -134,24 +134,24 @@ export default function Consultas() {
   )
 }
 
-function ConsultasAgendadas({ schedules }: { schedules?: ListScheduleType[] }) {
-  const grouped = groupSchedulesByDate(schedules || [])
+function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentType[] }) {
+  const grouped = groupAppointmentsByDate(appointments || [])
   return (
     <>
-      <ScheduleSection title="Para hoje" items={grouped.today} />
-      <ScheduleSection title="Para esta semana" items={grouped.thisWeek} />
-      <ScheduleSection title="Para este mês" items={grouped.thisMonth} />
+      <AppointmentSection title="Para hoje" items={grouped.today} />
+      <AppointmentSection title="Para esta semana" items={grouped.thisWeek} />
+      <AppointmentSection title="Para este mês" items={grouped.thisMonth} />
       {
         Object.entries(grouped.months).map(([ month, items ]) => (
-          <ScheduleSection key={month} title={`Para ${month}`} items={items} />
+          <AppointmentSection key={month} title={`Para ${month}`} items={items} />
         ))
       }
     </>
   )
 }
 
-function ConsultasConcluidasECanceladas({ schedules, status }: { schedules?: ListScheduleType[], status: string }) {
-  const grouped = groupSchedulesByMonth(schedules || [])
+function ConsultasConcluidasECanceladas({ appointments, status }: { appointments?: ListAppointmentType[], status: string }) {
+  const grouped = groupAppointmentsByMonth(appointments || [])
 
   const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
     const dateA = new Date(a[ 1 ][ 0 ].date).getTime()
@@ -165,7 +165,7 @@ function ConsultasConcluidasECanceladas({ schedules, status }: { schedules?: Lis
         !sortedEntries.length ? <p className='py-2 sm:py-4 px-3 md:px-6'>Não há Nenhuma consulta {status}</p>
           :
           sortedEntries.map(([ month, items ]) => (
-            <ScheduleSection key={month} title={`${month}`} items={items} />
+            <AppointmentSection key={month} title={`${month}`} items={items} />
           ))}
     </>
   )

@@ -8,22 +8,22 @@ import {
 import { ReactNode, useState } from "react"
 import { ConsultaActionForm } from "./form"
 import { actionTypeView } from "@/constants/actionTypeView"
-import { isScheduleStarted } from "@/utils/isScheduleStarted"
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
+import { isAppointmentStarted } from "@/utils/isAppointmentStarted"
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 
 
 export const ConsultaActionDialog = ({
-  schedule,
+  appointment,
   children,
   closeMenu,
 }: {
-  schedule: ListScheduleType,
+  appointment: ListAppointmentType,
   closeMenu: () => void
   children: ReactNode,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
 
-  const actionType: 'START' | 'CONCLUDE' = isScheduleStarted(schedule) ?
+  const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'
 
   return (
@@ -35,7 +35,7 @@ export const ConsultaActionDialog = ({
         <DialogHeader>
           <DialogTitle>{actionTypeView[actionType]} consulta</DialogTitle>
         </DialogHeader>
-        <ConsultaActionForm schedule={schedule} closeModal={() => {
+        <ConsultaActionForm appointment={appointment} closeModal={() => {
           setOpenDialog(false)
           closeMenu()
         }} />

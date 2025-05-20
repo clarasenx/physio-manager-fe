@@ -6,16 +6,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { ReactNode, useState } from "react"
-import { ListScheduleType } from "@/dtos/schedule/list-schedule.dto"
+import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 import { ConsultaEditForm } from "./form"
 
 
 export const ConsultaEditDialog = ({
-  schedule,
+  appointment,
   children,
   closeMenu
 }: {
-  schedule: ListScheduleType
+  appointment: ListAppointmentType
   children: ReactNode
   closeMenu: () => void
 }) => {
@@ -30,7 +30,7 @@ export const ConsultaEditDialog = ({
         <DialogHeader>
           <DialogTitle>Editar consulta</DialogTitle>
         </DialogHeader>
-        <ConsultaEditForm schedule={schedule} closeModal={() => {
+        <ConsultaEditForm appointment={appointment} closeModal={() => {
           setOpenDialog(false)
           closeMenu()
         }} />
