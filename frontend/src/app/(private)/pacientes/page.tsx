@@ -18,7 +18,7 @@ export default function Pacientes() {
   const patient = usePatient({search: auxSearch})
 
   return (
-    <div className='flex flex-col h-full w-full items-center px-2 sm:px-8 sm:py-5'>
+    <div className='flex flex-col h-full w-full items-center px-4 sm:px-8 pt-4 sm:py-5'>
       <div className='flex justify-around w-full items-center'>
         <p className='text-2xl text-center font-medium  my-4'>Pacientes</p>
         <div className='sm:hidden flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
