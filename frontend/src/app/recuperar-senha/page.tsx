@@ -1,25 +1,11 @@
 "use client"
 import Logo from "@/../public/iconDark.svg";
-import api from '@/api/axios';
 import { Input } from '@/components/ui/input';
-import { danger } from '@/constants/ToastStyle';
-import { CircularProgress } from '@mui/material';
-import { AxiosError } from 'axios';
-import { Eye, EyeOff } from 'lucide-react';
+
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { useHookFormMask } from 'use-mask-input';
-import { login } from '../actions/login';
 
-interface ILogin {
-  register: string
-  password: string
-}
 
-export default function Login() {
+export default function RecuperarSenha() {
 
   return (
     <div className='sm:flex bg-[#9C7C5A] w-full'>

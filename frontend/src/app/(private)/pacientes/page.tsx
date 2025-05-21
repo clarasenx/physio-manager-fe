@@ -1,6 +1,6 @@
 'use client'
 
-import { CardPatientTable, CardPatientMobile, CardPatientIndiv } from '@/components/cards/CardPatient';
+import { CardPatientTable, CardPatientMobile } from '@/components/cards/CardPatient';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePatient } from '@/hooks/usePatient';
