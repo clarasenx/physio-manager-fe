@@ -2,12 +2,11 @@
 
 import { CardPatient, CardPatientMobile } from '@/components/cards/CardPatient';
 import { ErrorMessage } from '@/components/ErrorMessage';
-import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePatient } from '@/hooks/usePatient';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
-import { LuCirclePlus, LuSearch } from 'react-icons/lu';
+import { LuCirclePlus } from 'react-icons/lu';
 import { PatientDialog } from './formDialog';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/searchInput';

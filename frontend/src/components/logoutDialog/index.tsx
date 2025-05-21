@@ -1,5 +1,4 @@
 'use client'
-import api from "@/api/axios"
 import { logout } from "@/app/actions/logout"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { danger } from "@/constants/ToastStyle"
-import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { ReactNode, useState } from "react"
 import { toast } from "sonner"

@@ -2,12 +2,11 @@
 import CardTratamentos from '@/components/cards/CardTratamentos';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useTratamento } from '@/hooks/useTratamento';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
-import { LuCirclePlus, LuSearch } from 'react-icons/lu';
+import { LuCirclePlus } from 'react-icons/lu';
 import { TratamentoDialog } from './components/formDialog';
 import { SearchInput } from '@/components/searchInput';
 
