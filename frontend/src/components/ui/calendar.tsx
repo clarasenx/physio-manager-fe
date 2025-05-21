@@ -74,9 +74,7 @@ function Calendar({
           <div>
             {props.date.getDate()}
             {
-              appointments?.some((appointment) => {
-                console.log(appointment.date);
-                
+              appointments?.some((appointment) => {                
                 const date = new Date(appointment.date)
                 return (
                   date.getDate() === props.date.getDate() &&
