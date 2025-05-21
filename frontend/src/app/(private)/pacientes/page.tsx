@@ -8,14 +8,15 @@ import { usePatient } from '@/hooks/usePatient';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
+import { PatientDialog } from './formDialog';
 
 export default function Pacientes() {
 
-  const [ search, setSearch ] = useState<string>('')
-  
-    const auxSearch = useDebounce(search, 700)
+  const [search, setSearch] = useState<string>('')
 
-  const patient = usePatient({search: auxSearch})
+  const auxSearch = useDebounce(search, 700)
+
+  const patient = usePatient({ search: auxSearch })
 
   return (
     <div className='flex flex-col h-full w-full items-center px-4 sm:px-8 pt-4 sm:py-5'>
@@ -23,7 +24,9 @@ export default function Pacientes() {
         <p className='text-2xl text-center font-medium  my-4'>Pacientes</p>
         <div className='sm:hidden flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
           <LuCirclePlus />
-          <button className='h-7 text-sm text-nowrap'>Novo paciente</button>
+          <PatientDialog>
+            <button className='h-7 text-sm text-nowrap cursor-pointer'>Novo paciente</button>
+          </PatientDialog>
         </div>
       </div>
 
@@ -40,7 +43,9 @@ export default function Pacientes() {
           </div>
           <div className='hidden sm:flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
             <LuCirclePlus />
-            <button className='h-8 text-sm text-nowrap'>Novo paciente</button>
+            <PatientDialog>
+              <button className='h-8 text-sm text-nowrap cursor-pointer'>Novo paciente</button>
+            </PatientDialog>
           </div>
         </div>
 
@@ -60,7 +65,7 @@ export default function Pacientes() {
                         <tr className="bg-[#F6F5F2] text-[#2D231C] text-left text-nowrap">
                           <th className="p-3">Nome</th>
                           <th className="p-3">Telefone</th>
-                          <th className="p-3">Última consulta</th>
+                          <th className="p-3">Última consulta Concluída</th>
                           <th className="p-3 text-center">Ações</th>
                         </tr>
                       </thead>

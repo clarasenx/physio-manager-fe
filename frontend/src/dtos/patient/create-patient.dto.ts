@@ -5,6 +5,7 @@ export const CreatePatientSchema = PatientSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  lastCompletedAppointment: true
 })
 
 export type CreatePatientType = z.infer<typeof CreatePatientSchema>
