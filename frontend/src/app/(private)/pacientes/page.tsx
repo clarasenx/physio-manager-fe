@@ -9,6 +9,8 @@ import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { LuCirclePlus, LuSearch } from 'react-icons/lu';
 import { PatientDialog } from './formDialog';
+import { Button } from '@/components/ui/button';
+import { SearchInput } from '@/components/searchInput';
 
 export default function Pacientes() {
 
@@ -19,37 +21,28 @@ export default function Pacientes() {
   const patient = usePatient({ search: auxSearch })
 
   return (
-    <div className='flex flex-col h-full w-full items-center px-4 sm:px-8 pt-4 sm:py-5'>
-      <div className='flex justify-around w-full items-center'>
-        <p className='text-2xl text-center font-medium  my-4'>Pacientes</p>
-        <div className='sm:hidden flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
-          <LuCirclePlus />
+    <section className='w-full flex flex-col gap-4 px-4 sm:px-8 mt-4 sm:mt-10'>
+      <div className='flex justify-between w-full items-center'>
+        <h2 className='text-2xl text-center font-medium'>Pacientes</h2>
+        <div className='sm:hidden'>
           <PatientDialog>
-            <button className='h-7 text-sm text-nowrap cursor-pointer'>Novo paciente</button>
+            <Button><LuCirclePlus />Novo paciente</Button>
           </PatientDialog>
         </div>
       </div>
 
-      <section className='bg-white w-full h-full rounded-lg py-5 px-4 shadow'>
+      <div className='bg-white w-full h-full rounded-lg py-5 px-4 shadow'>
         <div className='w-full flex justify-center gap-2'>
-          <div className='px-2 h-8 w-full flex bg-[#F6F5F2] rounded-lg items-center gap-2 shadow cursor-pointer'>
-            <LuSearch className='text-[#6A5242]' />
-            <Input
-              noFocusRing
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              placeholder="Buscar por tratamento"
-              className='text-sm w-full border-0 shadow-none' />
-          </div>
-          <div className='hidden sm:flex w-fit px-2 justify-center items-center bg-[#6A5242] rounded-lg text-white gap-1 cursor-pointer shadow'>
-            <LuCirclePlus />
+          <SearchInput onChange={setSearch} />
+
+          <div className='hidden sm:block'>
             <PatientDialog>
-              <button className='h-8 text-sm text-nowrap cursor-pointer'>Novo paciente</button>
+              <Button><LuCirclePlus />Novo paciente</Button>
             </PatientDialog>
           </div>
         </div>
 
-        <div className='w-full flex pt-6 gap-3'>
+        <div className='w-full flex mt-6 gap-3'>
           {/* Tabela com todos os pacientes */}
           <section className='w-full hidden lg:grid grid-cols-4 overflow-auto'>
             {
@@ -81,7 +74,7 @@ export default function Pacientes() {
           </section>
 
           {/* Cards de paciente individual mobile/telas menores*/}
-          <section className='w-full overflow-auto max-h-[70dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md px-2 py-4 sm:p-4'>
+          <section className='w-full overflow-auto max-h-[63dvh] md:max-h-[73dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md px-2 py-4 sm:p-4'>
             {
               patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
                 <CircularProgress className='mx-auto' />
@@ -113,7 +106,7 @@ export default function Pacientes() {
 
           </section> */}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   )
 }
