@@ -13,7 +13,7 @@ const Navbar = () => {
     { id: 'dashboard', icon: <LuLayoutGrid />, rota: "/dashboard" },
     { id: 'calendar', icon: <LuCalendarDays />, rota: "/consultas" },
     { id: 'users', icon: <LuUserPen />, rota: "/pacientes" },
-    { id: 'tratamento', icon: <LuList />, rota: "/tratamentos" },
+    { id: 'tratamento', icon: <LuList />, rota: "/tratamentos"},
   ];
 
   const pathname = usePathname();
