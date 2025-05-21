@@ -1,6 +1,6 @@
 'use client'
 
-import { CardPatient, CardPatientMobile } from '@/components/cards/CardPatient';
+import { CardPatientTable, CardPatientMobile, CardPatientIndiv } from '@/components/cards/CardPatient';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -67,7 +67,7 @@ export default function Pacientes() {
                       <tbody>
                         {
                           patient.data?.data.map((patient, index) => (
-                            <CardPatient key={`patient-${index}`} patient={patient} />
+                            <CardPatientTable key={`patient-${index}`} patient={patient} />
                           ))
                         }
                       </tbody>
@@ -86,27 +86,13 @@ export default function Pacientes() {
                 </div> :
                   !patient.data?.data.length ? <p>Não há pacientes cadastrados</p> :
 
-                    patient.data?.data.map((patient, index) => (
-                      <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
-                    ))
-
-            }
+                  patient.data?.data.map((patient, index) => (
+                    <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
+                  ))
+          }
           </section>
 
-          {/* <section className='hidden w-fit text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
-
-            <p className='font-semibold text-lg px-3 pb-2'>{pacientes[ 0 ].nome}</p>
-
-            <div className='bg-white px-4 py-3 rounded-lg'>
-              <p className='font-semibold line-clamp-1'>Telefone</p>
-              <p className='line-clamp-1'>{pacientes[ 0 ].telefone}</p>
-              <p className='font-semibold line-clamp-1'>Última consulta</p>
-              <p className='line-clamp-1'>{pacientes[ 0 ].ultimaConsulta}</p>
-              <p className='font-semibold line-clamp-1'>Email</p>
-              <p className='line-clamp-1'>{pacientes[ 0 ].email}</p>
-            </div>
-
-          </section> */}
+          {/* <CardPatientIndiv /> */}
         </div>
       </section>
     </div>
