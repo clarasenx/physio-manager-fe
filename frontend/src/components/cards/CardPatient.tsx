@@ -86,7 +86,7 @@ export const CardPatientIndiv = ({ patient }: { patient: PatientType }) => {
         </div>
         <div className='border flex flex-col w-full rounded-lg'>
           <div className='grid grid-cols-2 gap-1 px-2 sm:px-4 py-2 bg-[#9C7C5A] text-white rounded-t-lg'>
-            <p>Tratamento</p>
+            <p>Consulta</p>
             <p>Data</p>
           </div>
           <section className='px-2 sm:px-4 pb-2 bg-white rounded-b-lg'>
