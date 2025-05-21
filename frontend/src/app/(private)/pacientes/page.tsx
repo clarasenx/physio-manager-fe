@@ -1,21 +1,24 @@
 'use client'
 
-import { CardPatientTable, CardPatientMobile } from '@/components/cards/CardPatient';
+import { CardPatientTable, CardPatientMobile, PatientDetails } from '@/components/cards/CardPatient';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePatient } from '@/hooks/usePatient';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { LuCirclePlus } from 'react-icons/lu';
-import { PatientDialog } from './formDialog';
+import { PatientDialog } from './components/formDialog';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/searchInput';
+import { PatientType } from '@/dtos/patient/patient.schema';
 
 export default function Pacientes() {
 
   const [search, setSearch] = useState<string>('')
 
   const auxSearch = useDebounce(search, 700)
+
+  const [showPatientDetails, setShowPatientDetails] = useState<PatientType | null>()
 
   const patient = usePatient({ search: auxSearch })
 
@@ -64,7 +67,11 @@ export default function Pacientes() {
                       <tbody>
                         {
                           patient.data?.data.map((patient, index) => (
-                            <CardPatientTable key={`patient-${index}`} patient={patient} />
+                            <CardPatientTable
+                              key={`patient-${index}`}
+                              patient={patient}
+                              setShowPatientDetails={setShowPatientDetails}
+                            />
                           ))
                         }
                       </tbody>
@@ -83,13 +90,19 @@ export default function Pacientes() {
                 </div> :
                   !patient.data?.data.length ? <p>Não há pacientes cadastrados</p> :
 
-                  patient.data?.data.map((patient, index) => (
-                    <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
-                  ))
-          }
+                    patient.data?.data.map((patient, index) => (
+                      <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
+                    ))
+            }
           </section>
 
-          {/* <CardPatientIndiv /> */}
+          {
+            showPatientDetails &&
+            <PatientDetails 
+            patient={showPatientDetails} 
+            close={()=> setShowPatientDetails(null)}
+            />
+          }
         </div>
       </div>
     </section>
