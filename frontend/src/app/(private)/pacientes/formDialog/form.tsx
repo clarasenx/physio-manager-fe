@@ -127,7 +127,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
               name="birthday"
               render={({ field }) => (
                 <FormItem className="flex flex-col flex-1">
-                  <FormLabel>Data</FormLabel>
+                  <FormLabel>Data de Nascimento</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

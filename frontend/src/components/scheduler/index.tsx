@@ -11,6 +11,11 @@ import { AppointmentMobile } from "./mobile";
 import { useAppointment } from "@/hooks/useAppointment";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
+export interface IRangeDate {
+  final: Date;
+  initial: Date;
+}
+
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -33,6 +38,27 @@ export const Scheduler = () => {
   const mounth = useCallback(() => currentMonth.toLocaleDateString('pt-BR', {
     month: 'long',
   }), [currentMonth])
+
+  const days = useMemo(() => getDaysInMonth(currentMonth), [currentMonth])  // Função utilitária
+
+  const rangeMonth = useMemo(() => {
+    const monthDays = days
+
+    console.log('pc');
+
+
+    const initial = new Date(monthDays[0].date)
+    initial.setHours(0, 0, 0, 0)
+
+    const final = new Date(monthDays[monthDays.length - 1].date)
+    final.setHours(23, 59, 59, 999)
+
+
+    return {
+      final,
+      initial
+    }
+  }, [days])
 
 
   const nextMonth = () => setCurrentMonth(current => {
@@ -62,42 +88,32 @@ export const Scheduler = () => {
           <AppointmentMobile
             month={currentMonth}
             setMonth={setCurrentMonth}
+            rangeMonth={rangeMonth}
           /> :
-          <Calendar currentMonth={currentMonth} />
+          <Calendar
+            days={days}
+            rangeMonth={rangeMonth} />
       }
     </>
 
   );
 };
 
-function Calendar({ currentMonth }: { currentMonth: Date }) {
-
-  const days = useMemo(() => getDaysInMonth(currentMonth), [currentMonth])  // Função utilitária
-
-  const rangeMonth = useMemo(() => {
-    const monthDays = days
-
-    console.log('pc');
-
-
-    const initial = new Date(monthDays[0].date)
-    initial.setHours(0, 0, 0, 0)
-
-    const final = new Date(monthDays[monthDays.length - 1].date)
-    final.setHours(23, 59, 59, 999)
-
-
-    return {
-      final,
-      initial
-    }
-  }, [days])
+function Calendar({
+  days,
+  rangeMonth,
+}: {
+  days: {
+    date: Date;
+    isCurrentMonth: boolean;
+  }[]
+  rangeMonth: IRangeDate
+}) {
 
   const appointment = useAppointment({
     initialDate: rangeMonth.initial,
     finalDate: rangeMonth.final
   })
-
 
   return (
     <>
