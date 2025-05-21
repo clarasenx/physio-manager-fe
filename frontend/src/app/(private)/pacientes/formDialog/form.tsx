@@ -34,7 +34,7 @@ type PatientFormProps = {
 
 export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);  
 
   const form = useForm<CreatePatientType>({
     resolver: zodResolver(CreatePatientSchema),
@@ -97,7 +97,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
     <div className="w-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
-          <div className="mb-4 flex w-full gap-10">
+          <div className="mb-4 flex flex-col sm:flex-row w-full gap-5 sm:gap-10">
             <FormField
               control={form.control}
               name="name"
@@ -121,13 +121,13 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
               )}
             />
           </div>
-          <div className="w-8/12 mb-4 flex gap-10">
+          <div className="sm:w-8/12 mb-4 flex gap-5 sm:gap-10">
             <FormField
               control={form.control}
               name="birthday"
               render={({ field }) => (
                 <FormItem className="flex flex-col flex-1">
-                  <FormLabel>Data</FormLabel>
+                  <FormLabel>Data de Nascimento</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

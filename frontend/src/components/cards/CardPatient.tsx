@@ -14,9 +14,8 @@ import { DeleteDialog } from "../deleteDialog"
 import { patientKey } from "@/hooks/usePatient"
 import { PatientDialog } from "@/app/(private)/pacientes/formDialog"
 
-export const CardPatient = ({ patient }: { patient: PatientType }) => {
-  const [formatedDate, setFormatedDate] = useState<string>('')
-
+export const CardPatientTable = ({ patient }: { patient: PatientType }) => {
+  const [ formatedDate, setFormatedDate ] = useState<string>('')
   useEffect(() => {
     if (patient.lastCompletedAppointment?.date) {
       const date = new Date(patient.lastCompletedAppointment?.date).toLocaleDateString('pt-BR', {
@@ -58,6 +57,66 @@ export const CardPatient = ({ patient }: { patient: PatientType }) => {
         </div>
       </td>
     </tr>
+  )
+}
+
+export const CardPatientIndiv = ({ patient }: { patient: PatientType }) => {
+  const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
+  const toggleInicial = [
+    { id: 1, label: "Agendadas" },
+    { id: 2, label: "Finalizadas" },
+  ]
+  return (
+    <section className='hidden lg:flex flex-col w-fit text-nowrap text-[#2D231C] px-4 py-3 rounded-lg bg-[#F1EDE3]'>
+      <p className='font-semibold px-3 pb-2'>{patient.name}</p>
+      <div className='bg-white px-4 py-3 rounded-lg'>
+        <p className='font-medium line-clamp-1 t'>Telefone</p>
+        <p className='line-clamp-1'>{patient.phone}</p>
+        <p className='font-medium line-clamp-1'>Última consulta</p>
+        <p className='line-clamp-1'></p>
+        <p className='font-medium line-clamp-1'>Email</p>
+        <p className='line-clamp-1'>{patient.email}</p>
+      </div>
+
+      <div className='flex flex-col items-center justify-center py-3 gap-3'>
+        <div className="relative inline-flex bg-white rounded-full p-1">
+          {/* Indicador deslizante */}
+          <div
+            className="absolute top-1 left-1 h-7 w-25 rounded-full bg-[#9C7C5A] transition-all duration-300"
+            style={{
+              transform: `translateX(${(activeToggleInicial - 1) * 99}px)`
+            }}
+          ></div>
+
+          {toggleInicial.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveToggleInicial(item.id)}
+              className={`relative z-10 w-25 h-7 text-sm flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleInicial === item.id ? 'text-white' : 'text-[#2D231C]'
+                }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <div className='border flex flex-col w-full rounded-lg'>
+          <div className='grid grid-cols-2 gap-1 px-2 sm:px-4 py-2 bg-[#9C7C5A] text-white rounded-t-lg'>
+            <p>Consulta</p>
+            <p>Data</p>
+          </div>
+          <section className='px-2 sm:px-4 pb-2 bg-white rounded-b-lg'>
+            <div className='grid grid-cols-2 pt-2 gap-1'>
+              <p className='text-wrap'>Tratamento miofacial</p>
+              <p>12/05/25</p>
+            </div>
+            <div className='grid grid-cols-2 pt-2 gap-1'>
+              <p className='text-wrap'>Tratamento 2</p>
+              <p>12/05/25</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
   )
 }
 

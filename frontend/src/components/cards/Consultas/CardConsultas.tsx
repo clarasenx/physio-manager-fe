@@ -43,7 +43,7 @@ export default function CardConsulta({ item }: CardConsultaProps) {
   return (
     <section className='bg-[#F6F5F2] justify-between w-full flex rounded-lg py-2 sm:py-3 px-4 shadow'>
       <div className='flex md:gap-8'>
-        <div className='flex flex-col items-center justify-center pr-4 border-r-2 border-[#6B4A2E]/40 sm:pl-3 sm:pr-5 md:pl-8 md:pr-10 lg:justify-center w-20 sm:w-32'>
+        <div className='flex flex-col items-center justify-center pr-4 border-r-2 border-[#6B4A2E]/40 sm:pl-3 sm:pr-5 md:pl-8 md:pr-10 lg:justify-center w-16 sm:w-32'>
           <p className='font-semibold text-lg text-[#1f1005] md:font-semibold md:text-center'>{getWeekDay(item.date)}</p>
           <p className='font-bold text-3xl sm:text-4xl text-[#6A5242] md:text-center'>{getMonthDay(item.date)}</p>
         </div>

@@ -9,7 +9,7 @@ export default async function Dashboard() {
       {/* Primeira seção, de boas vindas */}
       <section className='flex flex-col w-full items-center md:items-start  text-[#2D231C] pb-5'>
         <p className='text-3xl py-2'>
-          Seja bem-vindo (a)!
+          Seja bem-vinda!
         </p>
         <p className='text-sm'>Vamos dar uma olhada no que temos para hoje</p>
       </section>
@@ -29,7 +29,7 @@ export default async function Dashboard() {
           <LuSquareCheck className='size-12 sm:size-14 text-[#6B4A2E] self-center' />
           <div className='self-center'>
             <DashboardResult dataKey='totalAppointmentsCompleted' />
-            <p className='text-sm leading-4 sm:text-base'>Consultas concluídas</p>
+            <p className='text-sm leading-4 sm:text-base'>Consultas concluídas este mês</p>
           </div>
         </div>
 
@@ -43,7 +43,7 @@ export default async function Dashboard() {
       </section>
 
       {/* Terceira seção, de consultas de hoje */}
-      <section className='flex flex-col w-full md:h-full gap-2 py-5 items-center md:items-start'>
+      <section className='flex flex-col w-full md:h-full gap-2 mt-5 items-center md:items-start'>
         <p className='flex items-center gap-1 text-xl text-center font-medium py-2 md:hidden'><LuPin className='size-5' /> Para Hoje</p>
         <div className='hidden md:flex items-center w-full gap-2'>
           <LuPin className='size-6' />

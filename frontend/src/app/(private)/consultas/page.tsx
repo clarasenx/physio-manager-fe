@@ -15,13 +15,13 @@ import { AppointmentSection } from './components/appointmentSection';
 
 export default function Consultas() {
 
-  const [ activeToggleInicial, setActiveToggleInicial ] = useState(1);
+  const [activeToggleInicial, setActiveToggleInicial] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Consultas" },
     { id: 2, label: "Calendário" },
   ]
 
-  const [ activeToggleConsultas, setActiveToggleConsultas ] = useState(1);
+  const [activeToggleConsultas, setActiveToggleConsultas] = useState(1);
   const toggleConsultas = [
     { id: 1, label: "Agendadas", status: AppointmentStatus.SCHEDULED },
     { id: 2, label: "Concluídas", status: AppointmentStatus.COMPLETED },
@@ -47,9 +47,9 @@ export default function Consultas() {
 
 
   return (
-    <div className='w-full max-h-dvh px-4 sm:px-8 pt-4'>
+    <div className='w-full max-h-dvh px-4 sm:px-8'>
       {/* toggle Consultas/Calendario */}
-      <section className='flex justify-center px-4 mt-3 sm:mt-6'>
+      <section className='flex justify-center px-4 mt-2 sm:mt-6'>
         <div className="relative inline-flex bg-white rounded-full p-1">
           {/* Indicador deslizante */}
           <div
@@ -73,11 +73,22 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-4 py-4 '>
-        <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
+      <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 '>
+        <div className='flex justify-between w-full items-center'>
+          <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
+          {
+            activeToggleInicial === 1 ?
+              <div className='sm:hidden'>
+                <ConsultaCreateDialog>
+                  <Button><LuCirclePlus />Nova Consulta</Button>
+                </ConsultaCreateDialog>
+              </div>
+              : <></>
+          }
+        </div>
 
 
-        <div className='bg-white w-full rounded-2xl py-2 flex flex-col items-center justify-center'>
+        <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 px-2 sm:px-4 shadow'>
 
           {
             activeToggleInicial === 1 ? (
@@ -104,12 +115,14 @@ export default function Consultas() {
                       </button>
                     ))}
                   </div>
-                  <ConsultaCreateDialog>
-                    <Button><LuCirclePlus />Nova Consulta</Button>
-                  </ConsultaCreateDialog>
+                  <div className='hidden sm:block'>
+                    <ConsultaCreateDialog>
+                      <Button><LuCirclePlus />Nova Consulta</Button>
+                    </ConsultaCreateDialog>
+                  </div>
                 </div>
 
-                <div className='w-full max-h-[63dvh] md:max-h-[75dvh] my-2 overflow-auto'>
+                <div className='w-full max-h-[63dvh] md:max-h-[73dvh] my-2 overflow-auto'>
 
                   {/*Seção das consultas do dia*/}
                   {
@@ -117,12 +130,12 @@ export default function Consultas() {
                       appointments.isError ? <ErrorMessage name='consultas' refetch={appointments.refetch} isLoading={appointments.isFetching} /> :
                         activeToggleConsultas === 1 ?
                           <ConsultasAgendadas appointments={appointments.data} /> :
-                          <ConsultasConcluidasECanceladas appointments={appointments.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'}/>
+                          <ConsultasConcluidasECanceladas appointments={appointments.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'} />
                   }
                 </div>
 
               </>) : (
-              <div className='px-6 w-full'>
+              <div className='sm:px-6 w-full'>
                 <Scheduler />
               </div>
             )
@@ -142,7 +155,7 @@ function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentTy
       <AppointmentSection title="Para esta semana" items={grouped.thisWeek} />
       <AppointmentSection title="Para este mês" items={grouped.thisMonth} />
       {
-        Object.entries(grouped.months).map(([ month, items ]) => (
+        Object.entries(grouped.months).map(([month, items]) => (
           <AppointmentSection key={month} title={`Para ${month}`} items={items} />
         ))
       }
@@ -154,8 +167,8 @@ function ConsultasConcluidasECanceladas({ appointments, status }: { appointments
   const grouped = groupAppointmentsByMonth(appointments || [])
 
   const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
-    const dateA = new Date(a[ 1 ][ 0 ].date).getTime()
-    const dateB = new Date(b[ 1 ][ 0 ].date).getTime()
+    const dateA = new Date(a[1][0].date).getTime()
+    const dateB = new Date(b[1][0].date).getTime()
     return dateB - dateA // Mais recente primeiro
   })
 
@@ -164,7 +177,7 @@ function ConsultasConcluidasECanceladas({ appointments, status }: { appointments
       {
         !sortedEntries.length ? <p className='py-2 sm:py-4 px-3 md:px-6'>Não há Nenhuma consulta {status}</p>
           :
-          sortedEntries.map(([ month, items ]) => (
+          sortedEntries.map(([month, items]) => (
             <AppointmentSection key={month} title={`${month}`} items={items} />
           ))}
     </>

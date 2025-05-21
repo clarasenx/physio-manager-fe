@@ -61,7 +61,7 @@ export const AppointmentMenu = ({
 
 
   return (
-    <div ref={menuRef} className={'w-[175px] flex flex-col absolute shadow-lg p-1 rounded-lg ' + className}>
+    <div ref={menuRef} className={'w-[175px] z-100 flex flex-col absolute shadow-lg p-1 rounded-lg ' + className}>
       <ConsultaViewDialog appointment={appointment}>
         <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
           <PiEyeBold />

@@ -78,7 +78,7 @@ export default function Login() {
           <Image src={Logo} alt='Logo do site' className='w-10 sm:w-18 pb-5 self-end sm:self-center'/>
           <div className='flex flex-col 2xl:ml-14 sm:pb-28'>
             <p className='text-xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold md:leading-8 xl:leading-10'>Olá,</p>
-            <p className='hidden sm:flex font-semibold text-xl md:text-3xl lg:text-4xl xl:text-5xl'>Bem-vindo(a)</p>
+            <p className='hidden sm:flex font-semibold text-xl md:text-3xl lg:text-4xl xl:text-5xl'>Bem-vinda</p>
             <p className='sm:pt-2 text-sm sm:text-base xl:text-[17px] leading-5'>Faça login para gerenciar suas consultas</p>
           </div>
           {/* Info do cliente */}
@@ -118,7 +118,13 @@ export default function Login() {
                 {
                   isLoading ? <CircularProgress size={20} color='inherit' /> : 'Login'
                 }
-                </button>
+            </button>
+            <div className='flex w-full justify-end'>
+              <button className='w-fit my-3 hover:cursor-pointer text-[#82654C] text- underline text-center'>
+                  Esqueci minha senha
+              </button>
+            </div>
+            
           </form>
 
         </div>
