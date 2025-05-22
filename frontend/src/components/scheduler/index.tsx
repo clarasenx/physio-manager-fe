@@ -130,7 +130,7 @@ function Calendar({
                 key={`CalendarDay-${index}`}
                 date={date.date}
                 isCurrentMonth={date.isCurrentMonth}
-                events={appointment.data?.filter(e => isSameDay(e.date, date.date)) || []}
+                events={appointment.data?.data.filter(e => isSameDay(e.date, date.date)) || []}
                 index={index}
               />
             )) : <></>

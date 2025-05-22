@@ -7,7 +7,7 @@ import { pt } from 'date-fns/locale/pt';
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
+import { AppointmentType } from "@/dtos/appointment/appointment.schema";
 
 function Calendar({
   className,
@@ -15,7 +15,7 @@ function Calendar({
   showOutsideDays = true,
   appointments,
   ...props
-}: React.ComponentProps<typeof DayPicker> & { appointments?: ListAppointmentType[] }) {
+}: React.ComponentProps<typeof DayPicker> & { appointments?: AppointmentType[] }) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}

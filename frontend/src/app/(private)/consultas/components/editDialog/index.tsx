@@ -6,8 +6,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { ReactNode, useState } from "react"
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 import { ConsultaEditForm } from "./form"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 
 export const ConsultaEditDialog = ({
@@ -15,7 +15,7 @@ export const ConsultaEditDialog = ({
   children,
   closeMenu
 }: {
-  appointment: ListAppointmentType
+  appointment: AppointmentType
   children: ReactNode
   closeMenu: () => void
 }) => {
