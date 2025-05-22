@@ -22,7 +22,7 @@ export default function Pacientes() {
 
   const [showPatientDetails, setShowPatientDetails] = useState<PatientType | null>()
 
-  const patient = usePatient({ search: auxSearch, page, perPage: 2 })
+  const patient = usePatient({ search: auxSearch, page, perPage: 10 })
 
   return (
     <section className='w-full flex flex-col gap-4 px-4 sm:px-8 mt-4 sm:mt-10'>
