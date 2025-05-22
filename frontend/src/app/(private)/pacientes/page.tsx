@@ -91,21 +91,30 @@ export default function Pacientes() {
           </section>
 
           {/* Cards de paciente individual mobile/telas menores*/}
-          <section className='w-full overflow-auto max-h-[63dvh] md:max-h-[73dvh] flex flex-col gap-3 lg:hidden bg-[#F1EDE3] rounded-md px-2 py-4 sm:p-4'>
-            {
-              patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
-                <CircularProgress className='mx-auto' />
-              </div> :
-                patient.isError ? <div className='sm:col-span-full'>
-                  <ErrorMessage name='pacientes' refetch={patient.refetch} />
+          <div className='flex flex-col w-full lg:hidden'>
+            <section className='w-full overflow-auto h-fit max-h-[59dvh] md:max-h-[73dvh] flex flex-col gap-3 bg-[#F1EDE3] rounded-md px-2 py-3 sm:p-4'>
+              {
+                patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
+                  <CircularProgress className='mx-auto' />
                 </div> :
-                  !patient.data?.data.length ? <p>Não há pacientes cadastrados</p> :
+                  patient.isError ? <div className='sm:col-span-full'>
+                    <ErrorMessage name='pacientes' refetch={patient.refetch} />
+                  </div> :
+                    !patient.data?.data.length ? <p>Não há pacientes cadastrados</p> :
 
-                    patient.data?.data.map((patient, index) => (
-                      <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
-                    ))
-            }
-          </section>
+                      patient.data?.data.map((patient, index) => (
+                        <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
+                      ))
+              }
+            </section>
+            <div className='w-full flex items-end mt-5'>
+              <Paginator
+                page={page}
+                setPage={setPage}
+                hasMore={patient.data?.meta.hasMore || false}
+              />
+            </div>
+          </div>
 
           {
             showPatientDetails &&
