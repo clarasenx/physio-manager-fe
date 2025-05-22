@@ -9,7 +9,7 @@ import { ReactNode, useState } from "react"
 import { ConsultaActionForm } from "./form"
 import { actionTypeView } from "@/constants/actionTypeView"
 import { isAppointmentStarted } from "@/utils/isAppointmentStarted"
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 
 export const ConsultaActionDialog = ({
@@ -17,7 +17,7 @@ export const ConsultaActionDialog = ({
   children,
   closeMenu,
 }: {
-  appointment: ListAppointmentType,
+  appointment: AppointmentType,
   closeMenu: () => void
   children: ReactNode,
 }) => {

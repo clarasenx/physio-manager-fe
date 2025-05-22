@@ -18,18 +18,18 @@ import { Textarea } from "@/components/ui/textarea"
 import { actionTypeView } from "@/constants/actionTypeView";
 import { ConcludeAppointmentSchema } from "@/dtos/appointment/conclude-appointment.dto";
 import { z } from "zod";
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
 import { useState } from "react";
 import { GoPencil } from "react-icons/go";
 import { isAppointmentStarted } from "@/utils/isAppointmentStarted";
 import { appointmentKey } from "@/hooks/useAppointment";
+import { AppointmentType } from "@/dtos/appointment/appointment.schema";
 
 export const ConsultaActionForm = ({
   closeModal,
   appointment,
 }: {
   closeModal: () => void,
-  appointment: ListAppointmentType,
+  appointment: AppointmentType,
 }) => {
   const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'

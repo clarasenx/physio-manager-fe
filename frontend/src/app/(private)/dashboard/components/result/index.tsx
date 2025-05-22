@@ -23,7 +23,7 @@ export const DashboardResult = ({
     <p className='text-3xl leading-9 sm:text-4xl pt-2 font-semibold'>
       {
         dataKey === 'todayAppointments' ?
-          <>{dashboard.todayAppointments.length}</> :
+          <>{dashboard.todayAppointments.data.length}</> :
           <>{dashboard[dataKey as keyof typeof dashboard]}</>
       }
     </p>

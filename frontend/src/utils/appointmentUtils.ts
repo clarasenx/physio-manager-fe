@@ -1,20 +1,21 @@
 
-import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto'
+
+import { AppointmentType } from '@/dtos/appointment/appointment.schema'
 import { isSameDay, isSameWeek, isSameMonth, format, getYear } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 export type GroupedAppointments = {
-  today: ListAppointmentType[]
-  thisWeek: ListAppointmentType[]
-  thisMonth: ListAppointmentType[]
-  months: Record<string, ListAppointmentType[]>
+  today: AppointmentType[]
+  thisWeek: AppointmentType[]
+  thisMonth: AppointmentType[]
+  months: Record<string, AppointmentType[]>
 }
 
-export function groupAppointmentsByDate(appointments: ListAppointmentType[], todayDate = new Date()): GroupedAppointments {
-  const today: ListAppointmentType[] = []
-  const thisWeek: ListAppointmentType[] = []
-  const thisMonth: ListAppointmentType[] = []
-  const months: Record<string, ListAppointmentType[]> = {}
+export function groupAppointmentsByDate(appointments: AppointmentType[], todayDate = new Date()): GroupedAppointments {
+  const today: AppointmentType[] = []
+  const thisWeek: AppointmentType[] = []
+  const thisMonth: AppointmentType[] = []
+  const months: Record<string, AppointmentType[]> = {}
 
   const currentYear = getYear(todayDate)
 
@@ -41,8 +42,8 @@ export function groupAppointmentsByDate(appointments: ListAppointmentType[], tod
   return { today, thisWeek, thisMonth, months }
 }
 
-export function groupAppointmentsByMonth(appointments: ListAppointmentType[], todayDate = new Date()): Pick<GroupedAppointments, 'months'> {
-  const months: Record<string, ListAppointmentType[]> = {}
+export function groupAppointmentsByMonth(appointments: AppointmentType[], todayDate = new Date()): Pick<GroupedAppointments, 'months'> {
+  const months: Record<string, AppointmentType[]> = {}
 
   const currentYear = getYear(todayDate)
 

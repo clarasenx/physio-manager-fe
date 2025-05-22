@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { HiClock, HiDotsVertical } from 'react-icons/hi';
-import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
 import { isAppointmentStarted } from '@/utils/isAppointmentStarted';
 import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmentMenu';
 import { Portal } from '@/components/portal';
+import { AppointmentType } from '@/dtos/appointment/appointment.schema';
 
 
 interface CardConsultaProps {
-  item: ListAppointmentType;
+  item: AppointmentType;
 }
 
 export default function CardConsulta({ item }: CardConsultaProps) {

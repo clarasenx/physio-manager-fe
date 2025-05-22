@@ -11,6 +11,7 @@ import { useAppointment } from '@/hooks/useAppointment';
 import { groupAppointmentsByDate, groupAppointmentsByMonth } from '@/utils/appointmentUtils';
 import { Scheduler } from '@/components/scheduler';
 import { AppointmentSection } from './components/appointmentSection';
+import { AppointmentType } from '@/dtos/appointment/appointment.schema';
 
 
 export default function Consultas() {
@@ -130,7 +131,7 @@ export default function Consultas() {
                       appointments.isError ? <ErrorMessage name='consultas' refetch={appointments.refetch} isLoading={appointments.isFetching} /> :
                         activeToggleConsultas === 1 ?
                           <ConsultasAgendadas appointments={appointments.data} /> :
-                          <ConsultasConcluidasECanceladas appointments={appointments.data} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'} />
+                          <ConsultasConcluidasECanceladas appointments={appointments.data?.data || []} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'} />
                   }
                 </div>
 
@@ -147,8 +148,8 @@ export default function Consultas() {
   )
 }
 
-function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentType[] }) {
-  const grouped = groupAppointmentsByDate(appointments || [])
+function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentType }) {
+  const grouped = groupAppointmentsByDate(appointments?.data || [])
   return (
     <>
       <AppointmentSection title="Para hoje" items={grouped.today} />
@@ -163,8 +164,8 @@ function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentTy
   )
 }
 
-function ConsultasConcluidasECanceladas({ appointments, status }: { appointments?: ListAppointmentType[], status: string }) {
-  const grouped = groupAppointmentsByMonth(appointments || [])
+function ConsultasConcluidasECanceladas({ appointments, status }: { appointments: AppointmentType[], status: string }) {
+  const grouped = groupAppointmentsByMonth(appointments)
 
   const sortedEntries = Object.entries(grouped.months).sort((a, b) => {
     const dateA = new Date(a[1][0].date).getTime()
