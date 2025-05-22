@@ -9,9 +9,11 @@ import { useState } from 'react';
 import { LuCirclePlus } from 'react-icons/lu';
 import { TratamentoDialog } from './components/formDialog';
 import { SearchInput } from '@/components/searchInput';
+import { Paginator } from '@/components/Paginator';
 
 export default function Tratamentos() {
   const [search, setSearch] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
 
   const auxSearch = useDebounce(search, 700)
 
@@ -50,6 +52,13 @@ export default function Tratamentos() {
                     <CardTratamentos key={`cardsTratamento${tratamento.id}`} tratamento={tratamento} />
                   ))
           }
+        </div>
+        <div className='w-full flex items-end mt-5'>
+          <Paginator
+            page={page}
+            setPage={setPage}
+            hasMore={tratamentos.data?.meta.hasMore || false}
+          />
         </div>
       </div>
     </section>
