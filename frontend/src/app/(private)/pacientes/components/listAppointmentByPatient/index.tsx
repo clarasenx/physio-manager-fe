@@ -61,8 +61,8 @@ export const ListAppointmentByPatient = ({
             </div>
              :
               appointment.isError ? <ErrorMessage name="consultas" refetch={appointment.refetch} isLoading={appointment.isFetching} /> :
-                !appointment.data?.length ? <p className="px-5 py-3">Este paciente não possui <br /> consultas {toggleInicial.find(t => t.id === activeToggleInicial)?.label}</p> :
-                  appointment.data.map((appointment, index) => (
+                !appointment.data?.data.length ? <p className="px-5 py-3">Este paciente não possui <br /> consultas {toggleInicial.find(t => t.id === activeToggleInicial)?.label}</p> :
+                  appointment.data.data.map((appointment, index) => (
                     <div key={`appointment-patient-${index}${isMobile}`} className='grid grid-cols-2 items-center pt-3 gap-6'>
                       <p className='text-wrap'>{appointment.appointmentType?.name}</p>
                       <p>{getFormatedDate(appointment.date)}</p>

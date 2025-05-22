@@ -1,13 +1,15 @@
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { StatusView } from "@/constants/StatusView"
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { formatPhone } from "@/utils/formatPhone"
+import { getFormatedDate } from "@/utils/getFormatedDate"
 import { ReactNode } from "react"
 
 
@@ -15,7 +17,7 @@ export const ConsultaViewDialog = ({
   appointment,
   children
 }: {
-  appointment: ListAppointmentType,
+  appointment: AppointmentType,
   children: ReactNode
 }) => {
 
@@ -29,18 +31,19 @@ export const ConsultaViewDialog = ({
           <DialogTitle>Dados da Consulta</DialogTitle>
         </DialogHeader>
         <p>Nome do paciente: <b>{appointment.patient?.name}</b></p>
+        <p>Tratamento: <b>{appointment.appointmentType?.name}</b></p>
         <p>Telefone do paciente: <b>{formatPhone(appointment.patient?.phone)}</b></p>
-        <p>Data da consulta: <b>{appointment.date.toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}</b></p>
+        <p>Data da consulta: <b>{getFormatedDate(appointment.date, true)}</b></p>
         <p>Status: <b>{StatusView[appointment.status]}</b></p>
         <div className="flex gap-10">
-        {
-          appointment.initialDiscomfort &&
+          {
+            appointment.initialDiscomfort &&
             <p>Dor Inicial: <b>{appointment.initialDiscomfort}</b></p>
-        }
-        {
-          appointment.finalDiscomfort &&
+          }
+          {
+            appointment.finalDiscomfort &&
             <p>Dor Final: <b>{appointment.finalDiscomfort}</b></p>
-        }
+          }
 
         </div>
         {
@@ -48,6 +51,9 @@ export const ConsultaViewDialog = ({
           <p>Anotações da consulta: <br /> <i>{appointment.notes}</i></p>
         }
 
+        <DialogFooter>
+          <p className="text-sm">Registrada em {getFormatedDate(appointment.createdAt, true)}</p>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

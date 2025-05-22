@@ -8,9 +8,9 @@ import { CircularProgress } from "@mui/material"
 import { Button } from "../ui/button"
 import { LuCirclePlus } from "react-icons/lu"
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog'
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 import { IRangeDate } from "."
 import { isSameDay } from "date-fns"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 export const AppointmentMobile = ({
   month,
@@ -44,9 +44,8 @@ export const AppointmentMobile = ({
           caption: 'hidden'
         }}
         onSelect={(date) => date ? setDaySelected(date) : null}
-        appointments={appointment.data ? appointment.data : []}
+        appointments={appointment.data?.data || []}
         mode="single"
-
       />
       <ConsultaCreateDialog date={daySelected}>
         <Button><LuCirclePlus />Nova Consulta</Button>
@@ -55,8 +54,8 @@ export const AppointmentMobile = ({
       <div className="w-full bg-[#B7A17D] items-center flex flex-col p-4 gap-2 rounded-lg mt-4">
         {
           appointment.isPending ? <CircularProgress color="inherit" /> : appointment.isError ? <ErrorMessage name='consultas' refetch={appointment.refetch} /> :
-            !appointment.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
-              <AppointmentList appointments={appointment.data} currentDay={daySelected} />
+            !appointment.data.data.length ? <p className="text-center text-white">Não há consultas marcadas</p> :
+              <AppointmentList appointments={appointment.data.data} currentDay={daySelected} />
         }
       </div>
     </div>
@@ -66,7 +65,8 @@ export const AppointmentMobile = ({
 function AppointmentList({
   appointments,
   currentDay
-}: { appointments: ListAppointmentType[], currentDay: Date }) {
+}: { appointments: AppointmentType[], currentDay: Date }) {
+
   const appointmentsOfDay = useMemo(() => {
     return appointments.filter(a => {
       const date = new Date(a.date)

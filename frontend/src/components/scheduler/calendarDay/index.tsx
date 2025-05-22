@@ -4,10 +4,10 @@ import { isSameDay } from "@/utils/isSameDay";
 import { useRef, useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { StatusColor } from "@/constants/StatusColor";
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
 import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmentMenu';
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog';
 import { Portal } from '@/components/portal';
+import { AppointmentType } from "@/dtos/appointment/appointment.schema";
 
 export type EventType = {
   id: string;
@@ -18,20 +18,14 @@ export type EventType = {
 
 interface ICalendarDay {
   date: Date,
-  events: ListAppointmentType[]
+  events: AppointmentType[]
   index: number
   isCurrentMonth: boolean
 }
 
 const indexOfEndWeek = [0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41]
 
-
-
-
-
-
-
-const EventCard = ({ event, isCurrentMonth }: { event: ListAppointmentType, isCurrentMonth: boolean }) => {
+const EventCard = ({ event, isCurrentMonth }: { event: AppointmentType, isCurrentMonth: boolean }) => {
   const [showActions, setShowActions] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);

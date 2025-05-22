@@ -30,8 +30,8 @@ export const TodayAppointments = () => {
     <div className='bg-white flex flex-col w-full px-4 py-5 sm:p-5 rounded-lg gap-3 text-zinc-950 sm:overflow-auto sm:max-h-[60dvh] lg:max-h-[65dvh]'>
       {
         isPending ? <Loading /> : isError ? <ErrorMessage name='consultas' refetch={refetch} isLoading={isFetching} /> :
-          !dashboard?.todayAppointments.length ? <p className="font-medium">Você ainda não tem consultas marcadas para hoje.</p> :
-            dashboard?.todayAppointments.map((appointment) => (
+          !dashboard?.todayAppointments.data.length ? <p className="font-medium">Você ainda não tem consultas marcadas para hoje.</p> :
+            dashboard?.todayAppointments.data.map((appointment) => (
               <CardDashboard key={`CardDashboard-${appointment.id}`} item={appointment} />
             ))
       }

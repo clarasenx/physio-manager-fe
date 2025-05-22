@@ -9,7 +9,7 @@ export const useDashboard = () => useQuery<IDashboard>({
   queryFn: async ()=> {
     const res = (await api.get('dashboard')).data as IDashboard
     const aux = {...res}
-    aux.todayAppointments = res.todayAppointments.map(r => ({...r, date: new Date(r.date)}))
+    aux.todayAppointments.data = res.todayAppointments.data.map(r => ({...r, date: new Date(r.date)}))
     return aux
   },
   retry: 3

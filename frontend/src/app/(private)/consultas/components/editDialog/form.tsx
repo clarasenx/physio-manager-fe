@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { danger } from "@/constants/ToastStyle"
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
 import { UpdateAppointmentSchema, UpdateAppointmentType } from "@/dtos/appointment/update-appointment.dto"
 import { AppointmentStatus } from "@/enum/appointment-status.enum"
 import { useDebounce } from '@/hooks/useDebounce'
@@ -46,13 +45,14 @@ import { CalendarIcon, Check } from "lucide-react"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 export const ConsultaEditForm = ({
   closeModal,
   appointment
 }: {
   closeModal: () => void,
-  appointment: ListAppointmentType
+  appointment: AppointmentType
 }) => {
   const queryClient = useQueryClient()
   const [ time, setTime ] = useState<string>(appointment.date.toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' }))

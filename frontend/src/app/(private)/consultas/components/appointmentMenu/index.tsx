@@ -6,7 +6,6 @@ import { GoPencil } from "react-icons/go";
 import { LuX } from "react-icons/lu";
 import { PiEyeBold } from "react-icons/pi";
 import { VscDebugStart } from "react-icons/vsc";
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto";
 import { ConsultaActionDialog } from "../actionDialog";
 import { actionTypeView } from "@/constants/actionTypeView";
 import { ConsultaCancelDialog } from "../cancelDialog";
@@ -15,12 +14,13 @@ import { ConsultaActiveDialog } from "../activeDialog";
 import { GrUpdate } from "react-icons/gr";
 import { ConsultaViewDialog } from "../viewDialog";
 import { isAppointmentStarted } from "@/utils/isAppointmentStarted";
+import { AppointmentType } from "@/dtos/appointment/appointment.schema";
 
 interface IAppointmentMenu {
   setMenuAberto: (p: boolean) => void
   menuAberto: boolean
   className?: string
-  appointment: ListAppointmentType
+  appointment: AppointmentType
 }
 
 export const AppointmentMenu = ({

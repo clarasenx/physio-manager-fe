@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { danger } from "@/constants/ToastStyle"
-import { ListAppointmentType } from "@/dtos/appointment/list-appointment.dto"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { appointmentKey } from "@/hooks/useAppointment"
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useState } from "react"
@@ -20,7 +20,7 @@ export const ConsultaActiveDialog = ({
   appointment,
   children
 }: {
-  appointment: ListAppointmentType,
+  appointment: AppointmentType,
   children: ReactNode
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
