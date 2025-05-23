@@ -1,8 +1,8 @@
 const Usuario = () => {
   return (
-    <div className='w-full flex flex-col gap-4 px-4 sm:px-8 pt-5'>
+    <div className='w-full md:w-[700px] mx-auto flex flex-col gap-4 px-4 sm:px-8 pt-5'>
       <section className='flex px-4 py-3'>
-        <p className='leading-4'>Bem vindo(a),
+        <p className='leading-4'>Bem vinda,
           <br /><span className='font-semibold text-xl text-[#2D231C]'>Rafaella Kalena</span>
         </p>
       </section>

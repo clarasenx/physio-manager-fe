@@ -34,7 +34,7 @@ type PatientFormProps = {
 
 export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<CreatePatientType>({
     resolver: zodResolver(CreatePatientSchema),
@@ -51,6 +51,8 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
   async function onSubmit(data: CreatePatientType) {
 
     const payload = { ...data }
+
+    if(!payload.email) delete payload.email
 
     if (patient) {
       Object.entries(data).forEach(([key, value]) => {
@@ -163,7 +165,18 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
 
             <FormItem className="flex-1">
               <FormLabel>Telefone</FormLabel>
-              <Input className="border-black bg-white" placeholder="00 00000-0000" {...registerWithMask('phone', ['99 99999-9999'], { required: true, autoUnmask: true, })} />
+              <Input
+                className="border-black bg-white"
+                placeholder="00 00000-0000"
+                {...registerWithMask('phone', ['99 99999-9999'], {
+                  required: false,
+                  autoUnmask: true,
+                  setValueAs: (val) => {
+                    // Trata valores "mascarados" vazios como null
+                    return val?.trim() === '' || val?.includes('_') ? null : val;
+                  },
+                })}
+              />
               <FormMessage />
             </FormItem>
           </div>

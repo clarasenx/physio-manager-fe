@@ -76,7 +76,7 @@ export const CalendarDay = ({ date, events, index, isCurrentMonth }: ICalendarDa
   return (
     <div className={`bg-[${indexOfEndWeek.includes(index) ? '#F6F5F2' : '#F9F7F3'}] ${isCurrentMonth ? '' : 'opacity-70'} py-1 relative h-[110px] ${isCurrentDate ? 'border border-[#9b7b61]/50' : ''}`} onPointerEnter={() => setIsHover(true)} onPointerLeave={() => setIsHover(false)}>
       <div className="text-xxs text-[#2D231C] font-semibold text-right mr-3">{date.getDate()}</div>
-      <div className="overflow-auto max-h-[80px] seu-container px-1">
+      <div className="overflow-auto max-h-[80px] seu-container py-0.5 pb-2 px-1">
         {events.map(event => (
           <EventCard key={event.id} event={event} isCurrentMonth={isCurrentMonth} />
         ))}

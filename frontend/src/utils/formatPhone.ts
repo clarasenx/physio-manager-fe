@@ -1,5 +1,5 @@
-export function formatPhone(numero?: string): string {
-  if(!numero) return 'Telefone não definido'
+export function formatPhone(numero?: string | null): string {
+  if(!numero) return 'Não definido'
   const limpo = numero.replace(/\D/g, '');
 
   if (limpo.length !== 11) {
