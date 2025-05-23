@@ -69,6 +69,7 @@ export const PatientDetails = ({
 }) => {
 
   const formatedDate = getFormatedDate(patient.lastCompletedAppointment?.date)
+  const formatedDateBirthday = getFormatedDate(patient.birthday)
   const age = calculateAge(patient.birthday)
 
   return (
@@ -80,25 +81,34 @@ export const PatientDetails = ({
         </button>
       </div>
       <div className='bg-white flex flex-col gap-2 px-4 py-3 rounded-lg'>
-        <div>
-          <p className='font-semibold line-clamp-1'>Idade</p>
-          <p className='line-clamp-1'>{age}</p>
-        </div>
-        <div>
-          <p className='font-semibold line-clamp-1 t'>Telefone</p>
-          <p className='line-clamp-1'>{patient.phone}</p>
-        </div>
+        {
+          patient.birthday &&
+          <div>
+            <p className='font-semibold line-clamp-1'>Data de Nascimento</p>
+            <p className='line-clamp-1'>{formatedDateBirthday} ({age} Anos)</p>
+          </div>
+        }
+        {
+          patient.phone &&
+          <div>
+            <p className='font-semibold line-clamp-1 t'>Telefone</p>
+            <p className='line-clamp-1'>{formatPhone(patient.phone)}</p>
+          </div>
+        }
         <div>
           <p className='font-semibold line-clamp-1'>Última consulta</p>
           <p className='line-clamp-1'>{formatedDate}</p>
         </div>
-        <div>
-          <p className='font-semibold line-clamp-1'>Email</p>
-          <p className='line-clamp-1'>{patient.email}</p>
-        </div>
+        {
+          patient.email &&
+          <div>
+            <p className='font-semibold line-clamp-1'>Email</p>
+            <p className='line-clamp-1'>{patient.email}</p>
+          </div>
+        }
       </div>
 
-      <ListAppointmentByPatient patientId={patient.id}/>
+      <ListAppointmentByPatient patientId={patient.id} />
     </section>
   )
 }
@@ -126,8 +136,8 @@ export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
               <p className='text-[#82654C] w-fit font-semibold'>Última consulta:</p>
               <p>{formatedDateLastAppointment}</p>
             </div>
-            
-            <ListAppointmentByPatient isMobile patientId={patient.id}/>
+
+            <ListAppointmentByPatient isMobile patientId={patient.id} />
 
             <div className="flex justify-center gap-2">
               <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">

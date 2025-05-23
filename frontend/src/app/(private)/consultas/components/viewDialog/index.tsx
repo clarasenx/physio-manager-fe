@@ -48,11 +48,13 @@ export const ConsultaViewDialog = ({
         </div>
         {
           appointment.notes &&
-          <p>Anotações da consulta: <br /> <i>{appointment.notes}</i></p>
+          <div>
+            <p>Anotações da consulta:</p>
+            <p className="px-2 py-1 rounded underline  underline-offset-4"><i>{appointment.notes}</i></p>
+          </div>
         }
-
         <DialogFooter>
-          <p className="text-sm">Registrada em {getFormatedDate(appointment.createdAt, true)}</p>
+          <p className="text-sm mt-2">Registrada em {getFormatedDate(appointment.createdAt, true)}</p>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { Paginator } from "@/components/Paginator";
 import { AppointmentStatus } from "@/enum/appointment-status.enum";
 import { useAppointment } from "@/hooks/useAppointment";
 import { getFormatedDate } from "@/utils/getFormatedDate";
@@ -14,7 +15,7 @@ export const ListAppointmentByPatient = ({
 }) => {
 
 
-
+  const [page, setPage] = useState<number>(1)
   const [activeToggleInicial, setActiveToggleInicial] = useState(1);
   const toggleInicial = [
     { id: 1, label: "Agendadas" },
@@ -24,7 +25,7 @@ export const ListAppointmentByPatient = ({
   const status = activeToggleInicial === 1
     ? AppointmentStatus.SCHEDULED
     : AppointmentStatus.COMPLETED
-  const appointment = useAppointment({ patientId, status })
+  const appointment = useAppointment({ patientId, status, perPage: 4, page })
 
   return (
     <div className='flex flex-col items-center justify-center py-3 gap-3'>
@@ -53,21 +54,32 @@ export const ListAppointmentByPatient = ({
           <p>Tratamento</p>
           <p>Data</p>
         </div>
-        <section className={`px-2 w-[250px] sm:px-4 pb-2 text-sm rounded-b-lg ${!isMobile ? 'bg-white' : 'bg-[#F1EDE3]'} `}>
+        <section className={`px-2 lg:w-[250px] xl:w-[300px] 2xl:w-[350px] sm:px-4 pb-2 text-sm rounded-b-lg ${!isMobile ? 'bg-white' : 'bg-[#F1EDE3]'} `}>
           {
             appointment.isLoading ?
-            <div className="w-full flex py-3 justify-center items-center">
-              <CircularProgress /> 
-            </div>
-             :
+              <div className="w-full flex py-3 justify-center items-center">
+                <CircularProgress />
+              </div>
+              :
               appointment.isError ? <ErrorMessage name="consultas" refetch={appointment.refetch} isLoading={appointment.isFetching} /> :
-                !appointment.data?.data.length ? <p className="px-5 py-3">Este paciente não possui <br /> consultas {toggleInicial.find(t => t.id === activeToggleInicial)?.label}</p> :
-                  appointment.data.data.map((appointment, index) => (
-                    <div key={`appointment-patient-${index}${isMobile}`} className='grid grid-cols-2 items-center pt-3 gap-6'>
-                      <p className='text-wrap'>{appointment.appointmentType?.name}</p>
-                      <p>{getFormatedDate(appointment.date)}</p>
+                !appointment.data?.data.length ? <p className="px-5 py-3 text-center">Este paciente não possui <br /> consultas {toggleInicial.find(t => t.id === activeToggleInicial)?.label}</p> :
+                  <>
+                    {
+                      appointment.data.data.map((appointment, index) => (
+                        <div key={`appointment-patient-${index}${isMobile}`} className='grid grid-cols-2 items-center pt-3 gap-6'>
+                          <p className='text-wrap'>{appointment.appointmentType?.name}</p>
+                          <p>{getFormatedDate(appointment.date)}</p>
+                        </div>
+                      ))
+                    }
+                    <div className='w-full flex items-end mt-5'>
+                      <Paginator
+                        page={page}
+                        setPage={setPage}
+                        hasMore={appointment.data?.meta.hasMore || false}
+                      />
                     </div>
-                  ))
+                  </>
           }
         </section>
       </div>

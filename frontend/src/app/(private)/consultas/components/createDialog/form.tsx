@@ -29,7 +29,6 @@ import { danger } from "@/constants/ToastStyle"
 import { CreateAppointmentSchema, CreateAppointmentType } from "@/dtos/appointment/create-appointment.dto"
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
-import { appointmentKey } from "@/hooks/useAppointment"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -42,6 +41,8 @@ import { CalendarIcon, Check } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
+import { appointmentKey } from "@/hooks/useAppointment"
 
 export const ConsultaCreateForm = ({
   closeModal,
@@ -90,6 +91,9 @@ export const ConsultaCreateForm = ({
 
       queryClient.refetchQueries({
         queryKey: [ appointmentKey ]
+      })
+      queryClient.refetchQueries({
+        queryKey: [ appointmentInfiniteKey ]
       })
 
       setIsLoading(false)
