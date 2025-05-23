@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LuCirclePlus } from 'react-icons/lu';
 import { Button } from "@/components/ui/button"
 import { AppointmentStatus } from '@/enum/appointment-status.enum';
@@ -7,11 +7,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ConsultaCreateDialog } from './components/createDialog';
 import { ListAppointmentType } from '@/dtos/appointment/list-appointment.dto';
-import { useAppointment } from '@/hooks/useAppointment';
 import { groupAppointmentsByDate, groupAppointmentsByMonth } from '@/utils/appointmentUtils';
 import { Scheduler } from '@/components/scheduler';
 import { AppointmentSection } from './components/appointmentSection';
 import { AppointmentType } from '@/dtos/appointment/appointment.schema';
+import { useInfiniteAppointment } from '@/hooks/useInfinityAppointment';
+import { InfiniteData } from '@tanstack/react-query';
+import { StatusView } from '@/constants/StatusView';
 
 
 export default function Consultas() {
@@ -31,11 +33,11 @@ export default function Consultas() {
 
   const appointmentStatus = toggleConsultas.find(t => t.id === activeToggleConsultas)?.status
 
-  const appointments = useAppointment({ status: appointmentStatus })
+  const appointments = useInfiniteAppointment({ status: appointmentStatus, perPage: 10 })
 
   function Loading() {
     return (
-      <div className='lex flex-col gap-3 py-4 px-3 md:px-6 w-full'>
+      <div className='lex flex-col gap-3 py-4 w-full'>
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
         <Skeleton className="w-full mt-2 h-[90px] rounded-lg" />
@@ -45,7 +47,6 @@ export default function Consultas() {
       </div>
     )
   }
-
 
   return (
     <div className='w-full max-h-dvh px-4 sm:px-8'>
@@ -123,15 +124,27 @@ export default function Consultas() {
                   </div>
                 </div>
 
-                <div className='w-full max-h-[63dvh] md:max-h-[73dvh] my-2 overflow-auto'>
+                <div className='w-full max-h-[63dvh] md:max-h-[73dvh] my-2 px-3 md:px-6 overflow-auto flex flex-col'>
 
                   {/*Seção das consultas do dia*/}
                   {
-                    appointments.isLoading ? <Loading /> :
-                      appointments.isError ? <ErrorMessage name='consultas' refetch={appointments.refetch} isLoading={appointments.isFetching} /> :
-                        activeToggleConsultas === 1 ?
-                          <ConsultasAgendadas appointments={appointments.data} /> :
-                          <ConsultasConcluidasECanceladas appointments={appointments.data?.data || []} status={activeToggleConsultas === 2 ? 'concluída' : 'cancelada'} />
+
+                    appointments.isLoading ?
+                      <Loading /> :
+                      appointments.isError ?
+                        <ErrorMessage name='consultas' refetch={appointments.refetch} isLoading={appointments.isFetching} /> :
+                        appointments.data ?
+                          <AppointmentList appointmentData={appointments.data} status={toggleConsultas.find(t => t.id === activeToggleConsultas)!.status} /> : <></>
+
+                  }
+                  {
+                    !appointments.isLoading && appointments.data?.pages[appointments.data?.pages.length - 1].meta.hasMore ?
+                      <Button
+                        className='ml-auto mt-4'
+                        variant={'outline'}
+                        onClick={() => appointments.fetchNextPage()}
+                        isLoading={appointments.isFetchingNextPage}
+                      >Ver Mais</Button> : <></>
                   }
                 </div>
 
@@ -148,10 +161,32 @@ export default function Consultas() {
   )
 }
 
-function ConsultasAgendadas({ appointments }: { appointments?: ListAppointmentType }) {
-  const grouped = groupAppointmentsByDate(appointments?.data || [])
+function AppointmentList({
+  appointmentData,
+  status
+}: {
+  appointmentData: InfiniteData<ListAppointmentType, unknown>
+  status: AppointmentStatus
+}) {
+  const appointments = useMemo(() => appointmentData.pages.map(a => a.data).flat(), [appointmentData])
+  const statusView = StatusView[status].toLowerCase()
+  
+  if(!appointments.length) {
+    return <p>Nenhuma consulta {statusView}</p>
+  }
+  
+  if(status === AppointmentStatus.SCHEDULED) {    
+    return <ConsultasAgendadas appointments={appointments} />
+  }
+
+  return <ConsultasConcluidasECanceladas appointments={appointments} status={statusView} />
+}
+
+function ConsultasAgendadas({ appointments }: { appointments?: AppointmentType[] }) {
+  const grouped = groupAppointmentsByDate(appointments || [])
   return (
     <>
+      <AppointmentSection title="Consultas Agendadas Não Realizadas" items={grouped.past} />
       <AppointmentSection title="Para hoje" items={grouped.today} />
       <AppointmentSection title="Para esta semana" items={grouped.thisWeek} />
       <AppointmentSection title="Para este mês" items={grouped.thisMonth} />

@@ -44,9 +44,6 @@ export const Scheduler = () => {
   const rangeMonth = useMemo(() => {
     const monthDays = days
 
-    console.log('pc');
-
-
     const initial = new Date(monthDays[0].date)
     initial.setHours(0, 0, 0, 0)
 
@@ -112,7 +109,8 @@ function Calendar({
 
   const appointment = useAppointment({
     initialDate: rangeMonth.initial,
-    finalDate: rangeMonth.final
+    finalDate: rangeMonth.final,
+    perPage: 500
   })
 
   return (
