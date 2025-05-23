@@ -1,40 +1,65 @@
+'use client'
+
+import { useUser } from "@/hooks/useUser";
+import { UserDataCell } from "./components/cell";
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { UserDialog } from "./components/formDialog";
+
 const Usuario = () => {
+
+  const user = useUser()
+
+  if (user.isError) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <ErrorMessage name="dados do usuário" refetch={user.refetch} />
+      </div>
+    )
+  }
+
+  function Loading() {
+    return (
+      <>
+        <Skeleton className="h-7 mt-1 w-full" />
+        <Skeleton className="h-7 mt-1 w-full" />
+        <Skeleton className="h-7 mt-1 mb-2 w-full" />
+      </>
+    )
+  }
+
   return (
     <div className='w-full md:w-[700px] mx-auto flex flex-col gap-4 px-4 sm:px-8 pt-5'>
       <section className='flex px-4 py-3'>
-        <p className='leading-4'>Bem vinda,
-          <br /><span className='font-semibold text-xl text-[#2D231C]'>Rafaella Kalena</span>
-        </p>
+        {
+          user.isPending ? <Skeleton className="w-40 h-7" /> :
+            <p className='leading-4'>Bem vinda, <br />
+              <span className='font-semibold text-xl text-[#2D231C]'>{user.data?.name}</span>
+            </p>
+        }
       </section>
 
       <section className='bg-white flex flex-col rounded-2xl'>
-        <div className='bg-[#9C7C5A] px-4 py-2 rounded-t-2xl w-full '>
+        <div className='bg-primary px-4 py-2 rounded-t-2xl w-full '>
           <p className='font-medium text-lg text-center text-white'>Dados pessoais</p>
         </div>
 
         <section className='flex flex-col gap-2 px-4 py-2'>
-          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
-            <p className='text-sm sm:text-base sm:font-medium'>Nome:</p>
-            <p className='font-medium sm:font-normal line-clamp-1'>Rafaella Kalena</p>
-          </div>
-          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
-            <p className='text-sm sm:text-base sm:font-medium'>Email:</p>
-            <p className='font-medium sm:font-normal line-clamp-1'>rafaKalenasouza@gmail.com</p>
-          </div>
-          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
-            <p className='text-sm sm:text-base sm:font-medium'>CPF:</p>
-            <p className='font-medium sm:font-normal line-clamp-1'>111.222.333.44</p>
-          </div>
-          <div className='flex flex-col sm:flex-row justify-between py-1 border-b border-[#6A5242]/45'>
-            <p className='text-sm sm:text-base sm:font-medium'>Senha:</p>
-            <p className='font-medium sm:font-normal line-clamp-1'>*******</p>
-          </div>
+          {
+            user.isPending ? <Loading /> :
+              <>
+                <UserDataCell label="Nome" data={user.data?.name || ''} />
+                <UserDataCell label="Email" data={user.data?.email || ''} />
+                <UserDataCell label="CPF" data={user.data?.register || ''} />
+                <UserDialog user={user.data}>
+                  <Button className="w-fit mx-auto mt-2">Alterar dados</Button>
+                </UserDialog>
+              </>
+
+          }
         </section>
 
-        <div className='flex justify-center py-2'>
-          <button className='w-fit px-3 bg-[#9C7C5A] rounded-lg text-sm xs:text-base lg:text-lg sm:px-4 sm:py-1 text-white cursor-pointer shadow'>Alterar dados</button>
-        </div>
-        
       </section>
     </div>
   )
