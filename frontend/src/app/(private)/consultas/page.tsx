@@ -51,7 +51,19 @@ export default function Consultas() {
   return (
     <div className='w-full max-h-dvh px-4 sm:px-8'>
       {/* toggle Consultas/Calendario */}
-      <section className='flex justify-center px-4 mt-2 sm:mt-6'>
+      <section className='flex flex-col gap-3 lg:flex-row items-center lg:justify-between px-4 mt-2 sm:mt-6'>
+        <div className='flex justify-between w-full lg:w-auto order-2 lg:order-none items-center'>
+          <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
+          {
+            activeToggleInicial === 1 ?
+              <div className='sm:hidden'>
+                <ConsultaCreateDialog>
+                  <Button><LuCirclePlus />Nova Consulta</Button>
+                </ConsultaCreateDialog>
+              </div>
+              : <></>
+          }
+        </div>
         <div className="relative inline-flex bg-white rounded-full p-1">
           {/* Indicador deslizante */}
           <div
@@ -72,22 +84,12 @@ export default function Consultas() {
             </button>
           ))}
         </div>
+        <div className='hidden lg:block w-[122px] h-1'></div>
       </section>
 
       {/* Seção consultas */}
       <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 '>
-        <div className='flex justify-between w-full items-center'>
-          <h2 className='text-2xl text-center md:text-start font-medium'>Consultas</h2>
-          {
-            activeToggleInicial === 1 ?
-              <div className='sm:hidden'>
-                <ConsultaCreateDialog>
-                  <Button><LuCirclePlus />Nova Consulta</Button>
-                </ConsultaCreateDialog>
-              </div>
-              : <></>
-          }
-        </div>
+        
 
 
         <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 px-2 sm:px-4 shadow'>
@@ -124,7 +126,7 @@ export default function Consultas() {
                   </div>
                 </div>
 
-                <div className='w-full max-h-[63dvh] md:max-h-[73dvh] my-2 px-3 md:px-6 overflow-auto flex flex-col'>
+                <div className='w-full max-h-[54dvh] lg:max-h-[73dvh] my-2 px-3 md:px-6 overflow-auto flex flex-col'>
 
                   {/*Seção das consultas do dia*/}
                   {
@@ -186,7 +188,7 @@ function ConsultasAgendadas({ appointments }: { appointments?: AppointmentType[]
   const grouped = groupAppointmentsByDate(appointments || [])
   return (
     <>
-      <AppointmentSection title="Consultas Agendadas Não Realizadas" items={grouped.past} />
+      <AppointmentSection title="Consultas Não Realizadas" items={grouped.past} />
       <AppointmentSection title="Para hoje" items={grouped.today} />
       <AppointmentSection title="Para esta semana" items={grouped.thisWeek} />
       <AppointmentSection title="Para este mês" items={grouped.thisMonth} />

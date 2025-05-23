@@ -1,6 +1,6 @@
 import api from "@/api/axios"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { CalendarWithSelect } from "@/components/ui/calendarWithSelect"
 import {
   Form,
   FormControl,
@@ -52,7 +52,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
 
     const payload = { ...data }
 
-    if(!payload.email) delete payload.email
+    if (!payload.email) delete payload.email
 
     if (patient) {
       Object.entries(data).forEach(([key, value]) => {
@@ -150,11 +150,15 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
+                      <CalendarWithSelect
+                        weekStartsOn={0}
                         mode="single"
+                        captionLayout="dropdown-buttons"
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
+                        fromYear={1925}
+                        toYear={new Date().getFullYear()}
                       />
                     </PopoverContent>
                   </Popover>

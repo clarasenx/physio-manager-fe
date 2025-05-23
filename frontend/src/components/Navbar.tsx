@@ -46,8 +46,8 @@ const Navbar = () => {
       <div className='flex flex-col sm:items-center z-40'>
         <Image src={Logo} alt='Logo do site' className='hidden lg:flex w-13 sm:mt-3' />
 
-        <div className='flex fixed right-0 left-0 bottom-0 py-3 lg:py-6 lg:static'>
-          <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center sm:justify-between sm:mt-4 shadow-md">
+        <div className='flex fixed right-0 left-0 bottom-0 shadow-[-4px_-4px_5px_rgba(0,0,0,0.1)] lg:shadow-none py-1 lg:py-6 lg:static'>
+          <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center sm:justify-between lg:mt-4 shadow-md">
             {navItems.map((item) => (
               <button
                 key={item.id}
