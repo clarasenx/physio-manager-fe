@@ -30,7 +30,7 @@ export default function Tratamentos() {
         </div>
       </div>
       <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 sm:px-4 shadow'>
-        <div className='w-full flex flex-col xs:flex-row justify-center gap-2'>
+        <div className='w-full flex flex-col xs:flex-row justify-center gap-2 px-2'>
           <SearchInput onChange={setSearch} />
           <div className='hidden sm:block'>
             <TratamentoDialog>
