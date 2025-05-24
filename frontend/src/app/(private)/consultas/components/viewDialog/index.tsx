@@ -15,14 +15,22 @@ import { ReactNode } from "react"
 
 export const ConsultaViewDialog = ({
   appointment,
-  children
+  children,
+  closeMenu
 }: {
   appointment: AppointmentType,
   children: ReactNode
+  closeMenu: () => void
 }) => {
 
+  const handleOpen = (open: boolean) => {
+    if (!open) {
+      closeMenu()
+    }
+  }
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
@@ -34,7 +42,7 @@ export const ConsultaViewDialog = ({
         <p>Tratamento: <b>{appointment.appointmentType?.name}</b></p>
         <p>Telefone do paciente: <b>{formatPhone(appointment.patient?.phone)}</b></p>
         <p>Data da consulta: <b>{getFormatedDate(appointment.date, true)}</b></p>
-        <p>Status: <b>{StatusView[appointment.status]}</b></p>
+        <p>Status: <b>{StatusView[ appointment.status ]}</b></p>
         <div className="flex gap-10">
           {
             appointment.initialDiscomfort &&

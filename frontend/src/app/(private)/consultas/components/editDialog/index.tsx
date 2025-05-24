@@ -5,9 +5,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { ReactNode, useState } from "react"
 import { ConsultaEditForm } from "./form"
-import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 
 export const ConsultaEditDialog = ({
@@ -19,10 +19,17 @@ export const ConsultaEditDialog = ({
   children: ReactNode
   closeMenu: () => void
 }) => {
-  const [openDialog, setOpenDialog] = useState(false)
+  const [ openDialog, setOpenDialog ] = useState(false)
+
+  const handleOpen = (open: boolean) => {
+    setOpenDialog(open)
+    if (!open) {
+      closeMenu()
+    }
+  }
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog open={openDialog} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
