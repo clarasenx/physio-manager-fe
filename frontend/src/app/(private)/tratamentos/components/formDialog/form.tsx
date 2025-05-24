@@ -90,8 +90,7 @@ export const TratamentoForm = ({ closeModal, tratamento }: TratamentoFormProps) 
               )}
             />
           </div>
-          <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant="secondary" onClick={closeModal}>Cancelar</Button>
+          <div className="flex justify-end mt-6">
             <Button type="submit" isLoading={isLoading}>
               {tratamento?.id ? 'Salvar' : 'Criar'}
             </Button>

@@ -62,7 +62,7 @@ export const AppointmentMenu = ({
 
   return (
     <div ref={menuRef} className={'w-[175px] z-100 flex flex-col absolute shadow-lg p-1 rounded-lg ' + className}>
-      <ConsultaViewDialog appointment={appointment}>
+      <ConsultaViewDialog appointment={appointment} closeMenu={() => setMenuAberto(false)}>
         <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
           <PiEyeBold />
           <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Visualizar consulta</p>
@@ -85,14 +85,14 @@ export const AppointmentMenu = ({
       </ConsultaEditDialog>
       {
         appointment.status === AppointmentStatus.SCHEDULED ?
-          <ConsultaCancelDialog appointment={appointment}>
+          <ConsultaCancelDialog appointment={appointment} closeMenu={() => setMenuAberto(false)}>
             <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
               <LuX />
               <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Cancelar consulta</p>
             </button>
           </ConsultaCancelDialog> :
           appointment.status === AppointmentStatus.CANCELED ?
-            <ConsultaActiveDialog appointment={appointment}>
+            <ConsultaActiveDialog appointment={appointment} closeMenu={() => setMenuAberto(false)}>
               <button className='flex items-center cursor-pointer px-2 py-1 rounded-lg hover:text-white hover:bg-[#6A5242]'>
                 <GrUpdate />
                 <p className='px-2 p-1 cursor-pointer text-[12px] font-medium rounded-lg'>Ativar consulta</p>

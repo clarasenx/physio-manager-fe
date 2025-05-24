@@ -18,13 +18,15 @@ import { toast } from "sonner"
 
 export const ConsultaActiveDialog = ({
   appointment,
-  children
+  children,
+  closeMenu
 }: {
   appointment: AppointmentType,
   children: ReactNode
+  closeMenu: () => void
 }) => {
-  const [openDialog, setOpenDialog] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [ openDialog, setOpenDialog ] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(false)
   const queryClient = useQueryClient()
 
   async function activeAppointment() {
@@ -32,13 +34,13 @@ export const ConsultaActiveDialog = ({
       setIsLoading(true)
 
       await api.patch(`appointment/${appointment.id}/active`)
-      
-      queryClient.invalidateQueries({ queryKey: [appointmentKey], type: 'all' })
-      
+
+      queryClient.invalidateQueries({ queryKey: [ appointmentKey ], type: 'all' })
+
       toast("Consulta ativada com sucesso.")
 
       setIsLoading(false)
-      setOpenDialog(false)
+      handleOpen(false)
     }
     catch {
       setIsLoading(false)
@@ -49,8 +51,15 @@ export const ConsultaActiveDialog = ({
     }
   }
 
+  const handleOpen = (open: boolean) => {
+    setOpenDialog(open)
+    if (!open) {
+      closeMenu()
+    }
+  }
+
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog open={openDialog} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>

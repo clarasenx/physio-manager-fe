@@ -20,8 +20,8 @@ export const PasswordForm = ({
   email: string
 }) => {
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [typeInput, setTypeInput] = useState<'password' | 'text'>('password')
+  const [ isLoading, setIsLoading ] = useState<boolean>(false)
+  const [ typeInput, setTypeInput ] = useState<'password' | 'text'>('password')
 
   const route = useRouter()
 
@@ -127,7 +127,7 @@ export const PasswordForm = ({
 
         <div className="flex justify-end items-center gap-4 mt-2">
           <Button type="submit" isLoading={isLoading} className="rounded-none w-full">
-            Enviar Codigo
+            Salvar Senha
           </Button>
         </div>
       </form>

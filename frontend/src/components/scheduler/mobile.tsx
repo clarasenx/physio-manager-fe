@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from "react"
-import { Calendar } from "../ui/calendar"
 import { useAppointment } from "@/hooks/useAppointment"
+import { useEffect, useMemo, useState } from "react"
 import CardConsulta from "../cards/Consultas/CardConsultas"
+import { Calendar } from "../ui/calendar"
 
-import { ErrorMessage } from "../ErrorMessage"
-import { CircularProgress } from "@mui/material"
-import { Button } from "../ui/button"
-import { LuCirclePlus } from "react-icons/lu"
 import { ConsultaCreateDialog } from '@/app/(private)/consultas/components/createDialog'
-import { IRangeDate } from "."
-import { isSameDay } from "date-fns"
 import { AppointmentType } from "@/dtos/appointment/appointment.schema"
+import { CircularProgress } from "@mui/material"
+import { isSameDay } from "date-fns"
+import { LuCirclePlus } from "react-icons/lu"
+import { IRangeDate } from "."
+import { ErrorMessage } from "../ErrorMessage"
+import { Button } from "../ui/button"
 
 export const AppointmentMobile = ({
   month,
@@ -21,16 +21,17 @@ export const AppointmentMobile = ({
   setMonth: (m: Date) => void
   rangeMonth: IRangeDate
 }) => {
-  const [daySelected, setDaySelected] = useState<Date>(new Date())
+  const [ daySelected, setDaySelected ] = useState<Date>(new Date())
 
   const appointment = useAppointment({
+    perPage: 500,
     initialDate: rangeMonth.initial,
     finalDate: rangeMonth.final
   })
 
   useEffect(() => {
     setDaySelected(month)
-  }, [month])
+  }, [ month ])
 
   return (
     <div className="w-full flex items-center flex-col">
@@ -72,7 +73,7 @@ function AppointmentList({
       const date = new Date(a.date)
       return isSameDay(date, currentDay)
     })
-  }, [appointments, currentDay])
+  }, [ appointments, currentDay ])
 
   return (
     <>

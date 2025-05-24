@@ -28,7 +28,7 @@ type UserFormProps = {
 
 export const UserForm = ({ closeModal, user }: UserFormProps) => {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const form = useForm<UpdateUserType>({
     resolver: zodResolver(UpdateUserSchema),
@@ -45,12 +45,12 @@ export const UserForm = ({ closeModal, user }: UserFormProps) => {
 
     const payload = { ...data }
 
-    Object.entries(data).forEach(([key, value]) => {
+    Object.entries(data).forEach(([ key, value ]) => {
 
-      if (user[key as keyof typeof user] !== value) {
+      if (user[ key as keyof typeof user ] !== value) {
         return;
       }
-      delete payload[key as keyof typeof payload]
+      delete payload[ key as keyof typeof payload ]
     });
 
     if (Object.keys(payload).length === 0) {
@@ -64,7 +64,7 @@ export const UserForm = ({ closeModal, user }: UserFormProps) => {
       await api.patch(`user/${user.id}`, payload);
       toast("Paciente atualizado com sucesso.");
 
-      queryClient.invalidateQueries({ queryKey: [userKey], type: 'all' });
+      queryClient.invalidateQueries({ queryKey: [ userKey ], type: 'all' });
       closeModal();
     } catch {
       toast("Ocorreu uma falha ao salvar.", {
@@ -107,7 +107,7 @@ export const UserForm = ({ closeModal, user }: UserFormProps) => {
             <FormLabel>CPF</FormLabel>
             <Input
               className="border-black bg-white"
-              {...registerWithMask('register', ['999.999.999-99'], {
+              {...registerWithMask('register', [ '999.999.999-99' ], {
                 required: false,
                 autoUnmask: true,
                 setValueAs: (val) => {
@@ -120,11 +120,10 @@ export const UserForm = ({ closeModal, user }: UserFormProps) => {
           </FormItem>
           <div className="flex justify-end items-center gap-4 mt-6">
             <Link href={'/recuperar-senha'} className='w-fit my-3 mr-auto hover:cursor-pointer text-primary text-center'>
-            <Button variant={'outline'}>
-              Alterar Senha
-            </Button>
+              <Button variant={'outline'}>
+                Alterar Senha
+              </Button>
             </Link>
-            <Button type="button" variant="secondary" onClick={closeModal}>Cancelar</Button>
             <Button type="submit" isLoading={isLoading}>
               {user?.id ? 'Salvar' : 'Criar'}
             </Button>
