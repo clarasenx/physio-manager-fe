@@ -92,7 +92,7 @@ export default function Pacientes() {
 
           {/* Cards de paciente individual mobile/telas menores*/}
           <div className='flex flex-col w-full lg:hidden'>
-            <section className='w-full overflow-auto h-fit max-h-[58dvh] md:max-h-[73dvh] flex flex-col gap-3 bg-[#F1EDE3] rounded-md px-2 py-3 sm:p-4'>
+            <section className='w-full overflow-auto h-fit max-h-[56dvh] md:max-h-[73dvh] flex flex-col gap-3 bg-[#F1EDE3] rounded-md px-2 py-3 sm:p-4'>
               {
                 patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
                   <CircularProgress className='mx-auto' />
