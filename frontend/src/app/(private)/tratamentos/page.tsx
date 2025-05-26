@@ -39,7 +39,7 @@ export default function Tratamentos() {
           </div>
         </div>
 
-        <div className='w-full mt-6 flex flex-col gap-4 sm:grid sm:grid-cols-2 px-2 lg:grid-cols-3 xl:grid-cols-4 overflow-auto max-h-[58dvh] md:max-h-[73dvh] sm:items-stretch'>
+        <div className='w-full mt-6 flex flex-col gap-4 sm:grid sm:grid-cols-2 px-2 lg:grid-cols-3 xl:grid-cols-4 overflow-auto max-h-[56dvh] md:max-h-[73dvh] sm:items-stretch'>
           {
             tratamentos.isLoading ? <div className='py-5 flex sm:col-span-full'>
               <CircularProgress className='mx-auto' />

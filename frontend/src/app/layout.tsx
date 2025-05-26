@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} relative w-content bg-[#F6F5F2]`}>
-          <div className="max-h-dvh overflow-auto w-full">
+          <div className="max-h-dvh w-full">
             {children}
           </div>
         <Toaster position="top-right" />

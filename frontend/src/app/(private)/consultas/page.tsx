@@ -88,11 +88,11 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 '>
+      <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 pb-[90px] lg:pb-none'>
         
 
 
-        <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 px-2 sm:px-4 shadow'>
+        <div className='bg-white w-full h-full rounded-lg py-1.5 sm:py-5 px-2 sm:px-4 shadow'>
 
           {
             activeToggleInicial === 1 ? (

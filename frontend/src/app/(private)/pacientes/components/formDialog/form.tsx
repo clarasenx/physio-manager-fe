@@ -156,7 +156,6 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
                         captionLayout="dropdown-buttons"
                         selected={field.value}
                         onSelect={field.onChange}
-                        initialFocus
                         fromYear={1925}
                         toYear={new Date().getFullYear()}
                       />

@@ -20,12 +20,12 @@ const Navbar = () => {
   const router = useRouter();
 
   return (
-    <section className='flex flex-col lg:h-dvh lg:w-36 lg:px-10 lg:py-5 justify-items-center sm:items-center justify-between'>
+    <section className='flex flex-col lg:h-dvh lg:w-36 lg:px-10 lg:py-5 justify-items-center lg:items-center justify-between'>
 
 
-      <div className="flex lg:hidden items-center pl-4 pr-2 sm:pl-8 sm:pr-5 py-1 justify-between w-full shadow-md">
+      <div className="flex fixed top-0 z-40 lg:hidden bg-[#F6F5F2] items-center pl-4 pr-2 lg:pl-8 lg:pr-5 py-1 justify-between w-full shadow-md">
         <Image src={Logo} alt='Logo do site' className='w-10 h-10' />
-        <div className="flex items-center justify-between py-2 gap-1 sm:gap-5">
+        <div className="flex items-center justify-between py-2 gap-1 lg:gap-5">
           <button
             onClick={() => {
               router.push('/usuario')
@@ -43,11 +43,11 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className='flex flex-col sm:items-center z-40'>
-        <Image src={Logo} alt='Logo do site' className='hidden lg:flex w-13 sm:mt-3' />
+      <div className='flex flex-col lg:items-center z-40'>
+        <Image src={Logo} alt='Logo do site' className='hidden lg:block w-13 lg:mt-3' />
 
-        <div className='flex fixed right-0 left-0 bottom-0 shadow-[-4px_-4px_5px_rgba(0,0,0,0.1)] lg:shadow-none py-1 lg:py-6 lg:static'>
-          <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center sm:justify-between lg:mt-4 shadow-md">
+        <div className='flex fixed w-full right-0 left-0 bg-[#F6F5F2] bottom-0 visible shadow-[-4px_-4px_5px_rgba(0,0,0,0.1)] lg:shadow-none py-1 lg:py-6 lg:static'>
+          <div className="flex mx-auto lg:flex-col lg:h-[240px] lg:w-[60px] bg-[#ece2c9] rounded-full items-center lg:justify-between lg:mt-4 shadow-md">
             {navItems.map((item) => (
               <button
                 key={item.id}
