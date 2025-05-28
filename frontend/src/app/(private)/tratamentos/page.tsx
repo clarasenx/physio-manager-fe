@@ -17,10 +17,10 @@ export default function Tratamentos() {
 
   const auxSearch = useDebounce(search, 700)
 
-  const tratamentos = useTratamento({ name: auxSearch })
+  const tratamentos = useTratamento({ name: auxSearch, page, perPage: 16 })
 
   return (
-    <section className='w-full flex flex-col gap-4 px-4 sm:px-8 mt-4 sm:mt-10'>
+    <section className='w-full flex flex-col gap-4 px-4 sm:px-8 mt-4 sm:mt-10 my-3 sm:my-6'>
       <div className='flex justify-between w-full items-center'>
         <h2 className='text-2xl font-medium'>Tratamentos</h2>
         <div className='sm:hidden'>
@@ -29,8 +29,8 @@ export default function Tratamentos() {
           </TratamentoDialog>
         </div>
       </div>
-      <div className='bg-white w-full h-full rounded-lg py-5 px-4 shadow'>
-        <div className='w-full flex flex-col xs:flex-row justify-center gap-2'>
+      <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 sm:px-4 shadow'>
+        <div className='w-full flex flex-col xs:flex-row justify-center gap-2 px-2'>
           <SearchInput onChange={setSearch} />
           <div className='hidden sm:block'>
             <TratamentoDialog>
@@ -39,7 +39,7 @@ export default function Tratamentos() {
           </div>
         </div>
 
-        <div className='w-full mt-6 flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 overflow-auto max-h-[63dvh] md:max-h-[73dvh] sm:items-stretch py-1'>
+        <div className='w-full mt-6 flex flex-col gap-4 sm:grid sm:grid-cols-2 px-2 lg:grid-cols-3 xl:grid-cols-4 overflow-auto max-h-[56dvh] md:max-h-[73dvh] sm:items-stretch'>
           {
             tratamentos.isLoading ? <div className='py-5 flex sm:col-span-full'>
               <CircularProgress className='mx-auto' />
@@ -52,13 +52,13 @@ export default function Tratamentos() {
                     <CardTratamentos key={`cardsTratamento${tratamento.id}`} tratamento={tratamento} />
                   ))
           }
-        </div>
-        <div className='w-full flex items-end mt-5'>
-          <Paginator
-            page={page}
-            setPage={setPage}
-            hasMore={tratamentos.data?.meta.hasMore || false}
-          />
+          <div className='w-full flex items-end mt-2 sm:mt-5'>
+            <Paginator
+              page={page}
+              setPage={setPage}
+              hasMore={tratamentos.data?.meta.hasMore || false}
+            />
+          </div>
         </div>
       </div>
     </section>

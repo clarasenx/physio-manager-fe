@@ -35,7 +35,7 @@ export default function Pacientes() {
         </div>
       </div>
 
-      <div className='bg-white w-full h-full rounded-lg py-5 px-4 shadow'>
+      <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 px-2 sm:px-4 shadow'>
         <div className='w-full flex justify-center gap-2'>
           <SearchInput onChange={setSearch} />
 
@@ -92,7 +92,7 @@ export default function Pacientes() {
 
           {/* Cards de paciente individual mobile/telas menores*/}
           <div className='flex flex-col w-full lg:hidden'>
-            <section className='w-full overflow-auto h-fit max-h-[59dvh] md:max-h-[73dvh] flex flex-col gap-3 bg-[#F1EDE3] rounded-md px-2 py-3 sm:p-4'>
+            <section className='w-full overflow-auto h-fit max-h-[56dvh] md:max-h-[73dvh] flex flex-col gap-3 bg-[#F1EDE3] rounded-md px-2 py-3 sm:p-4'>
               {
                 patient.isLoading ? <div className='py-5 flex sm:col-span-full'>
                   <CircularProgress className='mx-auto' />
@@ -106,14 +106,14 @@ export default function Pacientes() {
                         <CardPatientMobile key={`patient-mobile-${index}`} patient={patient} />
                       ))
               }
+              <div className='w-full flex items-end mt-2'>
+                <Paginator
+                  page={page}
+                  setPage={setPage}
+                  hasMore={patient.data?.meta.hasMore || false}
+                />
+              </div>
             </section>
-            <div className='w-full flex items-end mt-5'>
-              <Paginator
-                page={page}
-                setPage={setPage}
-                hasMore={patient.data?.meta.hasMore || false}
-              />
-            </div>
           </div>
 
           {

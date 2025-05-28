@@ -28,11 +28,12 @@ import {
 } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { danger } from "@/constants/ToastStyle"
+import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { UpdateAppointmentSchema, UpdateAppointmentType } from "@/dtos/appointment/update-appointment.dto"
 import { AppointmentStatus } from "@/enum/appointment-status.enum"
+import { appointmentKey } from "@/hooks/useAppointment"
 import { useDebounce } from '@/hooks/useDebounce'
 import { usePatient } from "@/hooks/usePatient"
-import { appointmentKey } from "@/hooks/useAppointment"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -45,7 +46,6 @@ import { CalendarIcon, Check } from "lucide-react"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 
 export const ConsultaEditForm = ({
   closeModal,
@@ -317,7 +317,6 @@ export const ConsultaEditForm = ({
                           today.setHours(0, 0, 0, 0)
                           return (date < today)
                         }}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -390,8 +389,7 @@ export const ConsultaEditForm = ({
             >
               <Button type="button" variant={'destructive'}>Apagar</Button>
             </DeleteDialog>
-            <div className="flex justify-end gap-2">
-              <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
+            <div className="flex justify-end">
               <Button type="submit" isLoading={isLoading}>Salvar</Button>
             </div>
           </div>

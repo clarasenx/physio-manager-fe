@@ -5,7 +5,7 @@ import { TodayAppointments } from './components/todayAppointments';
 export default async function Dashboard() {
 
   return (
-    <div className='flex flex-col h-full w-full items-center px-4 sm:px-8 py-4 sm:py-5'>
+    <div className='flex flex-col h-full w-full items-center px-4 sm:px-8 pt-4 max-h-dvh overflow-auto pb-[90px] sm:py-5'>
       {/* Primeira seção, de boas vindas */}
       <section className='flex flex-col w-full items-center md:items-start  text-[#2D231C] pb-5'>
         <p className='text-3xl py-2'>

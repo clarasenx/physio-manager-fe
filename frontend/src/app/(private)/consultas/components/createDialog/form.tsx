@@ -25,9 +25,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Textarea } from '@/components/ui/textarea'
 import { danger } from "@/constants/ToastStyle"
 import { CreateAppointmentSchema, CreateAppointmentType } from "@/dtos/appointment/create-appointment.dto"
+import { appointmentKey } from "@/hooks/useAppointment"
 import { useDebounce } from '@/hooks/useDebounce'
+import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
 import { usePatient } from "@/hooks/usePatient"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
@@ -41,8 +44,6 @@ import { CalendarIcon, Check } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
-import { appointmentKey } from "@/hooks/useAppointment"
 
 export const ConsultaCreateForm = ({
   closeModal,
@@ -245,7 +246,7 @@ export const ConsultaCreateForm = ({
               )}
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10 mb-2">
             <FormField
               control={form.control}
               name="date"
@@ -281,7 +282,6 @@ export const ConsultaCreateForm = ({
                           today.setHours(0, 0, 0, 0)
                           return date < today
                         }}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -298,8 +298,20 @@ export const ConsultaCreateForm = ({
               <FormMessage />
             </FormItem>
           </div>
-          <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant={'secondary'} onClick={() => closeModal()}>Cancelar</Button>
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem className="flex flex-col flex-1">
+                <FormLabel>Notas</FormLabel>
+                <Textarea className="bg-white border-black" placeholder="Escreva suas anotações aqui" {...field} value={field.value ?? undefined} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex justify-end mt-6">
             <Button type="submit" isLoading={isLoading}>Criar</Button>
           </div>
         </form>

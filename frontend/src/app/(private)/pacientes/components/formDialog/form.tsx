@@ -1,6 +1,6 @@
 import api from "@/api/axios"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { CalendarWithSelect } from "@/components/ui/calendarWithSelect"
 import {
   Form,
   FormControl,
@@ -34,7 +34,7 @@ type PatientFormProps = {
 
 export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const form = useForm<CreatePatientType>({
     resolver: zodResolver(CreatePatientSchema),
@@ -52,21 +52,21 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
 
     const payload = { ...data }
 
-    if(!payload.email) delete payload.email
+    if (!payload.email) delete payload.email
 
     if (patient) {
-      Object.entries(data).forEach(([key, value]) => {
+      Object.entries(data).forEach(([ key, value ]) => {
 
         if (
-          patient[key as keyof typeof patient] !== value ||
+          patient[ key as keyof typeof patient ] !== value ||
           (
             value instanceof Date &&
-            value.getTime() !== new Date(patient[key as keyof typeof patient] as Date).getTime()
+            value.getTime() !== new Date(patient[ key as keyof typeof patient ] as Date).getTime()
           )
         ) {
           return;
         }
-        delete payload[key as keyof typeof payload]
+        delete payload[ key as keyof typeof payload ]
       });
     }
 
@@ -83,7 +83,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
         toast("Paciente criado com sucesso.");
       }
 
-      queryClient.invalidateQueries({ queryKey: [patientKey], type: 'all' });
+      queryClient.invalidateQueries({ queryKey: [ patientKey ], type: 'all' });
       closeModal();
     } catch {
       toast("Ocorreu uma falha ao salvar o paciente.", {
@@ -150,11 +150,14 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
+                      <CalendarWithSelect
+                        weekStartsOn={0}
                         mode="single"
+                        captionLayout="dropdown-buttons"
                         selected={field.value}
                         onSelect={field.onChange}
-                        initialFocus
+                        fromYear={1925}
+                        toYear={new Date().getFullYear()}
                       />
                     </PopoverContent>
                   </Popover>
@@ -168,7 +171,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
               <Input
                 className="border-black bg-white"
                 placeholder="00 00000-0000"
-                {...registerWithMask('phone', ['99 99999-9999'], {
+                {...registerWithMask('phone', [ '99 99999-9999' ], {
                   required: false,
                   autoUnmask: true,
                   setValueAs: (val) => {
@@ -180,8 +183,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
               <FormMessage />
             </FormItem>
           </div>
-          <div className="flex justify-end gap-4 mt-6">
-            <Button type="button" variant="secondary" onClick={closeModal}>Cancelar</Button>
+          <div className="flex justify-end mt-6">
             <Button type="submit" isLoading={isLoading}>
               {patient?.id ? 'Salvar' : 'Criar'}
             </Button>

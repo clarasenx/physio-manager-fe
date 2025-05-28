@@ -1,22 +1,37 @@
+import { jwtVerify } from 'jose'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 const publicPaths = [ '/login', '/recuperar-senha' ]
 
-export function middleware(request: NextRequest) {
+async function verifyToken(token: string) {
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+
+    const { payload } = await jwtVerify(token, secret)
+    return payload
+  } catch {
+    return null
+  }
+}
+
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const token = request.cookies.get('token')?.value
 
-  const isPublic = publicPaths.some(publicPath => path.startsWith(publicPath))
+  const isPublic = publicPaths.includes(path)
   const isAuthPage = path === '/login'
 
+  const tokenPayload = token ? await verifyToken(token) : null
+
+
   // Se o usuário NÃO está autenticado e tenta acessar página protegida → redireciona pro login
-  if (!token && !isPublic) {
+  if (!tokenPayload && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Se o usuário ESTÁ autenticado e tenta acessar /login → redireciona para /dashboard  
-  if (token && (isAuthPage || path === "/")) {
+  if (tokenPayload && (isAuthPage || path === "/")) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
