@@ -39,7 +39,7 @@ export const ConsultaViewDialog = ({
           <DialogTitle>Dados da Consulta</DialogTitle>
         </DialogHeader>
         <p>Nome do paciente: <b>{appointment.patient?.name}</b></p>
-        <p>Tratamento: <b>{appointment.appointmentType?.name}</b></p>
+        <p>Tratamento: <b>{appointment.appointmentType ? appointment.appointmentType?.name : 'Indefinido'}</b></p>
         <p>Telefone do paciente: <b>{formatPhone(appointment.patient?.phone)}</b></p>
         <p>Data da consulta: <b>{getFormatedDate(appointment.date, true)}</b></p>
         <p>Status: <b>{StatusView[ appointment.status ]}</b></p>

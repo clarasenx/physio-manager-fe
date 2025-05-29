@@ -22,6 +22,7 @@ interface DeleteDialogProps {
   path: string
   children: ReactNode
   close?: () => void
+  handleError?: (err: unknown) => void
 }
 
 export const DeleteDialog = ({
@@ -30,10 +31,11 @@ export const DeleteDialog = ({
   queryKey,
   path,
   children,
-  close
+  close,
+  handleError
 }: DeleteDialogProps) => {
-  const [ openDialog, setOpenDialog ] = useState(false)
-  const [ isLoading, setIsLoading ] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const queryClient = useQueryClient()
 
   async function deleteTratamento() {
@@ -43,7 +45,7 @@ export const DeleteDialog = ({
       await api.delete(`${path}`)
 
       queryClient.refetchQueries({
-        queryKey: [ queryKey ]
+        queryKey: [queryKey]
       })
 
       toast("Apagado com sucesso.")
@@ -53,8 +55,13 @@ export const DeleteDialog = ({
       setIsLoading(false)
       setOpenDialog(false)
     }
-    catch {
+    catch (err) {
       setIsLoading(false)
+      if (handleError) {
+        setOpenDialog(false)
+        handleError(err)
+        return
+      }
       toast("Ocorreu uma falha ao apagar.", {
         description: "Tente novamente mais tarde",
         style: danger

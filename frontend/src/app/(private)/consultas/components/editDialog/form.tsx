@@ -167,7 +167,7 @@ export const ConsultaEditForm = ({
           </DialogHeader>
           Existe uma ou mais consultas cadastradas perto do intervalo de tempo do horario definido, tem certeza que deseja salvar esta data?
           <DialogFooter>
-            <Button variant={'outline'}>
+            <Button variant={'outline'} onClick={()=> setOpenDialog(false)}>
               Alterar Horario
             </Button>
             <Button variant={'destructive'} onClick={() => onSubmit(form.getValues(), true)}>

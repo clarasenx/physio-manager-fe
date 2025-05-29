@@ -6,6 +6,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { PatientType } from '@/dtos/patient/patient.schema'
 import { formatPhone } from '@/utils/formatPhone'
 import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa'
@@ -16,6 +23,13 @@ import { getFormatedDate } from "@/utils/getFormatedDate"
 import { X } from "lucide-react"
 import { calculateAge } from "@/utils/calculateAge"
 import { ListAppointmentByPatient } from "@/app/(private)/pacientes/components/listAppointmentByPatient"
+import { Button } from "../ui/button"
+import { useState } from "react"
+import { danger } from "@/constants/ToastStyle"
+import { toast } from "sonner"
+import api from "@/api/axios"
+import { useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 
 export const CardPatientTable = ({
   patient,
@@ -34,16 +48,7 @@ export const CardPatientTable = ({
       <td className="p-3">{formatedDate}</td>
       <td className="p-3">
         <div className="flex justify-center gap-2">
-          <DeleteDialog
-            title="Tem certeza que deseja apagar o paciente: "
-            name={patient.name}
-            queryKey={patientKey}
-            path={`/patient/${patient.id}`}
-          >
-            <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-              <FaTrash size={14} />
-            </button>
-          </DeleteDialog>
+          <DeleteButton patient={patient} />
           <button
             onClick={() => setShowPatientDetails(patient)}
             className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
@@ -140,16 +145,96 @@ export const CardPatientMobile = ({ patient }: { patient: PatientType }) => {
             <ListAppointmentByPatient isMobile patientId={patient.id} />
 
             <div className="flex justify-center gap-2">
-              <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                <FaTrash size={14} />
-              </button>
-              <button className="bg-[#E3D4C0] hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
-                <FaPencilAlt size={14} />
-              </button>
+              <DeleteButton patient={patient} />
+
+              <PatientDialog patient={patient}>
+                <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+                  <FaPencilAlt size={14} />
+                </button>
+              </PatientDialog>
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
+  )
+}
+
+function DeleteButton({
+  patient
+}: {
+  patient: PatientType
+}) {
+  const [openDialog, setOpenDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
+
+  const handleError = (err: unknown) => {
+    if (err instanceof AxiosError && err.status === 409) {
+      setOpenDialog(true)
+      return
+    }
+    toast("Ocorreu uma falha ao apagar.", {
+      description: "Tente novamente mais tarde",
+      style: danger
+    })
+  }
+
+  const deletePatientWithAppointments = async () => {
+    try {
+      setIsLoading(true)
+
+      await api.delete(`/patient/${patient.id}`, { params: { delete_appointments: true } })
+
+      queryClient.refetchQueries({
+        queryKey: [patientKey]
+      })
+
+      toast("Paciente e suas consultas foram apagadas com sucesso.")
+
+      setIsLoading(false)
+      setOpenDialog(false)
+    }
+    catch {
+      toast("Ocorreu uma falha ao apagar.", {
+        description: "Tente novamente mais tarde",
+        style: danger
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+
+  return (
+    <>
+      <DeleteDialog
+        title="Tem certeza que deseja apagar o paciente: "
+        name={patient.name}
+        queryKey={patientKey}
+        path={`/patient/${patient.id}`}
+        handleError={handleError}
+      >
+        <button className="bg-[#E3D4C0] cursor-pointer hover:bg-[#6B4A2E] text-[#2D231C] hover:text-white p-2 rounded-lg transition">
+          <FaTrash size={14} />
+        </button>
+      </DeleteDialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-[425px] bg-[#F6F5F2]">
+          <DialogHeader>
+            <DialogTitle>Atenção</DialogTitle>
+          </DialogHeader>
+          Apagar o paciente irá apagar as consultas vinculadas a ele também, deseja prosseguir?
+          <DialogFooter>
+            <Button variant={'outline'} onClick={() => setOpenDialog(false)}>
+              Cancelar
+            </Button>
+            <Button variant={'destructive'} isLoading={isLoading} onClick={deletePatientWithAppointments}>
+              Apagar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

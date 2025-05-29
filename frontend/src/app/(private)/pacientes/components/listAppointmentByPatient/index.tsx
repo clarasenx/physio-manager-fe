@@ -67,7 +67,7 @@ export const ListAppointmentByPatient = ({
                     {
                       appointment.data.data.map((appointment, index) => (
                         <div key={`appointment-patient-${index}${isMobile}`} className='grid grid-cols-2 items-center pt-3 gap-6'>
-                          <p className='text-wrap'>{appointment.appointmentType?.name}</p>
+                          <p className='text-wrap'>{appointment.appointmentType?.name || 'Indefinido'}</p>
                           <p>{getFormatedDate(appointment.date)}</p>
                         </div>
                       ))

@@ -52,7 +52,7 @@ export default function Tratamentos() {
                     <CardTratamentos key={`cardsTratamento${tratamento.id}`} tratamento={tratamento} />
                   ))
           }
-          <div className='w-full flex items-end mt-2 sm:mt-5'>
+          <div className='w-full flex items-end mt-2 sm:mt-5 col-span-2'>
             <Paginator
               page={page}
               setPage={setPage}
