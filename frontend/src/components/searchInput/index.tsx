@@ -3,10 +3,12 @@ import { Input } from "../ui/input"
 
 interface SearchInputProps {
   onChange: (value: string) => void
+  placeholder: string
 }
 
 export const SearchInput = ({
-  onChange
+  onChange,
+  placeholder
 }: SearchInputProps) => {
   return (
     <div className='px-2 h-full w-full flex bg-[#F1EDE3] rounded-lg items-center gap-2 shadow cursor-pointer'>
@@ -15,7 +17,7 @@ export const SearchInput = ({
         noFocusRing
         onChange={(e) => onChange(e.target.value)}
         type="text"
-        placeholder="Buscar por tratamento"
+        placeholder={placeholder}
         className='text-sm w-full border-0 shadow-none' />
     </div>
   )

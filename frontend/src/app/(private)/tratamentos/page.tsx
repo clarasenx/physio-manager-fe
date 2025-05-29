@@ -1,6 +1,8 @@
 'use client'
 import CardTratamentos from '@/components/cards/CardTratamentos';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { Paginator } from '@/components/Paginator';
+import { SearchInput } from '@/components/searchInput';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useTratamento } from '@/hooks/useTratamento';
@@ -8,12 +10,10 @@ import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { LuCirclePlus } from 'react-icons/lu';
 import { TratamentoDialog } from './components/formDialog';
-import { SearchInput } from '@/components/searchInput';
-import { Paginator } from '@/components/Paginator';
 
 export default function Tratamentos() {
-  const [search, setSearch] = useState<string>('')
-  const [page, setPage] = useState<number>(1)
+  const [ search, setSearch ] = useState<string>('')
+  const [ page, setPage ] = useState<number>(1)
 
   const auxSearch = useDebounce(search, 700)
 
@@ -31,7 +31,7 @@ export default function Tratamentos() {
       </div>
       <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 sm:px-4 shadow'>
         <div className='w-full flex flex-col xs:flex-row justify-center gap-2 px-2'>
-          <SearchInput onChange={setSearch} />
+          <SearchInput onChange={setSearch} placeholder='Buscar por tratamento' />
           <div className='hidden sm:block'>
             <TratamentoDialog>
               <Button><LuCirclePlus />Novo tratamento</Button>

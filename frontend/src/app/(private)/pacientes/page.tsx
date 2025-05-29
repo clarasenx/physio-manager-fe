@@ -1,26 +1,26 @@
 'use client'
 
-import { CardPatientTable, CardPatientMobile, PatientDetails } from '@/components/cards/CardPatient';
+import { CardPatientMobile, CardPatientTable, PatientDetails } from '@/components/cards/CardPatient';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { Paginator } from '@/components/Paginator';
+import { SearchInput } from '@/components/searchInput';
+import { Button } from '@/components/ui/button';
+import { PatientType } from '@/dtos/patient/patient.schema';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePatient } from '@/hooks/usePatient';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { LuCirclePlus } from 'react-icons/lu';
 import { PatientDialog } from './components/formDialog';
-import { Button } from '@/components/ui/button';
-import { SearchInput } from '@/components/searchInput';
-import { PatientType } from '@/dtos/patient/patient.schema';
-import { Paginator } from '@/components/Paginator';
 
 export default function Pacientes() {
 
-  const [search, setSearch] = useState<string>('')
-  const [page, setPage] = useState<number>(1)
+  const [ search, setSearch ] = useState<string>('')
+  const [ page, setPage ] = useState<number>(1)
 
   const auxSearch = useDebounce(search, 700)
 
-  const [showPatientDetails, setShowPatientDetails] = useState<PatientType | null>()
+  const [ showPatientDetails, setShowPatientDetails ] = useState<PatientType | null>()
 
   const patient = usePatient({ search: auxSearch, page, perPage: 10 })
 
@@ -37,7 +37,7 @@ export default function Pacientes() {
 
       <div className='bg-white w-full h-full rounded-lg py-3 sm:py-5 px-2 sm:px-4 shadow'>
         <div className='w-full flex justify-center gap-2'>
-          <SearchInput onChange={setSearch} />
+          <SearchInput placeholder='Buscar por nome, email ou telefone do paciente' onChange={setSearch} />
 
           <div className='hidden sm:block'>
             <PatientDialog>
