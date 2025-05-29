@@ -79,7 +79,7 @@ function AppointmentList({
     <>
       {
         !appointmentsOfDay.length ? <p className="text-center text-white">Não há consultas marcadas para este dia</p> :
-          appointmentsOfDay?.map(item => <CardConsulta key={`cardConsultaMobile-${item.id}`} item={item} />)
+          appointmentsOfDay?.map(item => <CardConsulta key={`cardConsultaMobile-${item.id}`} item={item} showStatus />)
       }
     </>
   )

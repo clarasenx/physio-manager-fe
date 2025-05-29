@@ -77,7 +77,7 @@ export default function Consultas() {
             <button
               key={item.id}
               onClick={() => setActiveToggleInicial(item.id)}
-              className={`relative z-10 w-24 h-7 text-sm flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleInicial === item.id ? 'text-white' : 'text-[#2D231C]'
+              className={`relative z-10 w-24 h-7 cursor-pointer text-sm flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleInicial === item.id ? 'text-white' : 'text-[#2D231C]'
                 }`}
             >
               {item.label}
@@ -112,7 +112,7 @@ export default function Consultas() {
                       <button
                         key={item.id}
                         onClick={() => setActiveToggleConsultas(item.id)}
-                        className={`relative z-10 w-24 h-7 text-[12px] flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleConsultas === item.id ? 'text-white' : 'text-[#2D231C]'
+                        className={`relative cursor-pointer z-10 w-24 h-7 text-[12px] flex items-center justify-center rounded-full transition-all duration-300 font-medium ${activeToggleConsultas === item.id ? 'text-white' : 'text-[#2D231C]'
                           }`}
                       >
                         {item.label}

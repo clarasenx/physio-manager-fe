@@ -4,9 +4,10 @@ export default async function Nota({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  console.log(id)
   return (
     <div className='w-full h-full px-4 sm:px-8 pt-4'>
-      <section className='border-x rounded-t-lg '>
+      <section className='border-x rounded-t-lg'>
         <div className='flex flex-col sm:flex-row w-full h-full items-center bg-[#9C7C5A] rounded-t-lg border-t py-2 px-4'>
           <p className='sm:text-lg lg:text-xl font-semibold text-white'>Paciente x</p>
         </div>
@@ -40,7 +41,7 @@ export default async function Nota({
           name="" 
           id=""
           placeholder='Escreva suas anotações aqui!'
-          className='w-full min-h-[300px] '></textarea>
+          className='w-full min-h-[300px]'></textarea>
       </section>
     </div>
   )
