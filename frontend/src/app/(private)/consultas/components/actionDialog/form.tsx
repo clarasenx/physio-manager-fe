@@ -23,19 +23,24 @@ import { GoPencil } from "react-icons/go";
 import { isAppointmentStarted } from "@/utils/isAppointmentStarted";
 import { appointmentKey } from "@/hooks/useAppointment";
 import { AppointmentType } from "@/dtos/appointment/appointment.schema";
+import { useRouter } from "next/navigation";
+import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment";
 
 export const ConsultaActionForm = ({
   closeModal,
   appointment,
+  notes
 }: {
   closeModal: () => void,
   appointment: AppointmentType,
+  notes?: string
 }) => {
   const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'
 
   const [disbled, setDisabled] = useState(actionType === 'CONCLUDE')
   const [isLoading, setIsLoading] = useState(false)
+  const route = useRouter()
 
   const schema = z.union([ConcludeAppointmentSchema, StartAppointmentSchema])
   type SchemaType = typeof schema extends z.ZodTypeAny ? z.infer<typeof schema> : never
@@ -47,7 +52,7 @@ export const ConsultaActionForm = ({
     defaultValues: {
       initialDiscomfort: appointment.initialDiscomfort || 0,
       finalDiscomfort: 0,
-      notes: appointment.notes || ''
+      notes: notes || appointment.notes || ''
     } as Partial<SchemaType>
   })
 
@@ -58,14 +63,18 @@ export const ConsultaActionForm = ({
     try {
       setIsLoading(true)
       await api.patch(`appointment/${appointment.id}/${endPoint}`, data)
-      
-      queryClient.invalidateQueries({ queryKey: [appointmentKey], type: 'all' })
-      
+
+      queryClient.refetchQueries({ queryKey: [appointmentKey]})
+      queryClient.refetchQueries({ queryKey: [appointmentInfiniteKey]})
+
       const message = actionType === 'CONCLUDE' ? "Consulta finalizada com sucesso." : "Consulta iniciada com sucesso."
-      
+
       setIsLoading(false)
       toast(message)
       closeModal()
+      if (actionType === 'START') {
+        route.push(`consultas/${appointment.id}`)
+      }
     }
     catch {
       setIsLoading(false)

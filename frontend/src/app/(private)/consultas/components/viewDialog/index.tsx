@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,7 @@ import { StatusView } from "@/constants/StatusView"
 import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { formatPhone } from "@/utils/formatPhone"
 import { getFormatedDate } from "@/utils/getFormatedDate"
+import Link from "next/link"
 import { ReactNode } from "react"
 
 
@@ -42,24 +44,27 @@ export const ConsultaViewDialog = ({
         <p>Tratamento: <b>{appointment.appointmentType ? appointment.appointmentType?.name : 'Indefinido'}</b></p>
         <p>Telefone do paciente: <b>{formatPhone(appointment.patient?.phone)}</b></p>
         <p>Data da consulta: <b>{getFormatedDate(appointment.date, true)}</b></p>
-        <p>Status: <b>{StatusView[ appointment.status ]}</b></p>
+        <p>Status: <b>{StatusView[appointment.status]}</b></p>
         <div className="flex gap-10">
           {
-            appointment.initialDiscomfort &&
-            <p>Dor Inicial: <b>{appointment.initialDiscomfort}</b></p>
+            appointment.initialDiscomfort ?
+              <p>Dor Inicial: <b>{appointment.initialDiscomfort}</b></p> : <></>
           }
           {
-            appointment.finalDiscomfort &&
-            <p>Dor Final: <b>{appointment.finalDiscomfort}</b></p>
+            appointment.finalDiscomfort ?
+              <p>Dor Final: <b>{appointment.finalDiscomfort}</b></p> : <></>
           }
 
         </div>
+        <Link href={`/consultas/${appointment.id}`} className="w-full">
+          <Button variant={'outline'} className="w-full">Visualizar Anotações</Button>
+        </Link>
         {
-          appointment.notes &&
+          /* appointment.notes &&
           <div>
             <p>Anotações da consulta:</p>
             <p className="px-2 py-1 rounded underline  underline-offset-4"><i>{appointment.notes}</i></p>
-          </div>
+          </div> */
         }
         <DialogFooter>
           <p className="text-sm mt-2">Registrada em {getFormatedDate(appointment.createdAt, true)}</p>

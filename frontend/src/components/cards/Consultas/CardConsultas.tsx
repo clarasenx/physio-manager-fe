@@ -6,7 +6,7 @@ import { AppointmentMenu } from '@/app/(private)/consultas/components/appointmen
 import { Portal } from '@/components/portal';
 import { AppointmentType } from '@/dtos/appointment/appointment.schema';
 import { StatusView } from '@/constants/StatusView';
-import { StatusColor } from '@/constants/StatusColor';
+import { AppointmentStatus } from '@/enum/appointment-status.enum';
 
 
 interface CardConsultaProps {
@@ -92,7 +92,7 @@ export default function CardConsulta({ item, showStatus }: CardConsultaProps) {
               >Em Andamento</p> :
               showStatus ?
                 <p className={`px-1 md:px-3 py-1 md:py-1 self-end font-medium rounded-full text-xs md:text-sm text-end lg:text-center 
-                        text-${StatusColor[item.status]}`}>{StatusView[item.status]}</p> : <></>
+                        ${item.status === AppointmentStatus.COMPLETED ? "text-green-800" : item.status === AppointmentStatus.SCHEDULED ? "text-amber-600" : item.status === AppointmentStatus.CANCELED ? "text-red-800" : ''}`}>{StatusView[item.status]}</p> : <></>
           }
         </div>
       </div>

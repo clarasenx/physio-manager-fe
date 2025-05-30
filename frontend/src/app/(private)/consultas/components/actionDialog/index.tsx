@@ -16,19 +16,23 @@ export const ConsultaActionDialog = ({
   appointment,
   children,
   closeMenu,
+  notes
 }: {
   appointment: AppointmentType,
-  closeMenu: () => void
+  closeMenu?: () => void
   children: ReactNode,
+  notes?: string
 }) => {
   const [ openDialog, setOpenDialog ] = useState(false)
 
-  const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
+  const isStarted = isAppointmentStarted(appointment)
+
+  const actionType: 'START' | 'CONCLUDE' = isStarted ?
     'CONCLUDE' : 'START'
 
   const handleOpen = (open: boolean) => {
     setOpenDialog(open)
-    if (!open) {
+    if (!open && closeMenu) {
       closeMenu()
     }
   }
@@ -42,7 +46,7 @@ export const ConsultaActionDialog = ({
         <DialogHeader>
           <DialogTitle>{actionTypeView[ actionType ]} consulta</DialogTitle>
         </DialogHeader>
-        <ConsultaActionForm appointment={appointment} closeModal={() => handleOpen(false)} />
+        <ConsultaActionForm appointment={appointment} closeModal={() => handleOpen(false)} notes={notes}/>
       </DialogContent>
     </Dialog>
   )

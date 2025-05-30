@@ -88,7 +88,7 @@ export default function Consultas() {
       </section>
 
       {/* Seção consultas */}
-      <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 pb-[90px] lg:pb-none'>
+      <section className='flex flex-col gap-2 sm:gap-4 my-3 sm:my-6 pb-[90px] lg:pb-0'>
         
 
 

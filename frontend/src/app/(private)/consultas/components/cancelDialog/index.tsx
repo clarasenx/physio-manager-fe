@@ -11,6 +11,7 @@ import {
 import { danger } from "@/constants/ToastStyle"
 import { AppointmentType } from "@/dtos/appointment/appointment.schema"
 import { appointmentKey } from "@/hooks/useAppointment"
+import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useState } from "react"
 import { toast } from "sonner"
@@ -35,7 +36,8 @@ export const ConsultaCancelDialog = ({
 
       await api.patch(`appointment/${appointment.id}/cancel`)
 
-      queryClient.invalidateQueries({ queryKey: [ appointmentKey ], type: 'all' })
+      queryClient.refetchQueries({ queryKey: [ appointmentKey ]})
+      queryClient.refetchQueries({ queryKey: [ appointmentInfiniteKey ]})
 
       toast("Consulta cancelada com sucesso.")
 

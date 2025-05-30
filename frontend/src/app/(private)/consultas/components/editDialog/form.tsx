@@ -33,6 +33,7 @@ import { UpdateAppointmentSchema, UpdateAppointmentType } from "@/dtos/appointme
 import { AppointmentStatus } from "@/enum/appointment-status.enum"
 import { appointmentKey } from "@/hooks/useAppointment"
 import { useDebounce } from '@/hooks/useDebounce'
+import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
 import { usePatient } from "@/hooks/usePatient"
 import { useTratamento } from '@/hooks/useTratamento'
 import { cn } from "@/lib/utils"
@@ -124,6 +125,9 @@ export const ConsultaEditForm = ({
 
       queryClient.refetchQueries({
         queryKey: [ appointmentKey ]
+      })
+      queryClient.refetchQueries({
+        queryKey: [ appointmentInfiniteKey ]
       })
 
       setIsLoading(false)
