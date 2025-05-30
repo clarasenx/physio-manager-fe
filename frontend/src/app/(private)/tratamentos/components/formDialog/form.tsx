@@ -50,7 +50,7 @@ export const TratamentoForm = ({ closeModal, tratamento }: TratamentoFormProps) 
         toast("Tratamento criado com sucesso.");
       }
 
-      queryClient.invalidateQueries({ queryKey: [ tratamentoKey ], type: 'all' });
+      queryClient.refetchQueries({ queryKey: [ tratamentoKey ]});
       closeModal();
     } catch {
       toast("Ocorreu uma falha ao salvar o tratamento.", {

@@ -64,7 +64,7 @@ export const UserForm = ({ closeModal, user }: UserFormProps) => {
       await api.patch(`user/${user.id}`, payload);
       toast("Paciente atualizado com sucesso.");
 
-      queryClient.invalidateQueries({ queryKey: [ userKey ], type: 'all' });
+      queryClient.refetchQueries({ queryKey: [ userKey ]});
       closeModal();
     } catch {
       toast("Ocorreu uma falha ao salvar.", {

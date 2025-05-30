@@ -83,7 +83,7 @@ export const PatientForm = ({ closeModal, patient }: PatientFormProps) => {
         toast("Paciente criado com sucesso.");
       }
 
-      queryClient.invalidateQueries({ queryKey: [ patientKey ], type: 'all' });
+      queryClient.refetchQueries({ queryKey: [ patientKey ]});
       closeModal();
     } catch {
       toast("Ocorreu uma falha ao salvar o paciente.", {
