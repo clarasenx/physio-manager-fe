@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Textarea } from "@/components/ui/textarea"
 import { StatusView } from "@/constants/StatusView"
 import { danger } from "@/constants/ToastStyle"
-import { UpdateAppointmentType } from "@/dtos/appointment/update-appointment.dto"
+import { UpdateAppointmentSchema, UpdateAppointmentType } from "@/dtos/appointment/update-appointment.dto"
 import { appointmentKey, useAppointmentById } from "@/hooks/useAppointment"
 import { formatPhone } from "@/utils/formatPhone"
 import { getFormatedDate } from "@/utils/getFormatedDate"
@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import { ConsultaActionDialog } from "../components/actionDialog"
 import { useQueryClient } from "@tanstack/react-query"
 import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 export default function Nota() {
   const params = useParams()
@@ -47,10 +48,13 @@ export default function Nota() {
   const isStarted = isAppointmentStarted(appointment)
 
   const form = useForm<UpdateAppointmentType>({
+    resolver: zodResolver(UpdateAppointmentSchema),
     defaultValues: {
       notes: appointment?.notes || ''
     }
   })
+
+  const watchedNotes = form.watch('notes')
 
   function handleBack() {
     if (form.getValues('notes') !== getString(appointment?.notes)) {
@@ -61,6 +65,7 @@ export default function Nota() {
   }
 
   useEffect(() => {
+    form.setValue('notes', appointment?.notes || '')
     const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
       if (form.getValues('notes') !== getString(appointment?.notes)) {
         event.preventDefault()
@@ -117,54 +122,54 @@ export default function Nota() {
   }
 
   return (
-    <div className='w-full px-4 sm:px-8'>
+    <div className='w-full px-4 sm:px-8 pb-[70px] lg:pb-0'>
       <button className="self-start mb-2 mt-4 sm:mt-10 text-primary cursor-pointer flex items-center gap-1" onClick={handleBack}>
         <ArrowLeft size={25} />
         <span className='text-lg font-medium'>Voltar</span>
       </button>
       <section className='border-x rounded-t-lg'>
-        <div className='flex flex-col sm:flex-row w-full h-full items-center bg-[#9C7C5A] rounded-t-lg border-t py-2 px-4'>
+        <div className='flex flex-row w-full h-full itecenter bg-[#9C7C5A] rounded-t-lg border-t py-2 px-4'>
           <p className='sm:text-lg lg:text-xl font-semibold text-white'>
             {appointment.patient?.name}
           </p>
         </div>
 
-        <section className='bg-white px-4 py-2 grid xs:grid-cols-2 md:grid-cols-6 gap-2 md:gap-2'>
-          <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2 items-start sm:items-center col-span-1 md:col-span-2'>
+        <section className='bg-white px-4 py-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2 md:gap-2'>
+          <div className='flex flex-row w-full h-full gap-2 items-start sm:items-center col-span-1 lg:col-span-2'>
             <p className='font-medium text-nowrap sm:text-lg'>Tratamento:</p>
             <p>{appointment.appointmentType?.name || 'Indefinido'}</p>
           </div>
 
-          <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2  items-start sm:items-center col-span-1 md:col-span-2'>
+          <div className='flex flex-row w-full h-full gap-2  items-start sm:items-center col-span-1 lg:col-span-2'>
             <p className='font-medium sm:text-lg'>Data da consulta:</p>
             <p>{getFormatedDate(appointment.date, true)}</p>
           </div>
 
-          {
-            typeof appointment.initialDiscomfort === 'number' ?
-              <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2 items-start sm:items-center col-span-1 md:col-span-2'>
-                <p className='font-medium text-nowrap sm:text-lg'>Dor Inicial:</p>
-                <p>{appointment.initialDiscomfort}</p>
-              </div> : <div className="col-span-1 md:col-span-2"></div>
-          }
-
-          <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2  items-start sm:items-center col-span-1 md:col-span-2'>
+          <div className='flex flex-row w-full h-full gap-2  items-start sm:items-center col-span-1 lg:col-span-2'>
             <p className='font-medium sm:text-lg'>Telefone:</p>
             <p>{formatPhone(appointment.patient?.phone)}</p>
           </div>
 
-          <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2 items-start sm:items-center col-span-1 md:col-span-2'>
+          <div className='flex flex-row w-full h-full gap-2 items-start sm:items-center col-span-1 lg:col-span-2'>
             <p className='font-medium text-nowrap sm:text-lg'>Status:</p>
             <p>{StatusView[appointment.status]} {isStarted ? ' (Iniciada)' : ''}</p>
           </div>
 
           {
+            typeof appointment.initialDiscomfort === 'number' ?
+              <div className='flex flex-row w-full h-full gap-2 items-start sm:items-center col-span-1 lg:col-span-2'>
+                <p className='font-medium text-nowrap sm:text-lg'>Dor Inicial:</p>
+                <p>{appointment.initialDiscomfort}</p>
+              </div> : <div className="col-span-1 lg:col-span-2"></div>
+          }
+
+          {
             typeof appointment.finalDiscomfort === 'number' ?
-              <div className='flex flex-col sm:flex-row w-full h-full sm:gap-2 items-start sm:items-center col-span-1 md:col-span-2'>
+              <div className='flex flex-row w-full h-full gap-2 items-start sm:items-center col-span-1 lg:col-span-2'>
                 <p className='font-medium text-nowrap sm:text-lg'>Dor Final:</p>
                 <p>{appointment.finalDiscomfort}</p>
               </div> :
-              <div className="col-span-1 md:col-span-2"></div>
+              <div className="col-span-1 lg:col-span-2"></div>
           }
         </section>
       </section>
@@ -174,18 +179,18 @@ export default function Nota() {
           className='flex bg-white w-full max-h-[55vh] lg:max-h-4/6 rounded-b-lg overflow-auto sm:py-5 p-2 sm:px-4 border'>
           <Textarea
             placeholder='Escreva suas anotações aqui!'
-            className='w-full min-h-[450px] lg:min-h-[550px] h-full'
+            className='w-full min-h-[200px] lg:min-h-[550px] h-full'
             {...form.register('notes')}
           />
         </section>
-        <div className="mt-2 w-full flex items-center justify-between">
+        <div className="mt-2 w-full gap-2 flex-col-reverse sm:flex-row flex items-center justify-between">
           <p className="text-sm">Registrada em {getFormatedDate(appointment.createdAt, true)}</p>
-          <div>
+          <div className="flex w-full sm:w-auto justify-between">
             {
               isStarted ?
-                <ConsultaActionDialog appointment={appointment} notes={form.getValues('notes') || undefined}>
+                <ConsultaActionDialog appointment={{...appointment, notes: watchedNotes}} >
                   <Button type="button" variant={'outline'}>Finalizar Consulta</Button>
-                </ConsultaActionDialog> : <></>
+                </ConsultaActionDialog> : <div></div>
             }
             <Button type="submit" className="ml-4 px-10" isLoading={isLoading}>Salvar</Button>
           </div>
@@ -202,7 +207,7 @@ export default function Nota() {
             <Button variant={'destructive'} onClick={() => route.back()}>
               Não Salvar
             </Button>
-            <Button variant={'outline'} onClick={() => updateNote(form.getValues('notes') || '', true)}>
+            <Button variant={'outline'} onClick={() => updateNote(watchedNotes || '', true)}>
               Salvar Alterações
             </Button>
           </DialogFooter>
