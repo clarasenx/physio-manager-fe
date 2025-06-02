@@ -28,12 +28,10 @@ import { appointmentInfiniteKey } from "@/hooks/useInfinityAppointment";
 
 export const ConsultaActionForm = ({
   closeModal,
-  appointment,
-  notes
+  appointment
 }: {
   closeModal: () => void,
   appointment: AppointmentType,
-  notes?: string
 }) => {
   const actionType: 'START' | 'CONCLUDE' = isAppointmentStarted(appointment) ?
     'CONCLUDE' : 'START'
@@ -52,7 +50,7 @@ export const ConsultaActionForm = ({
     defaultValues: {
       initialDiscomfort: appointment.initialDiscomfort || 0,
       finalDiscomfort: 0,
-      notes: notes || appointment.notes || ''
+      notes: appointment.notes || ''
     } as Partial<SchemaType>
   })
 
@@ -132,7 +130,7 @@ export const ConsultaActionForm = ({
             render={({ field }) => (
               <FormItem className="flex flex-col flex-1">
                 <FormLabel>Notas</FormLabel>
-                <Textarea placeholder="Escreva suas notas aqui" {...field} value={field.value ?? undefined} />
+                <Textarea className="max-h-[250px]" placeholder="Escreva suas notas aqui" {...field} value={field.value ?? undefined} />
                 <FormMessage />
               </FormItem>
             )}

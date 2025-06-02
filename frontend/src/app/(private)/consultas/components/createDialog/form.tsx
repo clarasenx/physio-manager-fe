@@ -305,7 +305,7 @@ export const ConsultaCreateForm = ({
             render={({ field }) => (
               <FormItem className="flex flex-col flex-1">
                 <FormLabel>Notas</FormLabel>
-                <Textarea className="bg-white border-black" placeholder="Escreva suas anotações aqui" {...field} value={field.value ?? undefined} />
+                <Textarea className="bg-white border-black max-h-[250px]" placeholder="Escreva suas anotações aqui" {...field} value={field.value ?? undefined} />
                 <FormMessage />
               </FormItem>
             )}

@@ -10,7 +10,7 @@ export const AppointmentSchema = z.object({
   patient: z.lazy((()=> PatientSchema) as ()=> AnyZodObject).optional(),
   appointmentType: TratamentoSchema.optional(),
   date: z.date({message: 'Selecione uma data', invalid_type_error: 'Selecione uma data', required_error: 'Selecione uma data'}),
-  notes: z.string().nullable().optional(),
+  notes: z.string().max(1000, {message: 'As anotações devem ter no maxímo mil caracteres'}).nullable().optional(),
   initialDiscomfort: z.number({message: 'Insira um valor'}).int().min(0, {message: 'O valor mínimo é 0'}).max(10, {message: 'O valor maxímo é 10'}),
   finalDiscomfort: z.number({message: 'Insira um valor'}).int().min(0, {message: 'O valor mínimo é 0'}).max(10, {message: 'O valor maxímo é 10'}),
   status: z.nativeEnum(AppointmentStatus),

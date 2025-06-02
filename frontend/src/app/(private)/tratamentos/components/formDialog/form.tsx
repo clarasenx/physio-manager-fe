@@ -84,7 +84,7 @@ export const TratamentoForm = ({ closeModal, tratamento }: TratamentoFormProps) 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Descrição do tratamento</FormLabel>
-                  <Textarea {...field} value={field.value ?? undefined} />
+                  <Textarea className="max-h-[250px]" {...field} value={field.value ?? undefined} />
                   <FormMessage />
                 </FormItem>
               )}
